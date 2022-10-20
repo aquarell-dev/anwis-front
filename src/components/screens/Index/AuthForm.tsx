@@ -2,19 +2,14 @@ import { FC, useState } from 'react';
 
 import { useForm } from 'react-hook-form';
 
-import { IRHFInput, IUserCredentials } from './index.types';
+import { IUserCredentials } from './index.types';
 
 import { IndigoButton } from '../../ui/Button';
 
 import { useLoginMutation } from '../../../features/auth/authApiSlice';
 import { useActions } from '../../../hooks/useActions';
+import { RHFInput } from '../../ui/Input';
 
-export const RHFInput: FC<IRHFInput> = ({ label, register, required, ...inputProps }) =>
-  <input
-    className='py-2 px-4 outline-none bg-gray-100 shadow-md rounded-md'
-    {...inputProps}
-    {...register(label, { required })}
-  />;
 
 type UserData = {
   access: string;
