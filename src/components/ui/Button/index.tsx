@@ -31,3 +31,16 @@ export const IndigoButton: FC<IButton> = ({ handler, text, type }) => {
     </div>
   );
 };
+
+export const GreenButton: FC<IButton> = ({ handler, text, type }) => {
+  return (
+    <div className='py-2 px-4 w-40 text-center bg-emerald-500 text-white hover:cursor-pointer hover:bg-indigo-600 transition duration-300 ease-in-out rounded-md'>
+      <button
+        type={type ?? 'submit'}
+        onClick={handler}
+      >
+        {text}
+      </button>
+    </div>
+  );
+};
