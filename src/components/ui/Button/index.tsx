@@ -1,17 +1,22 @@
 import { ButtonHTMLAttributes, FC } from 'react';
+import { cn } from '../../../utils';
 
 interface IButton {
-  type: ButtonHTMLAttributes<string>["type"] | undefined;
+  type: ButtonHTMLAttributes<string>['type'] | undefined;
   text: string;
   handler: () => any;
+  customWidth?: string;
 }
 
 export const Button: FC<IButton> = ({ text, handler, type }) => {
   return (
-    <div className='py-1 px-2 bg-white text-center text-black hover:cursor-pointer hover:bg-gray-100 transition duration-300 ease-in-out rounded-md'>
+    <div
+      onClick={handler}
+      className='py-1 px-2 bg-white text-center text-black hover:cursor-pointer hover:bg-gray-100 transition duration-300 ease-in-out rounded-md'
+    >
       <button
         type={type ?? 'submit'}
-        onClick={handler}
+
       >
         {text}
       </button>
@@ -21,10 +26,12 @@ export const Button: FC<IButton> = ({ text, handler, type }) => {
 
 export const IndigoButton: FC<IButton> = ({ handler, text, type }) => {
   return (
-    <div className='py-2 px-4 w-40 text-center bg-indigo-600 text-white hover:cursor-pointer hover:bg-indigo-700 transition duration-300 ease-in-out rounded-md'>
+    <div
+      className='py-2 px-4 w-40 text-center bg-indigo-600 text-white hover:cursor-pointer hover:bg-indigo-700 transition duration-300 ease-in-out rounded-md'
+      onClick={handler}
+    >
       <button
         type={type ?? 'submit'}
-        onClick={handler}
       >
         {text}
       </button>
@@ -32,12 +39,17 @@ export const IndigoButton: FC<IButton> = ({ handler, text, type }) => {
   );
 };
 
-export const GreenButton: FC<IButton> = ({ handler, text, type }) => {
+export const GreenButton: FC<IButton> = ({ handler, text, type, customWidth }) => {
   return (
-    <div className='py-2 px-4 w-40 text-center bg-emerald-500 text-white hover:cursor-pointer hover:bg-indigo-600 transition duration-300 ease-in-out rounded-md'>
+    <div
+      className={cn(
+        'py-2 px-4 text-center bg-emerald-500 text-white hover:cursor-pointer hover:bg-indigo-600 transition duration-300 ease-in-out rounded-md',
+        customWidth ?? 'w-40'
+      )}
+      onClick={handler}
+    >
       <button
         type={type ?? 'submit'}
-        onClick={handler}
       >
         {text}
       </button>
