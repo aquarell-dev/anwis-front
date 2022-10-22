@@ -31,19 +31,17 @@ const FormControls: FC<IFormControls> = ({
   const [chinaDistributorValue, setChinaDistributorValue] = useState('');
 
   const [createIndividualEntrepreneur, {
-    error: individualEntrepreneurError,
+    isError: individualEntrepreneurError,
     isLoading: individualEntrepreneurLoading
   }] = useCreateIndividualEntrepreneurMutation();
   const [createChinaDistributor, {
-    error: chinaDistributorError,
+    isError: chinaDistributorError,
     isLoading: chinaDistributorLoading
   }] = useCreateChinaDistributorMutation();
   const [createOrderForProject, {
-    error: orderForProjectError,
+    isError: orderForProjectError,
     isLoading: orderForProjectLoading
   }] = useCreateOrderForProjectMutation(); // TODO add error check after
-
-  console.log(chinaDistributorError);
 
   return (
     <>
@@ -89,9 +87,11 @@ const FormControls: FC<IFormControls> = ({
         state={individualEntrepreneurOpen}
         isLoading={individualEntrepreneurLoading}
         handler={() => {
-          createIndividualEntrepreneur({ individual_entrepreneur: individualEntrepreneurValue });
-          !individualEntrepreneurError ? notifyError(`Ошибка при создании ${individualEntrepreneurValue}`) : notifySuccess(`Успешно создан ${individualEntrepreneurValue}`);
-          setIndividualEntrepreneurOpen(false);
+          createIndividualEntrepreneur({ individual_entrepreneur: individualEntrepreneurValue })
+            .unwrap()
+            .then(() => notifySuccess(`Успешно создан ${individualEntrepreneurValue}`))
+            .catch(() => notifyError(`Ошибка при создании ${individualEntrepreneurValue}`))
+            .finally(() => setIndividualEntrepreneurOpen(false));
         }}
         title='Индивидуальный предприниматель'
         setState={setIndividualEntrepreneurOpen}
@@ -103,9 +103,11 @@ const FormControls: FC<IFormControls> = ({
         setState={setChinaDistributorOpen}
         isLoading={chinaDistributorLoading}
         handler={() => {
-          createChinaDistributor({ china_distributor: chinaDistributorValue });
-          !chinaDistributorError ? notifyError(`Ошибка при создании ${chinaDistributorValue}`) : notifySuccess(`Успешно создан ${chinaDistributorValue}`);
-          setChinaDistributorOpen(false);
+          createChinaDistributor({ china_distributor: chinaDistributorValue })
+            .unwrap()
+            .then(() => notifySuccess(`Успешно создан ${chinaDistributorValue}`))
+            .catch(() => notifyError(`Ошибка при создании ${chinaDistributorValue}`))
+            .finally(() => setChinaDistributorOpen(false));
         }}
         title={'Китайский посредник'}
       />
@@ -115,9 +117,11 @@ const FormControls: FC<IFormControls> = ({
         state={orderForProjectOpen}
         isLoading={orderForProjectLoading}
         handler={() => {
-          createOrderForProject({ order_for_project: orderForProjectValue });
-          !orderForProjectError ? notifyError(`Ошибка при создании ${orderForProjectValue}`) : notifySuccess(`Успешно создан ${orderForProjectValue}`);
-          setOrderForProjectOpen(false);
+          createOrderForProject({ order_for_project: orderForProjectValue })
+            .unwrap()
+            .then(() => notifySuccess(`Успешно создан ${orderForProjectValue}`))
+            .catch(() => notifyError(`Ошибка при создании ${orderForProjectValue}`))
+            .finally(() => setOrderForProjectOpen(false));
         }}
         title={'Заказ под проект'}
         setState={setOrderForProjectOpen}
