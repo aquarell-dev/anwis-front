@@ -20,7 +20,9 @@ const FormControls: FC<IFormControls> = ({
                                            register,
                                            individualEntrepreneurs,
                                            chinaDistributors,
-                                           orderForProjects
+                                           orderForProjects,
+                                           statuses,
+                                           errors
                                          }) => {
   const [individualEntrepreneurOpen, setIndividualEntrepreneurOpen] = useState(false);
   const [orderForProjectOpen, setOrderForProjectOpen] = useState(false);
@@ -31,17 +33,14 @@ const FormControls: FC<IFormControls> = ({
   const [chinaDistributorValue, setChinaDistributorValue] = useState('');
 
   const [createIndividualEntrepreneur, {
-    isError: individualEntrepreneurError,
     isLoading: individualEntrepreneurLoading
   }] = useCreateIndividualEntrepreneurMutation();
   const [createChinaDistributor, {
-    isError: chinaDistributorError,
     isLoading: chinaDistributorLoading
   }] = useCreateChinaDistributorMutation();
   const [createOrderForProject, {
-    isError: orderForProjectError,
     isLoading: orderForProjectLoading
-  }] = useCreateOrderForProjectMutation(); // TODO add error check after
+  }] = useCreateOrderForProjectMutation();
 
   return (
     <>
@@ -49,10 +48,11 @@ const FormControls: FC<IFormControls> = ({
         <RHFSelect
           label={'individual_entrepreneur'}
           register={register}
-          required={false}
+          required={true}
+          error={errors?.individual_entrepreneur}
           text={'Индивидуальный предприниматель'}
           options={individualEntrepreneurs?.map(indEnt => ({
-            value: indEnt.individual_entrepreneur,
+            value: indEnt.id,
             label: indEnt.individual_entrepreneur
           }))}
         />
@@ -61,10 +61,11 @@ const FormControls: FC<IFormControls> = ({
         <RHFSelect
           label={'china_distributor'}
           register={register}
-          required={false}
+          required={true}
           text={'Китайский посредник'}
+          error={errors?.china_distributor}
           options={chinaDistributors.map(chDistr => ({
-            value: chDistr.china_distributor,
+            value: chDistr.id,
             label: chDistr.china_distributor
           }))}
         />
@@ -73,10 +74,11 @@ const FormControls: FC<IFormControls> = ({
         <RHFSelect
           label={'order_for_project'}
           register={register}
-          required={false}
+          required={true}
+          error={errors?.order_for_project}
           text={'Заказ под проект'}
           options={orderForProjects.map(ordProj => ({
-            value: ordProj.order_for_project,
+            value: ordProj.id,
             label: ordProj.order_for_project
           }))}
         />
@@ -127,6 +129,34 @@ const FormControls: FC<IFormControls> = ({
         setState={setOrderForProjectOpen}
       />
       <ToastContainer/>
+      <div className="flex items-center justify-between">
+        <div className='w-40'>
+          <RHFSelect
+            label={'status'}
+            register={register}
+            required={true}
+            text={'Статус'}
+            error={errors?.status}
+            options={statuses.map(status => ({
+              value: status.id,
+              label: status.status
+            }))}
+            defaultValue={'В ожидании'}
+          />
+        </div>
+        <div className='flex items-center space-x-3'>
+          <p className='text-xl font-medium'>Черновик</p>
+          <input
+            type='checkbox'
+            {...register('draft')}
+            className='mx-3'
+          />
+        </div>
+      </div>
+      <div className='w-full'>
+        <p>Комментарий к заказу</p>
+        <textarea className={'bg-gray-100 w-full'} {...register('comment')} />
+      </div>
     </>
   );
 };
