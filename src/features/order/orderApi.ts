@@ -1,16 +1,19 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import {
   IChinaDistributor, ICreateChinaDistributor,
-  ICreateIndividualEntrepreneur, ICreateOrderForProject,
-  IIndividualEntrepreneur,
-  IOrderForProject,
+  ICreateIndividualEntrepreneur, ICreateOrder, ICreateOrderForProject,
+  IIndividualEntrepreneur, IOrder,
+  IOrderForProject, IProduct,
   IStatus
 } from './types';
+
+// http://127.0.0.1:8000/api/
+// https://anwis-sklad.herokuapp.com/api/
 
 export const orderApi = createApi({
   reducerPath: 'orders/api',
   baseQuery: fetchBaseQuery({ baseUrl: 'https://anwis-sklad.herokuapp.com/api/' }),
-  tagTypes: ['IIndividualEntrepreneur', 'IChinaDistributor', 'IOrderForProject'],
+  tagTypes: ['IIndividualEntrepreneur', 'IChinaDistributor', 'IOrderForProject', 'IOrder'],
   endpoints: build => ({
     listIndividualEntrepreneurs: build.query<IIndividualEntrepreneur[], any>({
       query: (p: any) => ({
@@ -62,6 +65,27 @@ export const orderApi = createApi({
         url: 'statuses/'
       })
     }),
+    // --------------------------------------------------------------------------------------------------------------
+    listOrders: build.query<IOrder[], any>({
+      query: p => ({
+        url: 'orders/'
+      }),
+      providesTags: ['IOrder']
+    }),
+    createOrder: build.mutation<void, ICreateOrder>({
+      query: order => ({
+        url: 'orders/',
+        method: 'POST',
+        body: order
+      }),
+      invalidatesTags: ['IOrder']
+    }),
+    // --------------------------------------------------------------------------------------------------------------
+    listProducts: build.query<IProduct[], any>({
+      query: p => ({
+        url: 'products/'
+      })
+    })
   })
 });
 
@@ -70,8 +94,11 @@ export const {
   useListChinaDistributorsQuery,
   useListOrderForProjectsQuery,
   useListStatusesQuery,
+  useListOrdersQuery,
+  useListProductsQuery,
 
   useCreateIndividualEntrepreneurMutation,
   useCreateChinaDistributorMutation,
-  useCreateOrderForProjectMutation
+  useCreateOrderForProjectMutation,
+  useCreateOrderMutation
 } = orderApi;
