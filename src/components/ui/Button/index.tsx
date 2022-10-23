@@ -16,7 +16,7 @@ export const Button: FC<IButton> = ({ text, handler, type }) => {
     >
       <button
         type={type ?? 'submit'}
-
+        className='w-full'
       >
         {text}
       </button>
@@ -24,14 +24,18 @@ export const Button: FC<IButton> = ({ text, handler, type }) => {
   );
 };
 
-export const IndigoButton: FC<IButton> = ({ handler, text, type }) => {
+export const IndigoButton: FC<IButton> = ({ handler, text, type, customWidth }) => {
   return (
     <div
-      className='py-2 px-4 w-40 text-center bg-indigo-600 text-white hover:cursor-pointer hover:bg-indigo-700 transition duration-300 ease-in-out rounded-md'
+      className={cn(
+        'py-2 px-4 text-center bg-indigo-600 text-white hover:cursor-pointer hover:bg-indigo-700 transition duration-300 ease-in-out rounded-md',
+        customWidth ?? 'w-40'
+      )}
       onClick={handler}
     >
       <button
         type={type ?? 'submit'}
+        className='w-full'
       >
         {text}
       </button>
@@ -50,6 +54,7 @@ export const GreenButton: FC<IButton> = ({ handler, text, type, customWidth }) =
     >
       <button
         type={type ?? 'submit'}
+        className='w-full'
       >
         {text}
       </button>
