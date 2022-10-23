@@ -1,22 +1,27 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 
 import { useForm } from 'react-hook-form';
 
-import { RHFSelect } from '../../../../ui/Input';
 import { GreenButton, IndigoButton } from '../../../../ui/Button';
+import FormControls from '../../NewOrder/components/FormControls';
+import Products from '../Products';
 
 import {
-  useListIndividualEntrepreneursQuery,
+  useCreateOrderMutation,
   useListChinaDistributorsQuery,
-  useListOrderForProjectsQuery,
+  useListIndividualEntrepreneursQuery,
+  useListOrderForProjectsQuery, useListProductsQuery,
   useListStatusesQuery
 } from '../../../../../features/order/orderApi';
-import FormControls from '../../NewOrder/components/FormControls';
+
+import { IOrderForm } from '../../types';
+
+import { orderService } from '../../../../../features/order/orderServices';
+import { notifyError, notifySuccess } from '../../../../../utils/notify';
+import { IProduct } from '../../../../../features/order/types';
+
 
 const OrderForm: FC = () => {
-  const { register, handleSubmit, watch, formState: { errors } } = useForm();
-  const onSubmit = (data: any) => console.log(data);
-
   const {
     data: individualEntrepreneurs,
     error: ipError,
@@ -25,68 +30,55 @@ const OrderForm: FC = () => {
   const { data: chinaDistributors, error: chinaError, isLoading: chinaLoading } = useListChinaDistributorsQuery(null);
   const { data: orderForProjects, error: orderError, isLoading: orderLoading } = useListOrderForProjectsQuery(null);
   const { data: statuses, error: statusError, isLoading: statusLoading } = useListStatusesQuery(null);
+  const { data: products, error: productsError, isLoading: productsLoading } = useListProductsQuery(null);
 
-  if (ipLoading || chinaLoading || orderLoading || statusLoading) return <p>loading</p>;
+  const [createOrder, { isLoading: createOrderLoading }] = useCreateOrderMutation();
 
-  if (ipError || chinaError || orderError || statusError) return <p>error</p>;
+  const { register, handleSubmit, formState: { errors } } = useForm<IOrderForm>();
+
+  const [selectedProducts, setSelectedProducts] = useState<IProduct[]>([]);
+
+  const onSubmit = (data: IOrderForm) => {
+    createOrder(orderService.transformData({ ...data, products: selectedProducts.map(p => p.id) }))
+      .unwrap()
+      .then(() => notifySuccess('Заказ был успешно создан'))
+      .catch(() => notifyError('Заказ не был создан'));
+  };
+
+  if (ipLoading || chinaLoading || orderLoading || statusLoading || productsLoading) return <p>loading</p>;
+
+  if (ipError || chinaError || orderError || statusError || productsError) return <p>error</p>;
 
   return (
     <>
-      {individualEntrepreneurs && chinaDistributors && orderForProjects && statuses && (
+      {individualEntrepreneurs && chinaDistributors && orderForProjects && statuses && products && (
         <form
           onSubmit={handleSubmit(onSubmit)}
           className='flex flex-col space-y-4'
         >
           <FormControls
+            errors={errors}
             register={register}
             individualEntrepreneurs={individualEntrepreneurs}
             orderForProjects={orderForProjects}
             chinaDistributors={chinaDistributors}
+            statuses={statuses}
           />
-          <div className="flex items-center justify-between">
-            <div className='w-40'>
-              <RHFSelect
-                label={'status'}
-                register={register}
-                required={false}
-                text={'Статус'}
-                options={statuses.map(status => ({
-                  value: status.status,
-                  label: status.status
-                }))}
-                defaultValue={'В ожидании'}
-              />
-            </div>
-            <div className='flex items-center space-x-3'>
-              <p className='text-xl font-medium'>Черновик</p>
-              <input
-                type='checkbox'
-                {...register('draft')}
-                className='mx-3'
-              />
-            </div>
-          </div>
-          <div className='w-full'>
-            <p>Комментарий к заказу</p>
-            <textarea className={'bg-gray-100 w-full h-40'} {...register('comment')} />
-          </div>
+          <Products products={products} selectedProducts={selectedProducts} setSelectedProducts={setSelectedProducts} />
           <div className="flex justify-between items-center">
             <IndigoButton
               type={'submit'}
               text={'Создать'}
-              handler={() => {
-              }}
+              handler={() => null}
             />
             <GreenButton
               type={'button'}
               text={'Скачать Excel'}
-              handler={() => {
-              }}
+              handler={() => null}
             />
           </div>
         </form>
       )}
-
     </>
   );
 };
