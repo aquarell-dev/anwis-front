@@ -6,13 +6,18 @@ interface IButton {
   text: string;
   handler: () => any;
   customWidth?: string;
+  customColors?: string;
 }
 
-export const Button: FC<IButton> = ({ text, handler, type }) => {
+export const Button: FC<IButton> = ({ text, handler, type, customWidth, customColors }) => {
   return (
     <div
       onClick={handler}
-      className='py-1 px-2 bg-white text-center text-black hover:cursor-pointer hover:bg-gray-100 transition duration-300 ease-in-out rounded-md'
+      className={cn(
+        'py-2 px-4 text-center text-white hover:cursor-pointer transition duration-300 ease-in-out rounded-md',
+        customWidth ?? 'w-40',
+        customColors ?? 'bg-gray-600 hover:bg-gray-700'
+      )}
     >
       <button
         type={type ?? 'submit'}
@@ -26,38 +31,36 @@ export const Button: FC<IButton> = ({ text, handler, type }) => {
 
 export const IndigoButton: FC<IButton> = ({ handler, text, type, customWidth }) => {
   return (
-    <div
-      className={cn(
-        'py-2 px-4 text-center bg-indigo-600 text-white hover:cursor-pointer hover:bg-indigo-700 transition duration-300 ease-in-out rounded-md',
-        customWidth ?? 'w-40'
-      )}
-      onClick={handler}
-    >
-      <button
-        type={type ?? 'submit'}
-        className='w-full'
-      >
-        {text}
-      </button>
-    </div>
+    <Button
+      type={type}
+      text={text}
+      handler={handler}
+      customWidth={customWidth}
+      customColors={'bg-indigo-600 hover:bg-indigo-700'}
+    />
   );
 };
 
 export const GreenButton: FC<IButton> = ({ handler, text, type, customWidth }) => {
   return (
-    <div
-      className={cn(
-        'py-2 px-4 text-center bg-emerald-500 text-white hover:cursor-pointer hover:bg-indigo-600 transition duration-300 ease-in-out rounded-md',
-        customWidth ?? 'w-40'
-      )}
-      onClick={handler}
-    >
-      <button
-        type={type ?? 'submit'}
-        className='w-full'
-      >
-        {text}
-      </button>
-    </div>
+    <Button
+      type={type}
+      text={text}
+      handler={handler}
+      customWidth={customWidth}
+      customColors={'bg-emerald-500 hover:bg-indigo-600'}
+    />
+  );
+};
+
+export const RedButton: FC<IButton> = ({ handler, text, type, customWidth }) => {
+  return (
+    <Button
+      type={type}
+      text={text}
+      handler={handler}
+      customWidth={customWidth}
+      customColors={'bg-red-600 hover:bg-orange-700'}
+    />
   );
 };
