@@ -1,10 +1,11 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import {
-  IChinaDistributor, ICreateChinaDistributor,
-  ICreateIndividualEntrepreneur, ICreateOrder, ICreateOrderForProject,
+  ICategory,
+  IChinaDistributor, ICreateCategory, ICreateChinaDistributor,
+  ICreateIndividualEntrepreneur, ICreateUpdateOrder, ICreateOrderForProject,
   IIndividualEntrepreneur, IOrder,
   IOrderForProject, IProduct,
-  IStatus
+  IStatus, ITask, ICreateTask
 } from './types';
 
 // http://127.0.0.1:8000/api/
@@ -13,7 +14,7 @@ import {
 export const orderApi = createApi({
   reducerPath: 'orders/api',
   baseQuery: fetchBaseQuery({ baseUrl: 'https://anwis-sklad.herokuapp.com/api/' }),
-  tagTypes: ['IIndividualEntrepreneur', 'IChinaDistributor', 'IOrderForProject', 'IOrder'],
+  tagTypes: ['IIndividualEntrepreneur', 'IChinaDistributor', 'IOrderForProject', 'IOrder', 'ICategory', 'ITask'],
   endpoints: build => ({
     listIndividualEntrepreneurs: build.query<IIndividualEntrepreneur[], any>({
       query: (p: any) => ({
@@ -72,10 +73,24 @@ export const orderApi = createApi({
       }),
       providesTags: ['IOrder']
     }),
-    createOrder: build.mutation<void, ICreateOrder>({
+    getOrderById: build.query<IOrder, string | undefined>({
+      query: id => ({
+        url: `orders/${id}/`
+      }),
+      providesTags: ['IOrder']
+    }),
+    createOrder: build.mutation<void, ICreateUpdateOrder>({
       query: order => ({
         url: 'orders/',
         method: 'POST',
+        body: order
+      }),
+      invalidatesTags: ['IOrder']
+    }),
+    updateOrderById: build.mutation<void, ICreateUpdateOrder>({
+      query: order => ({
+        url: `order/${order.id}/`,
+        method: 'PUT',
         body: order
       }),
       invalidatesTags: ['IOrder']
@@ -85,7 +100,37 @@ export const orderApi = createApi({
       query: p => ({
         url: 'products/'
       })
-    })
+    }),
+    // --------------------------------------------------------------------------------------------------------------
+    listCategories: build.query<ICategory[], any>({
+      query: p => ({
+        url: 'categories/'
+      }),
+      providesTags: ['ICategory']
+    }),
+    createCategory: build.mutation<void, ICreateCategory>({
+      query: category => ({
+        url: 'categories/',
+        method: 'POST',
+        body: category
+      }),
+      invalidatesTags: ['ICategory']
+    }),
+    // --------------------------------------------------------------------------------------------------------------
+    listTasks: build.query<ITask[], any>({
+      query: p => ({
+        url: 'tasks/'
+      }),
+      providesTags: ['ITask']
+    }),
+    createTask: build.mutation<void, ICreateTask>({
+      query: task => ({
+        url: 'tasks/',
+        method: 'POST',
+        body: task
+      }),
+      invalidatesTags: ['ITask']
+    }),
   })
 });
 
@@ -96,9 +141,15 @@ export const {
   useListStatusesQuery,
   useListOrdersQuery,
   useListProductsQuery,
+  useListCategoriesQuery,
+  useGetOrderByIdQuery,
+  useListTasksQuery,
 
   useCreateIndividualEntrepreneurMutation,
   useCreateChinaDistributorMutation,
   useCreateOrderForProjectMutation,
-  useCreateOrderMutation
+  useCreateOrderMutation,
+  useCreateTaskMutation,
+  useCreateCategoryMutation,
+  useUpdateOrderByIdMutation,
 } = orderApi;
