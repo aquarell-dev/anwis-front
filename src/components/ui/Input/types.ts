@@ -1,5 +1,6 @@
 import React from 'react';
 import { FieldError, FieldErrorsImpl, Merge, UseFormRegister } from 'react-hook-form';
+import { IOrder } from '../../../features/order/types';
 
 export interface IInput {
   type?: React.HTMLInputTypeAttribute;
@@ -22,6 +23,10 @@ export interface IRHFInput extends IRHF, Pick<IInput, 'placeholder' | 'type'> {}
 
 export interface IRHFSelect extends IRHF {
   text: string;
-  options: { value: string | number; label: string | number; }[];
-  defaultValue?: string;
+  options: { value: string | number; label: string | number | React.ReactNode; }[];
+  defaultValue?: { value: string | number; label: string | number; };
+}
+
+export interface IOrderSelect extends IRHFSelect {
+  order?: IOrder;
 }
