@@ -14,6 +14,10 @@ const elements: ISubNavElement[] = [
     title: 'Китайские товары',
     link: '/china/products'
   },
+  {
+    title: 'Заказы в архиве',
+    link: '/china/archive'
+  },
 ];
 
 export const Layout: FC = () => {
