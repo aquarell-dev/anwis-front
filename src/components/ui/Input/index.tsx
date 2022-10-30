@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 
-import { IInput, IRHFInput, IRHFSelect } from './types';
+import { IInput, IOrderSelect, IRHFInput, IRHFSelect } from './types';
 
 import { cn } from '../../../utils';
 
@@ -21,19 +21,19 @@ export const RHFInput: FC<IRHFInput> = ({ label, register, required, ...inputPro
   <input
     className='py-2 px-4 outline-none w-full bg-gray-100 shadow-md rounded-md'
     {...inputProps}
-    {...register(label, { required,  })}
+    {...register(label, { required, })}
   />;
 
 export const RHFSelect: FC<IRHFSelect> = ({
-                                            label,
-                                            register,
-                                            required,
-                                            text,
-                                            options,
-                                            defaultValue,
-                                            error,
-                                            ...inputProps
-                                          }) => {
+                                              label,
+                                              register,
+                                              required,
+                                              text,
+                                              options,
+                                              defaultValue,
+                                              error,
+                                              ...inputProps
+                                            }) => {
   return (
     <div className='w-full'>
       <label
@@ -48,7 +48,7 @@ export const RHFSelect: FC<IRHFSelect> = ({
         {...register(label, { required })}
         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 text-black"
       >
-        <option value={''}>------------</option>
+        { defaultValue ? <option value={defaultValue.value}>{defaultValue.label}</option> : <option value={''}>------------</option> }
         {options.map((option, idx) => (
           <React.Fragment key={idx}>
             <option value={option.value}>{option.label}</option>

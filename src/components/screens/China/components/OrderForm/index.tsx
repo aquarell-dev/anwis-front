@@ -1,85 +1,114 @@
-import { FC, useState } from 'react';
-
+import { FC, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import useOrderData from '../../hooks/useOrderData';
 
-import { GreenButton, IndigoButton } from '../../../../ui/Button';
-import FormControls from '../../NewOrder/components/FormControls';
+import FormControls from '../FormControls';
 import Products from '../Products';
+import BottomControls from './BottomControls';
+import Notification from './Notification';
+import AdditionalExpenses from './AdditionalExpenses';
+import ButtonGroup from './ButtonGroup';
+import SlideAlert from '../../../../ui/SlideAlert';
 
-import {
-  useCreateOrderMutation,
-  useListChinaDistributorsQuery,
-  useListIndividualEntrepreneursQuery,
-  useListOrderForProjectsQuery, useListProductsQuery,
-  useListStatusesQuery
-} from '../../../../../features/order/orderApi';
-
-import { IOrderForm } from '../../types';
+import { IOrderForm, TAdditional } from '../../types';
+import { Mutation } from '../../../../../utils/types';
+import { ICreateUpdateOrder, IOrder, IProductSpecs, TStatuses } from '../../../../../features/order/types';
 
 import { orderService } from '../../../../../features/order/orderServices';
-import { notifyError, notifySuccess } from '../../../../../utils/notify';
-import { IProduct } from '../../../../../features/order/types';
+import Total from './Total';
 
 
-const OrderForm: FC = () => {
+const OrderForm: FC<{ order?: IOrder; mutation: Mutation<ICreateUpdateOrder> }> = ({ order, mutation }) => {
   const {
-    data: individualEntrepreneurs,
-    error: ipError,
-    isLoading: ipLoading
-  } = useListIndividualEntrepreneursQuery(null);
-  const { data: chinaDistributors, error: chinaError, isLoading: chinaLoading } = useListChinaDistributorsQuery(null);
-  const { data: orderForProjects, error: orderError, isLoading: orderLoading } = useListOrderForProjectsQuery(null);
-  const { data: statuses, error: statusError, isLoading: statusLoading } = useListStatusesQuery(null);
-  const { data: products, error: productsError, isLoading: productsLoading } = useListProductsQuery(null);
+    chinaDistributors,
+    orderForProjects,
+    statuses,
+    products,
+    isLoading,
+    isError
+  } = useOrderData();
 
-  const [createOrder, { isLoading: createOrderLoading }] = useCreateOrderMutation();
+  const { register, handleSubmit, formState: { errors }, control } = useForm<IOrderForm>();
 
-  const { register, handleSubmit, formState: { errors } } = useForm<IOrderForm>();
+  const [selectedProducts, setSelectedProducts] = useState<IProductSpecs[]>(order?.products || []);
+  const [selectedStatus, setSelectedStatus] = useState<TStatuses>(order ? order.status.status : 'Ожидает заказа в Китае');
+  const [additional, setAdditional] = useState<TAdditional>({});
 
-  const [selectedProducts, setSelectedProducts] = useState<IProduct[]>([]);
+  useEffect(() => {
+    if (additional.course) {
+      const { course } = additional;
+      setSelectedProducts(prev => prev.map(product => ({
+        ...product,
+        price_rub: product.price_cny * course
+      })));
+    }
+  }, [additional.course, additional.indicator]);
 
-  const onSubmit = (data: IOrderForm) => {
-    createOrder(orderService.transformData({ ...data, products: selectedProducts.map(p => p.id) }))
-      .unwrap()
-      .then(() => notifySuccess('Заказ был успешно создан'))
-      .catch(() => notifyError('Заказ не был создан'));
-  };
+  const date = orderService.getStringDate(order);
 
-  if (ipLoading || chinaLoading || orderLoading || statusLoading || productsLoading) return <p>loading</p>;
+  const onSubmit = (data: IOrderForm) => orderService.submitForm(
+    data, mutation, 1, selectedProducts, order ? order.id : undefined
+  );
 
-  if (ipError || chinaError || orderError || statusError || productsError) return <p>error</p>;
+  if (isLoading) return <p>loading</p>;
+
+  if (isError) return <p>error</p>;
 
   return (
-    <>
-      {individualEntrepreneurs && chinaDistributors && orderForProjects && statuses && products && (
+    <div className='mx-4 my-6'>
+      {chinaDistributors && orderForProjects && statuses && products && (
         <form
           onSubmit={handleSubmit(onSubmit)}
           className='flex flex-col space-y-4'
         >
+          <h1 className='text-3xl mb-3'>Заказ {order && `№${order.custom_id}`} поставщику
+            в <span className='underline text-indigo-600'>Китай</span> от {date}</h1>
           <FormControls
             errors={errors}
             register={register}
-            individualEntrepreneurs={individualEntrepreneurs}
             orderForProjects={orderForProjects}
             chinaDistributors={chinaDistributors}
             statuses={statuses}
+            order={order}
+            control={control}
+            setSelectedStatus={setSelectedStatus}
           />
-          <Products products={products} selectedProducts={selectedProducts} setSelectedProducts={setSelectedProducts} />
-          <div className="flex justify-between items-center">
-            <IndigoButton
-              type={'submit'}
-              text={'Создать'}
-              handler={() => null}
-            />
-            <GreenButton
-              type={'button'}
-              text={'Скачать Excel'}
-              handler={() => null}
-            />
-          </div>
+          {
+            selectedStatus === 'Отправлен поставщику для просчета' && (
+              <AdditionalExpenses
+                additional={additional}
+                setAdditional={setAdditional}
+                selectedProducts={selectedProducts}
+                setSelectedProducts={setSelectedProducts}
+                order={order}
+                statuses={statuses}
+              />
+            )
+          }
+          {
+            selectedStatus === 'Заказ оформлен' && (
+              <Total order={order} />
+            )
+          }
+          <Products
+            products={products}
+            selectedProducts={selectedProducts}
+            setSelectedProducts={setSelectedProducts}
+            additional={additional}
+            setAdditional={setAdditional}
+          />
+          <BottomControls
+            register={register}
+            order={order}
+          />
+          <Notification
+            order={order}
+            control={control}
+          />
+          <ButtonGroup order={order}/>
         </form>
       )}
-    </>
+    </div>
   );
 };
 

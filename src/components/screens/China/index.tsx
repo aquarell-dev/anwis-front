@@ -1,35 +1,22 @@
-import { FC } from 'react';
+import React, { FC } from 'react';
 
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { useListOrdersQuery } from '../../../features/order/orderApi';
-import { orderService } from '../../../features/order/orderServices';
+import { useNavigate } from 'react-router-dom';
 
-const columns: GridColDef[] = [
-  { field: 'id', headerName: 'ID', width: 70 },
-  { field: 'china_distributor', headerName: 'Китайский посредник', width: 150 },
-  { field: 'individual_entrepreneur', headerName: 'Индивидуальный предприниматель', width: 150 },
-  {
-    field: 'order_for_project',
-    headerName: 'Заказ под проект',
-    width: 150,
-  },
-  {
-    field: 'status',
-    headerName: 'Статус',
-    width: 150,
-  },
-];
+import Order from './styled/Order';
 
 const China: FC = () => {
 
   const { data, error, isLoading } = useListOrdersQuery(null);
+
+  const navigate = useNavigate();
 
   if (error) return <p>Error</p>;
 
   return (
     <div className='mt-8 flex space-x-5'>
       <div
-        style={{ height: 600, width: '50%' }}
+        style={{ height: 600, width: '100%' }}
       >
         <div className="flex items-center space-x-4 mb-3">
           <p className='font-medium text-xl'>Список заказов</p>
@@ -55,21 +42,37 @@ const China: FC = () => {
             />
           </div>
         </div>
-        {isLoading ? <p>Loading</p> : (
-          <>
-            {data && (
-              <DataGrid
-                rows={orderService.formRows(data)}
-                columns={columns}
-                pageSize={2}
-                rowsPerPageOptions={[2]}
-              />
-            )}
-          </>
-        )}
-      </div>
-      <div>
-        <p className='text-xl font-medium'>Заказы в архиве</p>
+        <div className="grid grid-cols-3 gap-y-4 gap-x-6">
+          {data?.map(order => (
+            <React.Fragment key={order.id}>
+              <Order
+                border={order.status.color}
+                hover={order.status.hover_color}
+                onClick={() => navigate(`/china/orders/${order.id}`)}
+              >
+                <div className='flex flex-col space-y-2 w-1/2'>
+                  <img
+                    src={order.status.photo}
+                    alt={'Статус'}
+                    className={'h-16 w-16'}
+                    style={{ flex: '0 0 auto' }}
+                  />
+                  <div className="flex items-center space-x-2">
+                    <div className="h-4 w-4 rounded-full" style={{ backgroundColor: order.status.color, flex: '0 0 auto' }} />
+                    <p className='text-[12px]'>{order.status.status}</p>
+                  </div>
+                </div>
+                <div className="w-full text-right">
+                  <p>
+                    Заказ {order.id}
+                  </p>
+                  <p>ИП: {order.individual_entrepreneur.individual_entrepreneur}</p>
+                  <p>КП: {order.china_distributor.china_distributor}</p>
+                </div>
+              </Order>
+            </React.Fragment>
+          ))}
+        </div>
       </div>
     </div>
   );

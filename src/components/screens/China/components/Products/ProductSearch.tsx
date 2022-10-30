@@ -1,8 +1,9 @@
 import { FC } from 'react';
 import { ReactSearchAutocomplete } from 'react-search-autocomplete';
 import { IProduct } from '../../../../../features/order/types';
+import { IProductSearchProps } from './types';
 
-const ProductSearch: FC<{ products: IProduct[], handleOnSelect: (item: IProduct) => any }> = ({ products, handleOnSelect }) => {
+const ProductSearch: FC<IProductSearchProps> = ({ products, handleOnSelect }) => {
   const formatResult = (item: IProduct) => {
     return (
       <div className='flex items-center space-x-5'>
