@@ -11,6 +11,9 @@ import Settings from './components/screens/Settings';
 
 import China from './components/screens/China';
 import NewOrder from './components/screens/China/NewOrder';
+import ExistingOrder from './components/screens/China/ExistingOrder';
+import Archive from './components/screens/China/Archive';
+
 
 function App() {
   return (
@@ -24,7 +27,9 @@ function App() {
 
             <Route path={'/china'} element={<ChinaLayout />}>
               <Route index element={<China />} />
+              <Route path={'/china/orders/:id'} element={<ExistingOrder />} />
               <Route path={'/china/new-order'} element={<NewOrder />} />
+              <Route path={'/china/archive'} element={<Archive />} />
             </Route>
           </Route>
         </Routes>
