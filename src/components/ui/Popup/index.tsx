@@ -1,11 +1,13 @@
-import { FC, useRef } from 'react';
+import { FC, useRef, useState } from 'react';
 import { useOutside } from '../../../hooks/useOutside';
-import { ICreatePopup, IPopup } from './types';
-import { GreenButton } from '../Button';
+import { IAddProductPopup, ICreatePopup, IPopup } from './types';
+import { GreenButton, IndigoButton } from '../Button';
 import { Input } from '../Input';
+import { cn } from '../../../utils';
+import ProductSearch from '../../screens/China/components/Products/ProductSearch';
 
 
-const Popup: FC<IPopup<boolean>> = ({ children, state, setState }) => {
+const Popup: FC<IPopup<boolean>> = ({ children, state, setState, width, height }) => {
   const ref = useRef(null);
 
   useOutside(ref, () => setState(false));
@@ -14,7 +16,10 @@ const Popup: FC<IPopup<boolean>> = ({ children, state, setState }) => {
     <>
       {state && (
         <div
-          className='fixed w-96 h-52 bg-gray-100 rounded-md shadow-md top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'
+          className={cn(
+            'fixed bg-gray-200 z-[100] rounded-md shadow-md top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2',
+            width ?? 'w-96', height ?? 'h-52'
+          )}
           ref={ref}
         >
           {children}
@@ -67,6 +72,98 @@ export const CreatePopup: FC<ICreatePopup> = ({ state, setState, title, handler,
                 text={'Создать'}
                 handler={() => handler()}
               />
+            </div>
+          </div>
+        </>
+      )}
+    </Popup>
+  );
+};
+
+export const AddProductFromDictionaryPopup: FC<IAddProductPopup> = ({
+                                                                      setState,
+                                                                      state,
+                                                                      isLoading,
+                                                                      categories,
+                                                                      error,
+                                                                      products,
+                                                                      selectedProducts,
+                                                                      setSelectedProducts
+                                                                    }) => {
+  const [filteredProducts, setFilteredProducts] = useState(products);
+
+  if (error) return <p>Error</p>;
+
+  return (
+    <Popup
+      state={state}
+      setState={setState}
+      width={'w-[80%]'}
+      height={'h-[70%]'}
+    >
+      {isLoading ? (
+        <p>Loading...</p>
+      ) : (
+        <>
+          <div className="absolute bottom-0 right-0 my-1 mx-2">
+            <IndigoButton
+              type={'button'}
+              text={'Готово'}
+              handler={() => setState(false)}
+            />
+          </div>
+          <div className="flex space-x-12 items-start mx-4 my-2">
+            <div className="overflow-y-auto">
+              <p className='font-medium text-xl'>Категории</p>
+              <div className="flex flex-col space-y-1.5 mt-8">
+                {categories ? categories.map(category => (
+                  <p
+                    className='underline hover:text-gray-600 duration-300 ease-in-out transition cursor-pointer'
+                    key={category.id}
+                    onClick={() => setFilteredProducts(products.filter(product => product.category === category.category))}
+                  >
+                    {category.category}
+                  </p>
+                )) : <p>Error</p>}
+                <p
+                  className='hover:text-gray-600 duration-300 ease-in-out transition cursor-pointer'
+                  onClick={() => setFilteredProducts(products)}
+                >
+                  Сбросить фильтры
+                </p>
+              </div>
+            </div>
+            <div className="w-[80%]">
+              <div className="w-50%">
+                <ProductSearch
+                  products={products}
+                  handleOnSelect={() => {
+                  }}
+                />
+              </div>
+              <div className="mt-2 w-full grid grid-cols-5 gap-x-4">
+                {filteredProducts.map(product => (
+                  <div
+                    key={product.id}
+                    className='flex space-x-4 bg-gray-200 hover:bg-gray-300 duration-300 transition ease-in-out cursor-pointer rounded-md items-center px-2 py-1'
+                    onClick={() => setSelectedProducts(prev => [{
+                      quantity: 0,
+                      price_rub: 0,
+                      price_cny: 0,
+                      cny_to_rub_course: 0,
+                      additional_expenses: 0,
+                      product
+                    }, ...prev])}
+                  >
+                    <img
+                      src={product.photo}
+                      alt={product.title}
+                      className='w-8 h-8 object-cover my-1'
+                    />
+                    <p>{product.article}, {product.title}</p>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </>
