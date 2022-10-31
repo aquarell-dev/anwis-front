@@ -23,6 +23,7 @@ const BottomControls: FC<{ order?: IOrder, register: any }> = ({ order, register
         <p className='text-xl'>Черновик</p>
         <input
           type='checkbox'
+          multiple={true}
           {...register('draft')}
           className='mx-3'
           defaultChecked={order?.draft}
