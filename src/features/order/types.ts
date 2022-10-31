@@ -114,3 +114,18 @@ export interface ITask {
 
 export interface ICreateTask extends Omit<ITask, 'id'> {
 }
+
+export interface ILeftOverProduct {
+  id: number;
+  title: string;
+  quantity: string;
+}
+
+export interface ILeftOver {
+  id: number;
+  products: ILeftOverProduct[];
+  title: string;
+  url: string;
+  photo_url: string;
+  nm: string;
+}
