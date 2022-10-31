@@ -13,6 +13,7 @@ import China from './components/screens/China';
 import NewOrder from './components/screens/China/NewOrder';
 import ExistingOrder from './components/screens/China/ExistingOrder';
 import Archive from './components/screens/China/Archive';
+import LeftOver from './components/screens/China/Leftover';
 
 
 function App() {
@@ -30,6 +31,7 @@ function App() {
               <Route path={'/china/orders/:id'} element={<ExistingOrder />} />
               <Route path={'/china/new-order'} element={<NewOrder />} />
               <Route path={'/china/archive'} element={<Archive />} />
+              <Route path={'/china/leftover'} element={<LeftOver />} />
             </Route>
           </Route>
         </Routes>

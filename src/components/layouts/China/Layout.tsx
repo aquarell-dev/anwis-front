@@ -18,6 +18,10 @@ const elements: ISubNavElement[] = [
     title: 'Заказы в архиве',
     link: '/china/archive'
   },
+  {
+    title: 'Остатки',
+    link: '/china/leftover'
+  },
 ];
 
 export const Layout: FC = () => {
