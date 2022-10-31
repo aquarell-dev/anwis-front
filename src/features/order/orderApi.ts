@@ -13,7 +13,7 @@ import {
 
 export const orderApi = createApi({
   reducerPath: 'orders/api',
-  baseQuery: fetchBaseQuery({ baseUrl: 'http://127.0.0.1:8000/api/' }),
+  baseQuery: fetchBaseQuery({ baseUrl: 'https://anwis-sklad.herokuapp.com/api/' }),
   tagTypes: [
     'IIndividualEntrepreneur', 'IChinaDistributor', 'IOrderForProject', 'IOrder', 'ICategory', 'ITask',
     'Leftover'
