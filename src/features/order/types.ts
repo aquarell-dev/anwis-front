@@ -50,6 +50,7 @@ export interface IOrder {
   total_cny: number;
   total_expenses: number;
   total_quantity: number;
+  ready_date: string;
 }
 
 type Modify<T, R> = Omit<T, keyof R> & R;
