@@ -5,7 +5,7 @@ import {
   ICreateIndividualEntrepreneur, ICreateUpdateOrder, ICreateOrderForProject,
   IIndividualEntrepreneur, IOrder,
   IOrderForProject, IProduct,
-  IStatus, ITask, ICreateTask
+  IStatus, ITask, ICreateTask, ILeftOver
 } from './types';
 
 // http://127.0.0.1:8000/api/
@@ -13,8 +13,11 @@ import {
 
 export const orderApi = createApi({
   reducerPath: 'orders/api',
-  baseQuery: fetchBaseQuery({ baseUrl: 'https://anwis-sklad.herokuapp.com/api/' }),
-  tagTypes: ['IIndividualEntrepreneur', 'IChinaDistributor', 'IOrderForProject', 'IOrder', 'ICategory', 'ITask'],
+  baseQuery: fetchBaseQuery({ baseUrl: 'http://127.0.0.1:8000/api/' }),
+  tagTypes: [
+    'IIndividualEntrepreneur', 'IChinaDistributor', 'IOrderForProject', 'IOrder', 'ICategory', 'ITask',
+    'Leftover'
+  ],
   endpoints: build => ({
     listIndividualEntrepreneurs: build.query<IIndividualEntrepreneur[], any>({
       query: (p: any) => ({
@@ -139,6 +142,28 @@ export const orderApi = createApi({
       }),
       invalidatesTags: ['ITask']
     }),
+    // --------------------------------------------------------------------------------------------------------------
+    listLeftovers: build.query<ILeftOver[], any>({
+      query: p => ({
+        url: 'leftovers/'
+      }),
+      providesTags: ['Leftover']
+    }),
+    createLeftover: build.mutation<void, { url: string, photo_url: string }>({
+      query: leftover => ({
+        url: 'leftovers/',
+        method: 'POST',
+        body: leftover
+      }),
+      invalidatesTags: ['Leftover']
+    }),
+    updateLeftovers: build.mutation<void, null>({
+      query: () => ({
+        url: 'leftovers/update/',
+        method: 'PUT',
+      }),
+      invalidatesTags: ['Leftover']
+    }),
   })
 });
 
@@ -152,6 +177,7 @@ export const {
   useListCategoriesQuery,
   useGetOrderByIdQuery,
   useListTasksQuery,
+  useListLeftoversQuery,
 
   useCreateIndividualEntrepreneurMutation,
   useCreateChinaDistributorMutation,
@@ -161,4 +187,6 @@ export const {
   useCreateCategoryMutation,
   useUpdateOrderPartialByIdMutation,
   useUpdateOrderByIdMutation,
+  useCreateLeftoverMutation,
+  useUpdateLeftoversMutation
 } = orderApi;
