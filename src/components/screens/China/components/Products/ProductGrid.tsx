@@ -3,12 +3,13 @@ import React, { FC, useState } from 'react';
 import { DataGrid, GridSelectionModel } from '@mui/x-data-grid';
 
 import { IProductFields } from './types';
-import { IProduct, IProductSpecs } from '../../../../../features/order/types';
+import { IOrder, IProduct, IProductSpecs } from '../../../../../features/order/types';
 
 import { orderService } from '../../../../../features/order/orderServices';
 import CustomToolbar from './CustomToolbar';
 import { SetState } from '../../../../../utils/types';
 import { TAdditional } from '../../types';
+import CustomFooter from './CustomFooter';
 
 
 const ProductGrid: FC<{
@@ -16,7 +17,8 @@ const ProductGrid: FC<{
   setSelectedProducts: SetState<IProductSpecs[]>,
   additional: TAdditional,
   setAdditional: SetState<TAdditional>,
-}> = ({ selectedProducts, setSelectedProducts, setAdditional }) => {
+  order: IOrder | undefined
+}> = ({ selectedProducts, setSelectedProducts, setAdditional, order }) => {
   const [selectionModel, setSelectionModel] = useState<GridSelectionModel>([]);
 
   const columns: IProductFields[] = [
@@ -67,17 +69,20 @@ const ProductGrid: FC<{
       density={'comfortable'}
       columns={columns}
       hideFooterPagination
-      hideFooter
       disableSelectionOnClick
       rows={rows}
       components={{
-        Toolbar: CustomToolbar
+        Toolbar: CustomToolbar,
+        Footer: CustomFooter
       }}
       componentsProps={{
         toolbar: {
           selectionModel,
           selectedProducts,
           setSelectedProducts
+        },
+        footer: {
+          order
         }
       }}
       onSelectionModelChange={selectionModel => setSelectionModel(selectionModel)}
