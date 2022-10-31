@@ -3,7 +3,7 @@ import React, { FC, useState } from 'react';
 import { IndigoButton } from '../../../../ui/Button';
 import ProductSearch from './ProductSearch';
 
-import { IProduct, IProductSpecs } from '../../../../../features/order/types';
+import { IOrder, IProduct, IProductSpecs } from '../../../../../features/order/types';
 import { SetState } from '../../../../../utils/types';
 import { AddProductFromDictionaryPopup } from '../../../../ui/Popup';
 import { useListCategoriesQuery } from '../../../../../features/order/orderApi';
@@ -17,7 +17,8 @@ interface IProductsProps {
   selectedProducts: IProductSpecs[];
   setSelectedProducts: SetState<IProductSpecs[]>;
   additional: TAdditional;
-  setAdditional: SetState<TAdditional>
+  setAdditional: SetState<TAdditional>;
+  order?: IOrder;
 }
 
 const Products: FC<IProductsProps> = ({
@@ -25,7 +26,8 @@ const Products: FC<IProductsProps> = ({
                                         selectedProducts,
                                         setSelectedProducts,
                                         additional,
-                                        setAdditional
+                                        setAdditional,
+                                        order
                                       }) => {
   const handleOnSelect = (item: IProduct) => setSelectedProducts(prev => [{
     quantity: 0,
@@ -69,6 +71,7 @@ const Products: FC<IProductsProps> = ({
           setSelectedProducts={setSelectedProducts}
           setAdditional={setAdditional}
           additional={additional}
+          order={order}
         />
       </div>
       <AddProductFromDictionaryPopup
