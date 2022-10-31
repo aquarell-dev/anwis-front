@@ -8,14 +8,14 @@ import BottomControls from './BottomControls';
 import Notification from './Notification';
 import AdditionalExpenses from './AdditionalExpenses';
 import ButtonGroup from './ButtonGroup';
-import SlideAlert from '../../../../ui/SlideAlert';
 
 import { IOrderForm, TAdditional } from '../../types';
 import { Mutation } from '../../../../../utils/types';
 import { ICreateUpdateOrder, IOrder, IProductSpecs, TStatuses } from '../../../../../features/order/types';
 
 import { orderService } from '../../../../../features/order/orderServices';
-import Total from './Total';
+import ReadyOrderDate from './ReadyOrderDate';
+import CargoShipInfo from './CargoShipInfo';
 
 
 const OrderForm: FC<{ order?: IOrder; mutation: Mutation<ICreateUpdateOrder> }> = ({ order, mutation }) => {
@@ -87,7 +87,7 @@ const OrderForm: FC<{ order?: IOrder; mutation: Mutation<ICreateUpdateOrder> }> 
           }
           {
             selectedStatus === 'Заказ оформлен' && (
-              <Total order={order} />
+              <ReadyOrderDate order={order} />
             )
           }
           <Products
@@ -96,6 +96,7 @@ const OrderForm: FC<{ order?: IOrder; mutation: Mutation<ICreateUpdateOrder> }> 
             setSelectedProducts={setSelectedProducts}
             additional={additional}
             setAdditional={setAdditional}
+            order={order}
           />
           <BottomControls
             register={register}
@@ -105,6 +106,9 @@ const OrderForm: FC<{ order?: IOrder; mutation: Mutation<ICreateUpdateOrder> }> 
             order={order}
             control={control}
           />
+          { selectedStatus === 'Отправлен из Китая' && (
+            <CargoShipInfo />
+          )}
           <ButtonGroup order={order}/>
         </form>
       )}
