@@ -2,6 +2,12 @@ import { FC, useState } from 'react';
 import { GreenButton, IndigoButton } from '../../../../ui/Button';
 import Expand from 'react-expand-animated';
 import { FancyInput } from '../../../../ui/Input';
+import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import TextField from '@mui/material/TextField';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import * as React from 'react';
+import moment from 'moment';
 
 const CargoShipInfo: FC = () => {
   const [open, setOpen] = useState(false);
@@ -12,6 +18,8 @@ const CargoShipInfo: FC = () => {
     pricePerKg: '',
     packagePrice: '',
     totalPrice: '',
+    shippingFromChinaDate: moment(),
+    inMoscowDate: moment(null),
   });
 
   return (
@@ -30,8 +38,15 @@ const CargoShipInfo: FC = () => {
           customWidth={'w-60'}
           handler={() => setOpen(!open)}
         />
+        <IndigoButton
+          type={'button'}
+          customWidth={'w-60'}
+          text={'Сохранить'}
+          handler={() => {
+          }}
+        />
         <Expand open={open}>
-          <div className="flex flex-col space-y-4">
+          <div className="grid grid-cols-4 gap-x-4 gap-y-4">
             <FancyInput
               type={'input'}
               value={cargoInfo.cargoNumber}
@@ -50,6 +65,19 @@ const CargoShipInfo: FC = () => {
               handler={(e) => setCargoInfo(prev => ({ ...prev, cargoVolume: e.target.value }))}
               placeholder={'Объем'}
             />
+            <LocalizationProvider dateAdapter={AdapterMoment}>
+              <DatePicker
+                label="Дата Отправки из Китая"
+                openTo="month"
+                views={['year', 'month', 'day']}
+                inputFormat={'DD/MM/YYYY'}
+                value={cargoInfo.shippingFromChinaDate}
+                onChange={(newValue) => {
+                  newValue && setCargoInfo(prev => ({ ...prev, shippingFromChinaDate: newValue }));
+                }}
+                renderInput={(params) => <TextField {...params} />}
+              />
+            </LocalizationProvider>
             <FancyInput
               type={'input'}
               value={cargoInfo.pricePerKg}
@@ -68,7 +96,19 @@ const CargoShipInfo: FC = () => {
               handler={(e) => setCargoInfo(prev => ({ ...prev, totalPrice: e.target.value }))}
               placeholder={'Общая сумма'}
             />
-            <IndigoButton type={'button'} text={'Сохранить'} handler={() => {}} />
+            <LocalizationProvider dateAdapter={AdapterMoment}>
+              <DatePicker
+                label="Доставка в Москву"
+                openTo="month"
+                views={['year', 'month', 'day']}
+                value={cargoInfo.inMoscowDate}
+                inputFormat={'DD/MM/YYYY'}
+                onChange={(newValue) => {
+                  newValue && setCargoInfo(prev => ({ ...prev, inMoscowDate: newValue }));
+                }}
+                renderInput={(params) => <TextField {...params} />}
+              />
+            </LocalizationProvider>
           </div>
         </Expand>
       </div>
