@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 
-import { IInput, IOrderSelect, IRHFInput, IRHFSelect } from './types';
+import { IInput, IRHFInput, IRHFSelect } from './types';
 
 import { cn } from '../../../utils';
 
@@ -16,6 +16,23 @@ export const Input: FC<IInput> = ({ type, placeholder, handler, value, additiona
   onChange={handler}
   value={value}
 />;
+
+export const FancyInput: FC<IInput> = ({ type, placeholder, handler, value, additionalStyles, disabled }) => {
+  return (
+    <input
+      className={cn(
+        'w-96 outline-none py-1 px-2 border border-gray-300 rounded-sm',
+        additionalStyles ? additionalStyles : ''
+      )}
+      type={type}
+      placeholder={placeholder}
+      disabled={disabled}
+      step={'any'}
+      onChange={handler}
+      value={value}
+    />
+  )
+};
 
 export const RHFInput: FC<IRHFInput> = ({ label, register, required, ...inputProps }) =>
   <input
