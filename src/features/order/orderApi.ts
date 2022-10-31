@@ -95,6 +95,14 @@ export const orderApi = createApi({
       }),
       invalidatesTags: ['IOrder']
     }),
+    updateOrderPartialById: build.mutation<void, Partial<ICreateUpdateOrder>>({
+      query: order => ({
+        url: `order/partial/${order.id}/`,
+        method: 'PUT',
+        body: order
+      }),
+      invalidatesTags: ['IOrder']
+    }),
     // --------------------------------------------------------------------------------------------------------------
     listProducts: build.query<IProduct[], any>({
       query: p => ({
@@ -151,5 +159,6 @@ export const {
   useCreateOrderMutation,
   useCreateTaskMutation,
   useCreateCategoryMutation,
+  useUpdateOrderPartialByIdMutation,
   useUpdateOrderByIdMutation,
 } = orderApi;
