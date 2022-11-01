@@ -79,7 +79,7 @@ const LeftOver: FC = () => {
       <div className='grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-y-6 w-full mx-4 my-6'>
         {data && data.map(leftover => (
           <div
-            className='w-[200px] md:w-[350px] border border-gray-300 min-h-56 rounded-md cursor-pointer hover:bg-gray-100 duration-300 transition ease-in-out'
+            className='w-[275px] md:w-[350px] border border-gray-300 min-h-56 rounded-md cursor-pointer hover:bg-gray-100 duration-300 transition ease-in-out'
             key={leftover.id}
           >
             <a
@@ -97,7 +97,7 @@ const LeftOver: FC = () => {
                     {leftover.title}
                   </p>
                 </div>
-                <div className="flex flex-col w-1/2 space-y-2">
+                <div className="flex flex-col w-full text-right space-y-2">
                   {leftover.products.map(product => (
                     <div key={product.id}>
                       <p><span>{product.title}</span> - <span>{product.quantity}</span></p>
