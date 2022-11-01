@@ -17,12 +17,13 @@ export const Input: FC<IInput> = ({ type, placeholder, handler, value, additiona
   value={value}
 />;
 
-export const FancyInput: FC<IInput> = ({ type, placeholder, handler, value, additionalStyles, disabled }) => {
+export const FancyInput: FC<IInput> = ({ customWidth, type, placeholder, handler, value, additionalStyles, disabled }) => {
   return (
     <input
       className={cn(
-        'w-96 outline-none py-1 px-2 border border-gray-300 rounded-sm',
-        additionalStyles ? additionalStyles : ''
+        'outline-none py-1 px-2 border border-gray-300 rounded-sm',
+        additionalStyles ? additionalStyles : '',
+        customWidth ?? 'w-96'
       )}
       type={type}
       placeholder={placeholder}

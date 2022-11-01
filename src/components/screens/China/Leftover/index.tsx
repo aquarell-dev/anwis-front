@@ -14,11 +14,11 @@ import { notifyError, notifySuccess } from '../../../../utils/notify';
 
 
 const LeftOver: FC = () => {
-  const [open, setOpen] = useState(false);
-  const [leftOver, setLeftover] = useState({
-    url: '',
-    photo_url: ''
-  });
+    const [open, setOpen] = useState(false);
+    const [leftOver, setLeftover] = useState({
+      url: '',
+      photo_url: ''
+    });
 
   const { data, isLoading, error } = useListLeftoversQuery(null);
   const [createLeftover, { isLoading: createLeftoverLoading }] = useCreateLeftoverMutation();
@@ -31,7 +31,7 @@ const LeftOver: FC = () => {
   return (
     <>
       <div className="flex flex-col space-y-2 mx-4 my-6">
-        <div className="flex space-x-2 items-center">
+        <div className="flex flex-col space-y-2 md:space-y-0 md:flex-row md:space-x-2 md:items-center">
           <IndigoButton
             type={'button'}
             text={open ? 'Создать' : 'Новый товар'}
@@ -63,21 +63,23 @@ const LeftOver: FC = () => {
           <div className="flex flex-col space-y-2">
             <FancyInput
               value={leftOver.url}
+              customWidth={'w-[700px]'}
               handler={(e) => setLeftover({ ...leftOver, url: e.target.value })}
               placeholder={'Ссылка на товар'}
             />
             <FancyInput
               value={leftOver.photo_url}
+              customWidth={'w-[700px]'}
               handler={(e) => setLeftover({ ...leftOver, photo_url: e.target.value })}
               placeholder={'Ссылка на картинку товара'}
             />
           </div>
         </Expand>
       </div>
-      <div className='grid grid-cols-4 gap-y-6 w-full mx-4 my-6'>
+      <div className='grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-y-6 w-full mx-4 my-6'>
         {data && data.map(leftover => (
           <div
-            className='w-[400px] border border-gray-300 min-h-56 rounded-md cursor-pointer hover:bg-gray-100 duration-300 transition ease-in-out'
+            className='w-[200px] md:w-[350px] border border-gray-300 min-h-56 rounded-md cursor-pointer hover:bg-gray-100 duration-300 transition ease-in-out'
             key={leftover.id}
           >
             <a

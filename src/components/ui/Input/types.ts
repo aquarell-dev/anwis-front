@@ -10,6 +10,7 @@ export interface IInput {
   error?: boolean;
   additionalStyles?: string;
   disabled?: boolean;
+  customWidth?: string;
 }
 
 interface IRHF {

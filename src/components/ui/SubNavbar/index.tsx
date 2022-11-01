@@ -10,8 +10,8 @@ const SubNavbar: FC<{ elements: ISubNavElement[] }> = ({ elements }) => {
   const router = useLocation();
 
   return (
-    <div className='w-full h-12 rounded-b-lg shadow-md bg-gray-100'>
-      <div className="w-full h-full flex items-center px-4 py-2 space-x-4">
+    <div className='w-full min-h-12 rounded-b-lg shadow-md bg-gray-100'>
+      <div className="w-full h-full flex flex-col md:flex-row items-center px-4 py-2 space-x-4">
         {elements.map(({ link, title }, idx) => (
           <div className='px-2 cursor-pointer transition duration-300 ease-in-out rounded-md hover:bg-gray-200 py-1' key={idx}>
             <Link to={link}>
