@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 export interface IIndividualEntrepreneur {
   id: number;
   individual_entrepreneur: string;
@@ -50,7 +52,26 @@ export interface IOrder {
   total_cny: number;
   total_expenses: number;
   total_quantity: number;
-  ready_date: string;
+  ready_date?: string;
+  shipping_from_china_date?: string;
+  in_moscow_date?: string;
+  cargo_number?: string;
+  cargo_weight?: string;
+  cargo_volume?: string;
+  price_per_kg: number;
+  package_price: number;
+  total_delivery: number;
+}
+
+export interface ICargoInfo {
+  cargo_number: string;
+  cargo_weight: string;
+  cargo_volume: string;
+  price_per_kg: number;
+  package_price: number;
+  total_delivery: number;
+  shipping_from_china_date: string;
+  in_moscow_date: string;
 }
 
 type Modify<T, R> = Omit<T, keyof R> & R;
@@ -128,4 +149,5 @@ export interface ILeftOver {
   url: string;
   photo_url: string;
   nm: string;
+  total: number;
 }

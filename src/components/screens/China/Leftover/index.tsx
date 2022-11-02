@@ -24,6 +24,10 @@ const LeftOver: FC = () => {
   const [createLeftover, { isLoading: createLeftoverLoading }] = useCreateLeftoverMutation();
   const [updateLeftovers, { isLoading: updateLeftoversLoading }] = useUpdateLeftoversMutation();
 
+  let total = 0;
+
+  data?.forEach(leftover => total += leftover.total);
+
   if (isLoading || createLeftoverLoading || updateLeftoversLoading) return <p>Loading...</p>;
 
   if (error) return <p>error...</p>;
@@ -76,6 +80,7 @@ const LeftOver: FC = () => {
           </div>
         </Expand>
       </div>
+      <p>Всего - <span className='font-medium'>{total}</span></p>
       <div className='grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-y-6 w-full mx-4 my-6'>
         {data && data.map(leftover => (
           <div
@@ -103,6 +108,7 @@ const LeftOver: FC = () => {
                       <p><span>{product.title}</span> - <span>{product.quantity}</span></p>
                     </div>
                   ))}
+                  <p>Всего - <span>{leftover.total}</span></p>
                 </div>
               </div>
             </a>
