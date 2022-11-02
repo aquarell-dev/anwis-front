@@ -107,7 +107,7 @@ const OrderForm: FC<{ order?: IOrder; mutation: Mutation<ICreateUpdateOrder> }> 
             control={control}
           />
           { selectedStatus === 'Отправлен из Китая' && (
-            <CargoShipInfo />
+            <CargoShipInfo order={order} />
           )}
           <ButtonGroup order={order}/>
         </form>
