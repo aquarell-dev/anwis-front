@@ -17,22 +17,42 @@ export const Input: FC<IInput> = ({ type, placeholder, handler, value, additiona
   value={value}
 />;
 
-export const FancyInput: FC<IInput> = ({ customWidth, type, placeholder, handler, value, additionalStyles, disabled }) => {
+export const FancyInput: FC<IInput> = ({
+                                         customWidth,
+                                         type,
+                                         placeholder,
+                                         handler,
+                                         value,
+                                         additionalStyles,
+                                         disabled,
+                                         showLabel,
+                                         defaultValue,
+                                         restProps
+                                       }) => {
   return (
-    <input
-      className={cn(
-        'outline-none py-1 px-2 border border-gray-300 rounded-sm',
-        additionalStyles ? additionalStyles : '',
-        customWidth ?? 'w-96'
+    <div className='flex flex-col space-y-1'>
+      {showLabel && (
+        <p className='text-sm'>{placeholder}</p>
       )}
-      type={type}
-      placeholder={placeholder}
-      disabled={disabled}
-      step={'any'}
-      onChange={handler}
-      value={value}
-    />
-  )
+      <input
+        className={cn(
+          'outline-none py-1 px-2 border border-gray-300 rounded-sm',
+          additionalStyles ? additionalStyles : '',
+          customWidth ?? 'w-96'
+        )}
+        defaultValue={defaultValue}
+        type={type}
+        placeholder={placeholder}
+        disabled={disabled}
+        step={'0.1'}
+        min={'0'}
+        max={'10000'}
+        onChange={handler}
+        value={value}
+        {...restProps}
+      />
+    </div>
+  );
 };
 
 export const RHFInput: FC<IRHFInput> = ({ label, register, required, ...inputProps }) =>
@@ -43,15 +63,15 @@ export const RHFInput: FC<IRHFInput> = ({ label, register, required, ...inputPro
   />;
 
 export const RHFSelect: FC<IRHFSelect> = ({
-                                              label,
-                                              register,
-                                              required,
-                                              text,
-                                              options,
-                                              defaultValue,
-                                              error,
-                                              ...inputProps
-                                            }) => {
+                                            label,
+                                            register,
+                                            required,
+                                            text,
+                                            options,
+                                            defaultValue,
+                                            error,
+                                            ...inputProps
+                                          }) => {
   return (
     <div className='w-full'>
       <label
@@ -66,7 +86,8 @@ export const RHFSelect: FC<IRHFSelect> = ({
         {...register(label, { required })}
         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 text-black"
       >
-        { defaultValue ? <option value={defaultValue.value}>{defaultValue.label}</option> : <option value={''}>------------</option> }
+        {defaultValue ? <option value={defaultValue.value}>{defaultValue.label}</option> :
+          <option value={''}>------------</option>}
         {options.map((option, idx) => (
           <React.Fragment key={idx}>
             <option value={option.value}>{option.label}</option>

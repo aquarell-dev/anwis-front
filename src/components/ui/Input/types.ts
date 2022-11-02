@@ -11,6 +11,9 @@ export interface IInput {
   additionalStyles?: string;
   disabled?: boolean;
   customWidth?: string;
+  showLabel?: boolean;
+  defaultValue?: string | number;
+  restProps?: any[];
 }
 
 interface IRHF {
