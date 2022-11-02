@@ -13,7 +13,9 @@ import { IOrder } from '../../../../../features/order/types';
 
 
 const ReadyOrderDate: FC<{ order: IOrder | undefined }> = ({ order }) => {
-  const [readyDate, setReadyDate] = useState(moment(order ? new Date(order.ready_date).toLocaleDateString() : '01/01/2022', 'MM/DD/YYYY'));
+  const orderDate = new Date(order?.ready_date ?? '');
+
+  const [readyDate, setReadyDate] = useState(moment(order ? orderDate.toLocaleDateString() : '01/01/2022', 'MM/DD/YYYY'));
 
   const [updateOrder, _] = useUpdateOrderPartialByIdMutation();
 
@@ -22,7 +24,7 @@ const ReadyOrderDate: FC<{ order: IOrder | undefined }> = ({ order }) => {
   let daysLeft = undefined;
 
   if (order) daysLeft = Math.ceil(
-    (new Date(order.ready_date).getTime() - current.getTime()) / (1000 * 3600 * 24)
+    (orderDate.getTime() - current.getTime()) / (1000 * 3600 * 24)
   );
 
   return (
