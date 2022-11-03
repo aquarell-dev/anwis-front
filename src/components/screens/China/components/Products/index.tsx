@@ -43,7 +43,7 @@ const Products: FC<IProductsProps> = ({
 
   return (
     <>
-      <div className="w-full border border-gray-500 mt-12"/>
+      <div className="w-full border border-2 border-green-400 mt-12"/>
       <div className="flex items-center space-x-3">
         <div style={{ width: '30%', zIndex: '30' }}>
           <ProductSearch
@@ -84,7 +84,7 @@ const Products: FC<IProductsProps> = ({
         selectedProducts={selectedProducts}
         setSelectedProducts={setSelectedProducts}
       />
-      <div className="w-full border border-gray-500 mb-24"/>
+      <div className="w-full border border-2 border-green-400 mb-24"/>
     </>
   );
 };
