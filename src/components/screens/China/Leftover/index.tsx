@@ -11,6 +11,7 @@ import Expand from 'react-expand-animated';
 import { FancyInput } from '../../../ui/Input';
 
 import { notifyError, notifySuccess } from '../../../../utils/notify';
+import { cn } from '../../../../utils';
 
 
 const LeftOver: FC = () => {
@@ -109,7 +110,10 @@ const LeftOver: FC = () => {
                 <div className="flex flex-col w-full text-right space-y-2">
                   {leftover.products.map((product, idx) => (
                     <div key={product.id}>
-                      <p className='text-[12px] md:text-lg'><span>{product.title}</span> - <span>{product.quantity}</span> - ({leftover.buffer[idx].quantity})</p>
+                      <p className={cn(
+                        'text-[12px] md:text-lg',
+                        product.quantity !== leftover.buffer[idx].quantity ? 'text-red-500' : ''
+                      )}><span>{product.title}</span> - <span>{product.quantity}</span> - ({leftover.buffer[idx].quantity})</p>
                     </div>
                   ))}
                   <p>Всего - <span>{leftover.total}</span></p>
