@@ -1,4 +1,5 @@
 import { FC, useEffect, useState } from 'react';
+import useUpdatePartialOrder from '../../hooks/useUpdatePartialOrder';
 
 import { SetState } from '../../../../../utils/types';
 import { TAdditional } from '../../types';
@@ -6,8 +7,7 @@ import { IOrder, IProductSpecs, IStatus } from '../../../../../features/order/ty
 
 import { GreenButton, IndigoButton } from '../../../../ui/Button';
 import SlideAlert from '../../../../ui/SlideAlert';
-
-import useUpdateOrder from '../../hooks/useUpdateOrder';
+import { FancyInput } from '../../../../ui/Input';
 
 import { orderService } from '../../../../../features/order/orderServices';
 
@@ -23,7 +23,13 @@ const AdditionalExpenses: FC<{
   const [dialogOpen, setDialogOpen] = useState(false);
   const [dialogContent, setDialogContent] = useState('');
 
-  const [updateOrder] = useUpdateOrder();
+  const orderToBeUpdated = orderService.transformOrder(
+    order,
+    statuses.find(status => status.status === 'Заказ оформлен'),
+    selectedProducts,
+    additional
+  );
+  const updateOrder = useUpdatePartialOrder();
 
   useEffect(() => {
     let timer: NodeJS.Timeout;
@@ -31,7 +37,7 @@ const AdditionalExpenses: FC<{
     if (dialogOpen) {
       timer = setTimeout(() => {
         setDialogOpen(false);
-        updateOrder({ order, statuses, selectedProducts });
+        updateOrder(orderToBeUpdated);
       }, 5000);
     }
 
@@ -39,27 +45,27 @@ const AdditionalExpenses: FC<{
   }, [dialogOpen]);
 
   return (
-    <div className='flex items-center space-x-4'>
-      <input
+    <div className='flex items-end space-x-4'>
+      <FancyInput
         type={'number'}
-        className='w-96 outline-none py-1 px-2 border border-gray-300 rounded-sm'
         placeholder='Курс'
         value={additional.course}
-        onChange={e => setAdditional(prev => ({ ...prev, course: parseInt(e.target.value) }))}
+        handler={e => setAdditional(prev => ({ ...prev, course: parseInt(e.target.value) }))}
+        showLabel
       />
-      <input
+      <FancyInput
         type={'number'}
-        className='w-96 outline-none py-1 px-2 border border-gray-300 rounded-sm'
+        showLabel
         placeholder='Доп. затраты ¥'
         value={additional.expensesCny}
-        onChange={e => setAdditional(prev => ({ ...prev, expensesCny: parseInt(e.target.value) }))}
+        handler={e => setAdditional(prev => ({ ...prev, expensesCny: parseInt(e.target.value) }))}
       />
-      <input
+      <FancyInput
         type={'number'}
-        className='w-96 outline-none py-1 px-2 border border-gray-300 rounded-sm'
+        showLabel
         placeholder='Доп. затраты ₽'
         value={additional.expensesRub}
-        onChange={e => setAdditional(prev => ({ ...prev, expensesRub: parseInt(e.target.value) }))}
+        handler={e => setAdditional(prev => ({ ...prev, expensesRub: parseInt(e.target.value) }))}
       />
       <IndigoButton
         type={'button'}
@@ -80,7 +86,7 @@ const AdditionalExpenses: FC<{
         buttonText={['Да', 'Нет']}
         onAccept={() => {
           setDialogOpen(false);
-          updateOrder({ order, statuses, selectedProducts });
+          updateOrder(orderToBeUpdated);
         }}
         onClose={() => setDialogOpen(false)}
         onDeny={() => setDialogOpen(false)}

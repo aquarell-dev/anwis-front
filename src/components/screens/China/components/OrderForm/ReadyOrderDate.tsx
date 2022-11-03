@@ -1,47 +1,58 @@
-import * as React from 'react';
 import { FC, useState } from 'react';
+import useUpdatePartialOrder from '../../hooks/useUpdatePartialOrder';
 
 import TextField from '@mui/material/TextField';
+import { Alert } from '@mui/material';
+
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import moment from 'moment';
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
+import moment from 'moment';
+
 import { IndigoButton } from '../../../../ui/Button';
-import { useUpdateOrderPartialByIdMutation } from '../../../../../features/order/orderApi';
-import { notifyError, notifySuccess } from '../../../../../utils/notify';
+
+import { notifyError } from '../../../../../utils/notify';
+import { convertDateToUSFormat, getDateDiff } from '../../../../../utils';
+
 import { IOrder } from '../../../../../features/order/types';
 
 
 const ReadyOrderDate: FC<{ order: IOrder | undefined }> = ({ order }) => {
-  const orderDate = new Date(order?.ready_date ?? '');
+  const orderDate = order?.ready_date ? convertDateToUSFormat(order.ready_date) : new Date();
 
-  const [readyDate, setReadyDate] = useState(moment(order ? orderDate.toLocaleDateString() : '01/01/2022', 'MM/DD/YYYY'));
+  const [readyDate, setReadyDate] = useState(moment(order ? orderDate : '', 'DD/MM/YYYY'));
 
-  const [updateOrder, _] = useUpdateOrderPartialByIdMutation();
-
-  const current = new Date();
+  const updateOrder = useUpdatePartialOrder();
 
   let daysLeft = undefined;
 
-  if (order) daysLeft = Math.ceil(
-    (orderDate.getTime() - current.getTime()) / (1000 * 3600 * 24)
-  );
+  if (order) daysLeft = getDateDiff(orderDate, new Date());
 
   return (
     <div className='flex items-center space-x-4'>
-      <div className="w-96 p-2 border border-gray-300">
-        {
-          daysLeft ?
-            daysLeft <= 0 ? <p>Товар уже изготовлен</p> : <p>Дней до изготовления товара: <span className='font-medium'>{daysLeft}</span></p>
+      <div className="w-96">
+        <Alert
+          variant="filled"
+          severity={daysLeft ? daysLeft <= 5 ? 'error' : 'success' : 'error'}
+          className='flex items-center'
+        >
+          {daysLeft ?
+            daysLeft <= 0 ? <p className='text-xl'>Товар уже изготовлен</p> :
+              <p className='text-xl'>Дней до изготовления товара: <span className='font-bold'>{daysLeft}</span></p>
             :
-            <p>Неизвестная ошибка</p>
-        }
+            <p className='text-xl'>Неизвестная ошибка</p>
+          }
+        </Alert>
       </div>
-      <LocalizationProvider dateAdapter={AdapterMoment}>
+      <LocalizationProvider
+        adapterLocale={moment.locale('ru')}
+        dateAdapter={AdapterMoment}
+      >
         <DatePicker
           label="Дата изготовления"
-          openTo="month"
+          openTo="day"
           views={['year', 'month', 'day']}
+          inputFormat='DD/MM/yyyy'
           value={readyDate}
           onChange={(newValue) => {
             newValue && setReadyDate(newValue);
@@ -54,11 +65,7 @@ const ReadyOrderDate: FC<{ order: IOrder | undefined }> = ({ order }) => {
         text={'Сохранить'}
         handler={() => {
           if (!order) return notifyError('Не указан заказ');
-
-          updateOrder({ id: order.id, ready_date: readyDate.format('DD/MM/YYYY') })
-            .unwrap()
-            .then(() => notifySuccess('Дата изготовления создана'))
-            .catch(() => notifyError('Дата изготовления не создана'));
+          updateOrder({ id: order.id, ready_date: readyDate.format('DD/MM/YYYY') });
         }}
       />
     </div>

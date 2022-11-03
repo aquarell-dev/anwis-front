@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import useOrderData from '../../hooks/useOrderData';
 
@@ -9,13 +9,14 @@ import Notification from './Notification';
 import AdditionalExpenses from './AdditionalExpenses';
 import ButtonGroup from './ButtonGroup';
 
-import { IOrderForm, TAdditional } from '../../types';
+import { IOrderForm } from '../../types';
 import { Mutation } from '../../../../../utils/types';
-import { ICreateUpdateOrder, IOrder, IProductSpecs, TStatuses } from '../../../../../features/order/types';
+import { ICreateUpdateOrder, IOrder, TStatuses } from '../../../../../features/order/types';
 
 import { orderService } from '../../../../../features/order/orderServices';
 import ReadyOrderDate from './ReadyOrderDate';
 import CargoShipInfo from './CargoShipInfo';
+import useStatusShow from '../../hooks/useStatusShow';
 
 
 const OrderForm: FC<{ order?: IOrder; mutation: Mutation<ICreateUpdateOrder> }> = ({ order, mutation }) => {
@@ -25,24 +26,17 @@ const OrderForm: FC<{ order?: IOrder; mutation: Mutation<ICreateUpdateOrder> }> 
     statuses,
     products,
     isLoading,
-    isError
-  } = useOrderData();
+    isError,
+    additional,
+    setAdditional,
+    selectedProducts,
+    setSelectedProducts
+  } = useOrderData(order);
 
   const { register, handleSubmit, formState: { errors }, control } = useForm<IOrderForm>();
 
-  const [selectedProducts, setSelectedProducts] = useState<IProductSpecs[]>(order?.products || []);
   const [selectedStatus, setSelectedStatus] = useState<TStatuses>(order ? order.status.status : 'Ожидает заказа в Китае');
-  const [additional, setAdditional] = useState<TAdditional>({});
-
-  useEffect(() => {
-    if (additional.course) {
-      const { course } = additional;
-      setSelectedProducts(prev => prev.map(product => ({
-        ...product,
-        price_rub: product.price_cny * course
-      })));
-    }
-  }, [additional.course, additional.indicator]);
+  const show = useStatusShow(statuses, selectedStatus);
 
   const date = orderService.getStringDate(order);
 
@@ -74,7 +68,7 @@ const OrderForm: FC<{ order?: IOrder; mutation: Mutation<ICreateUpdateOrder> }> 
             setSelectedStatus={setSelectedStatus}
           />
           {
-            selectedStatus === 'Отправлен поставщику для просчета' && (
+            show('Отправлен поставщику для просчета') && (
               <AdditionalExpenses
                 additional={additional}
                 setAdditional={setAdditional}
@@ -85,11 +79,11 @@ const OrderForm: FC<{ order?: IOrder; mutation: Mutation<ICreateUpdateOrder> }> 
               />
             )
           }
-          {
-            selectedStatus === 'Заказ оформлен' && (
-              <ReadyOrderDate order={order} />
-            )
-          }
+          {show('Заказ оформлен') && <ReadyOrderDate order={order}/>}
+          {show('Отправлен из Китая') && <CargoShipInfo
+            order={order}
+            statuses={statuses}
+          />}
           <Products
             products={products}
             selectedProducts={selectedProducts}
@@ -106,9 +100,6 @@ const OrderForm: FC<{ order?: IOrder; mutation: Mutation<ICreateUpdateOrder> }> 
             order={order}
             control={control}
           />
-          { selectedStatus === 'Отправлен из Китая' && (
-            <CargoShipInfo order={order} />
-          )}
           <ButtonGroup order={order}/>
         </form>
       )}
