@@ -17,6 +17,7 @@ const BottomControls: FC<{ order?: IOrder, register: any }> = ({ order, register
           aria-describedby="user_avatar_help"
           id="user_avatar"
           type="file"
+          multiple
         />
       </div>
       <div className='flex items-center space-x-3 w-1/6'>
