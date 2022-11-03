@@ -14,19 +14,20 @@ import { notifyError, notifySuccess } from '../../../../utils/notify';
 
 
 const LeftOver: FC = () => {
-    const [open, setOpen] = useState(false);
-    const [leftOver, setLeftover] = useState({
-      url: '',
-      photo_url: ''
-    });
+  const [open, setOpen] = useState(false);
+  const [leftOver, setLeftover] = useState({
+    url: '',
+    photo_url: ''
+  });
 
   const { data, isLoading, error } = useListLeftoversQuery(null);
   const [createLeftover, { isLoading: createLeftoverLoading }] = useCreateLeftoverMutation();
   const [updateLeftovers, { isLoading: updateLeftoversLoading }] = useUpdateLeftoversMutation();
 
   let total = 0;
+  let buffer = 0;
 
-  data?.forEach(leftover => total += leftover.total);
+  data?.forEach(leftover => { total += leftover.total; buffer += leftover.buffer_total });
 
   if (isLoading || createLeftoverLoading || updateLeftoversLoading) return <p>Loading...</p>;
 
@@ -81,6 +82,9 @@ const LeftOver: FC = () => {
         </Expand>
       </div>
       <p>Всего - <span className='font-medium'>{total}</span></p>
+      <p>Было - <span className='font-medium'>{buffer}</span></p>
+      <p>Продано - <span className='font-medium'>{buffer - total}</span></p>
+      <p>Последнее обновление - <span className='font-medium'>{data && data[0].last_update}</span></p>
       <div className='grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-y-6 w-full mx-4 my-6'>
         {data && data.map(leftover => (
           <div
@@ -103,9 +107,9 @@ const LeftOver: FC = () => {
                   </p>
                 </div>
                 <div className="flex flex-col w-full text-right space-y-2">
-                  {leftover.products.map(product => (
+                  {leftover.products.map((product, idx) => (
                     <div key={product.id}>
-                      <p><span>{product.title}</span> - <span>{product.quantity}</span></p>
+                      <p className='text-[12px] md:text-lg'><span>{product.title}</span> - <span>{product.quantity}</span> - ({leftover.buffer[idx].quantity})</p>
                     </div>
                   ))}
                   <p>Всего - <span>{leftover.total}</span></p>

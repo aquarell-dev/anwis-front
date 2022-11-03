@@ -145,9 +145,12 @@ export interface ILeftOverProduct {
 export interface ILeftOver {
   id: number;
   products: ILeftOverProduct[];
+  buffer: ILeftOverProduct[];
   title: string;
   url: string;
   photo_url: string;
   nm: string;
   total: number;
+  buffer_total: number;
+  last_update: string;
 }
