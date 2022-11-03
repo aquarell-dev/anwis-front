@@ -1,5 +1,5 @@
 import { IOrderForm, TAdditional } from '../../components/screens/China/types';
-import { ICreateUpdateOrder, IOrder, IOrderRows, IProductSpecs } from './types';
+import { ICreateUpdateOrder, IOrder, IOrderRows, IProductSpecs, IStatus, PartialOrder } from './types';
 import { AnyObject, Mutation, SetState } from '../../utils/types';
 import { notifyError, notifySuccess } from '../../utils/notify';
 import { IProductsRows } from '../../components/screens/China/components/Products/types';
@@ -21,7 +21,7 @@ class OrderService {
     return resultData as ICreateUpdateOrder;
   };
 
-  public updateAndTransformOrder = (order: IOrder, nextStatusId: number, selectedProducts: IProductSpecs[]): ICreateUpdateOrder => {
+  public transformOrder = (order: IOrder | undefined, nextStatus: IStatus | undefined, selectedProducts: IProductSpecs[], additional: TAdditional): PartialOrder => {
     const {
       additional_expenses,
       price_cny,
@@ -35,18 +35,17 @@ class OrderService {
       additional_expenses: prev.additional_expenses + current.additional_expenses,
     }));
 
+    if (!order) return {} as PartialOrder;
+
     return {
-      ...order,
-      individual_entrepreneur: 1,
-      china_distributor: order.china_distributor.id,
-      order_for_project: order.order_for_project.id,
-      tasks: order.tasks.map(task => task.id),
-      status: nextStatusId,
+      id: order.id,
+      status: nextStatus ? nextStatus.id : order.status.id,
       products: selectedProducts.map(product => ({ ...product, product: product.product.id })),
       total_cny: price_cny,
       total_rub: price_rub,
       total_quantity: quantity,
       total_expenses: additional_expenses,
+      course: additional.course
     };
   };
 
