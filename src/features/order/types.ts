@@ -1,5 +1,3 @@
-import moment from 'moment';
-
 export interface IIndividualEntrepreneur {
   id: number;
   individual_entrepreneur: string;
@@ -50,6 +48,7 @@ export interface IOrder {
   tasks: ITask[];
   total_rub: number;
   total_cny: number;
+  course: number;
   total_expenses: number;
   total_quantity: number;
   ready_date?: string;
@@ -61,18 +60,14 @@ export interface IOrder {
   price_per_kg: number;
   package_price: number;
   total_delivery: number;
+  delivered: boolean;
 }
 
-export interface ICargoInfo {
-  cargo_number: string;
-  cargo_weight: string;
-  cargo_volume: string;
-  price_per_kg: number;
-  package_price: number;
-  total_delivery: number;
-  shipping_from_china_date: string;
-  in_moscow_date: string;
-}
+export interface ICargoInfo extends Pick<
+  IOrder,
+  'cargo_number' | 'cargo_weight' | 'cargo_volume'
+  | 'price_per_kg' | 'package_price' | 'total_delivery'
+  | 'shipping_from_china_date' | 'in_moscow_date'> {}
 
 type Modify<T, R> = Omit<T, keyof R> & R;
 
@@ -84,7 +79,10 @@ export interface ICreateUpdateOrder extends Modify<IOrder, {
   products: ICreateProductSpecs[];
   status: number;
   tasks: number[];
-}> {}
+}> {
+}
+
+export type PartialOrder = { id: number } & Partial<ICreateUpdateOrder>;
 
 export interface IOrderRows {
   id: number;

@@ -4,7 +4,7 @@ import { IOrder } from '../../../features/order/types';
 
 export interface IInput {
   type?: React.HTMLInputTypeAttribute;
-  value: string | number;
+  value: string | number | undefined;
   handler: React.ChangeEventHandler<HTMLInputElement>;
   placeholder: string;
   error?: boolean;
