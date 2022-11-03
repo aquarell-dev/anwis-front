@@ -5,7 +5,7 @@ import {
   ICreateIndividualEntrepreneur, ICreateUpdateOrder, ICreateOrderForProject,
   IIndividualEntrepreneur, IOrder,
   IOrderForProject, IProduct,
-  IStatus, ITask, ICreateTask, ILeftOver
+  IStatus, ITask, ICreateTask, ILeftOver, PartialOrder
 } from './types';
 
 // http://127.0.0.1:8000/api/
@@ -98,7 +98,7 @@ export const orderApi = createApi({
       }),
       invalidatesTags: ['IOrder']
     }),
-    updateOrderPartialById: build.mutation<void, Partial<ICreateUpdateOrder>>({
+    updateOrderPartialById: build.mutation<void, PartialOrder>({
       query: order => ({
         url: `order/partial/${order.id}/`,
         method: 'PUT',
