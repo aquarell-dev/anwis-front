@@ -84,7 +84,7 @@ const LeftOver: FC = () => {
       </div>
       <p>Всего - <span className='font-medium'>{total}</span></p>
       <p>Было - <span className='font-medium'>{buffer}</span></p>
-      <p>Продано - <span className='font-medium'>{buffer - total}</span></p>
+      <p>Заказно - <span className='font-medium'>{buffer - total}</span></p>
       <p>Последнее обновление - <span className='font-medium'>{data && data[0].last_update}</span></p>
       <div className='grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-y-6 w-full mx-4 my-6'>
         {data && data.map(leftover => (
@@ -111,9 +111,9 @@ const LeftOver: FC = () => {
                   {leftover.products.map((product, idx) => (
                     <div key={product.id}>
                       <p className={cn(
-                        'text-[12px] md:text-lg',
+                        'text-[12px] md:text-sm',
                         product.quantity !== leftover.buffer[idx].quantity ? 'text-red-500' : ''
-                      )}><span>{product.title}</span> - <span>{product.quantity}</span> - ({leftover.buffer[idx].quantity})</p>
+                      )}><span>{product.title}</span> - <span>{product.quantity}</span> / ({leftover.buffer[idx].quantity}шт)</p>
                     </div>
                   ))}
                   <p>Всего - <span>{leftover.total}</span></p>
