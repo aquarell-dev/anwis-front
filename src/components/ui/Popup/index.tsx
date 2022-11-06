@@ -4,10 +4,10 @@ import { IAddProductPopup, ICreatePopup, IPopup } from './types';
 import { GreenButton, IndigoButton } from '../Button';
 import { Input } from '../Input';
 import { cn } from '../../../utils';
-import ProductSearch from '../../screens/China/components/Products/ProductSearch';
+import ProductSearch from '../../screens/China/Order/components/ProductSearch';
 
 
-const Popup: FC<IPopup<boolean>> = ({ children, state, setState, width, height }) => {
+const Popup: FC<IPopup<boolean>> = ({ children, state, setState, width, height, bgColor }) => {
   const ref = useRef(null);
 
   useOutside(ref, () => setState(false));
@@ -17,8 +17,8 @@ const Popup: FC<IPopup<boolean>> = ({ children, state, setState, width, height }
       {state && (
         <div
           className={cn(
-            'fixed bg-gray-200 z-[100] rounded-md shadow-md top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2',
-            width ?? 'w-96', height ?? 'h-52'
+            'fixed z-[100] rounded-md shadow-md top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2',
+            width ?? 'w-96', height ?? 'h-52', bgColor ?? 'bg-gray-200'
           )}
           ref={ref}
         >
@@ -139,6 +139,7 @@ export const AddProductFromDictionaryPopup: FC<IAddProductPopup> = ({
                   products={products}
                   handleOnSelect={() => {
                   }}
+                  selectedProducts={selectedProducts}
                 />
               </div>
               <div className="mt-2 w-full grid grid-cols-5 gap-x-4">

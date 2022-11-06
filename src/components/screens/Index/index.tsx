@@ -2,7 +2,7 @@ import { FC } from 'react';
 
 import { AbsoluteCenteredContainer } from '../../ui/Container';
 
-import AuthForm from './AuthForm';
+import AuthForm from './components/AuthForm';
 
 import useAuth from '../../../hooks/useAuth';
 

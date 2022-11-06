@@ -46,7 +46,7 @@ export const FancyInput: FC<IInput> = ({
         disabled={disabled}
         step={'0.1'}
         min={'0'}
-        max={'10000'}
+        max={'999999999'}
         onChange={handler}
         value={value}
         {...restProps}

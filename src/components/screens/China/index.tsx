@@ -1,15 +1,21 @@
 import React, { FC } from 'react';
 
-import { useListOrdersQuery } from '../../../features/order/orderApi';
+import { useListOrdersQuery } from '../../../store/api/order.api';
 import { useNavigate } from 'react-router-dom';
 
-import Order from './styled/Order';
+import Order from './Order/components/styled/Order';
+import Loader from '../../ui/Loader';
+
+import { getFourDigitId } from '../../../utils';
+
 
 const China: FC = () => {
 
   const { data, error, isLoading } = useListOrdersQuery(null);
 
   const navigate = useNavigate();
+
+  if (isLoading) return <Loader isLoading={isLoading} />;
 
   if (error) return <p>Error</p>;
 
@@ -64,7 +70,7 @@ const China: FC = () => {
                 </div>
                 <div className="w-full text-right">
                   <p>
-                    Заказ {order.id}
+                    Заказ {getFourDigitId(order.id)}
                   </p>
                   <p>ИП: {order.individual_entrepreneur.individual_entrepreneur}</p>
                   <p>КП: {order.china_distributor.china_distributor}</p>
