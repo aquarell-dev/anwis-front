@@ -14,3 +14,14 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.img-wrapper{
+  overflow:hidden;
+  transition-duration: 1s;
+  position: relative;
+}
+
+img.hover-zoom:hover {
+  transform: scale(1.25);
+  width: 100%;
+}
