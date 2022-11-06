@@ -10,11 +10,12 @@ import Index from './components/screens/Index';
 import Settings from './components/screens/Settings';
 
 import China from './components/screens/China';
-import NewOrder from './components/screens/China/NewOrder';
-import ExistingOrder from './components/screens/China/ExistingOrder';
+import NewOrder from './components/screens/China/Order/NewOrder';
+import ExistingOrder from './components/screens/China/Order/ExistingOrder';
 import Archive from './components/screens/China/Archive';
 import LeftOver from './components/screens/China/Leftover';
-import Products from './components/screens/China/Products';
+import ProductsPage from './components/screens/China/Products';
+import { ToastContainer } from 'react-toastify';
 
 
 function App() {
@@ -33,11 +34,12 @@ function App() {
               <Route path={'/china/new-order'} element={<NewOrder />} />
               <Route path={'/china/archive'} element={<Archive />} />
               <Route path={'/china/leftover'} element={<LeftOver />} />
-              <Route path={'/china/products'} element={<Products />} />
+              <Route path={'/china/products'} element={<ProductsPage />} />
             </Route>
           </Route>
         </Routes>
       </Router>
+      <ToastContainer/>
     </>
   );
 }
