@@ -157,6 +157,8 @@ export interface ILeftOver {
   id: number;
   products: ILeftOverProduct[];
   buffer: ILeftOverProduct[];
+  sorted_products: ILeftOverProduct[];
+  sorted_buffer: ILeftOverProduct[];
   title: string;
   url: string;
   photo_url: string;
