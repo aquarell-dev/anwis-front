@@ -1,18 +1,20 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { setupListeners } from '@reduxjs/toolkit/query';
-import { authReducer } from '../features/auth/authSlice';
-import { apiSlice } from './api/apiSlice';
-import { orderApi } from '../features/order/orderApi';
-import { orderReducer } from '../features/order/orderSlice';
+
+import { apiSlice } from './api/api.slice';
+
+import { authReducer } from '../features/auth/auth.slice';
+import { notificationReducer } from '../features/notifications/notification.slice';
+import { individualReducer } from '../features/individuals/individual.slice';
 
 export const store = configureStore({
   reducer: {
     [apiSlice.reducerPath]: apiSlice.reducer,
-    [orderApi.reducerPath]: orderApi.reducer,
     auth: authReducer,
-    order: orderReducer,
+    notifications: notificationReducer,
+    individual: individualReducer
   },
-  middleware: getDefaultMiddleware => getDefaultMiddleware().concat(orderApi.middleware).concat(apiSlice.middleware),
+  middleware: getDefaultMiddleware => getDefaultMiddleware({ serializableCheck: false }).concat(apiSlice.middleware),
   devTools: true
 });
 
