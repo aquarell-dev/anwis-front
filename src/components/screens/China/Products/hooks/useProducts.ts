@@ -1,5 +1,7 @@
-import { useListCategoriesQuery, useListProductsQuery } from '../../../../../features/order/orderApi';
 import { useEffect, useState } from 'react';
+import { useListCategoriesQuery } from '../../../../../store/api/category.api';
+import { useListProductsQuery } from '../../../../../store/api/product.api';
+
 
 const useProducts = () => {
   const { data: products, isLoading: productsLoading, error: productsError } = useListProductsQuery(null);
