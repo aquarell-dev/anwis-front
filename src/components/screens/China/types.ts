@@ -1,6 +1,14 @@
 import { Control, FieldErrors, UseFormRegister } from 'react-hook-form';
-import { IChinaDistributor, IOrder, IOrderForProject, IStatus, TStatuses } from '../../../features/order/types';
+import {
+  IChinaDistributor,
+  IOrder,
+  IOrderForProject, IProduct,
+  IProductSpecs,
+  IStatus,
+  TStatuses
+} from '../../../features/order/order.types';
 import { SetState } from '../../../utils/types';
+import { GridColDef, GridSelectionModel } from '@mui/x-data-grid';
 
 export interface IFormControls {
   register: UseFormRegister<any>;
@@ -49,4 +57,21 @@ export interface IStatusSelect {
 
 export type TAdditional = Partial<{course: number, expensesCny: number, expensesRub: number, indicator: boolean }>;
 
-export type Decision = 'YES' | 'NO';
+export type Field = { field: keyof IProductSpecs | keyof IProduct } & GridColDef;
+
+export type AddProductProps = {
+  addProductsFromDictionaryOpen: boolean,
+  setAddProductsFromDictionaryOpen: SetState<boolean>,
+  products: IProduct[],
+  selectedProducts: IProductSpecs[],
+  setSelectedProducts: SetState<IProductSpecs[]>
+}
+
+export type CustomGridProps = {
+  selectionModel: GridSelectionModel,
+  setSelectionModel: SetState<GridSelectionModel>,
+  buffer: Buffer[],
+  setBuffer: SetState<Buffer[]>
+} & Pick<AddProductProps, 'products'>;
+
+export type Buffer = IProduct & Pick<IProductSpecs, 'quantity'>;

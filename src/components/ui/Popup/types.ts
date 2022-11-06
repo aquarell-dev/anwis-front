@@ -1,15 +1,16 @@
 import React from 'react';
 import { SetState } from '../../../utils/types';
-import { ICategory, IProductSpecs } from '../../../features/order/types';
+import { ICategory, IProductSpecs } from '../../../features/order/order.types';
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { SerializedError } from '@reduxjs/toolkit';
-import { IProductSearchProps } from '../../screens/China/components/Products/types';
+import { IProductSearchProps } from '../../screens/China/Order/components/Products/types';
 
 export interface IPopup<T> {
   state: boolean;
   setState: SetState<boolean>;
   width?: string;
   height?: string;
+  bgColor?: string;
   children?: React.ReactNode;
 }
 

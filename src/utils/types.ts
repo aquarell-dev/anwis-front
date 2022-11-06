@@ -21,3 +21,5 @@ export type Mutation<T> = MutationTrigger<MutationDefinition<
   BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError, {}, FetchBaseQueryMeta>,
   any,
   void>>;
+
+export type Modify<T, R> = Omit<T, keyof R> & R;

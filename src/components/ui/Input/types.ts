@@ -1,6 +1,6 @@
 import React from 'react';
 import { FieldError, FieldErrorsImpl, Merge, UseFormRegister } from 'react-hook-form';
-import { IOrder } from '../../../features/order/types';
+import { IOrder } from '../../../features/order/order.types';
 
 export interface IInput {
   type?: React.HTMLInputTypeAttribute;
