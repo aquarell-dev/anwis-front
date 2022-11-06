@@ -1,11 +1,13 @@
 import { useDispatch } from 'react-redux';
-import { authActions } from '../features/auth/authSlice';
+import { authActions } from '../features/auth/auth.slice';
 import { bindActionCreators } from '@reduxjs/toolkit';
-import { orderActions } from '../features/order/orderSlice';
+import { notificationActions } from '../features/notifications/notification.slice';
+import { individualActions } from '../features/individuals/individual.slice';
 
 const actions = {
   ...authActions,
-  ...orderActions
+  ...notificationActions,
+  ...individualActions
 };
 
 export const useActions = () => {
