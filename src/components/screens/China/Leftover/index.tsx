@@ -3,14 +3,16 @@ import { FC, useState } from 'react';
 import {
   useCreateLeftoverMutation,
   useListLeftoversQuery,
-  useUpdateLeftoversMutation
-} from '../../../../features/order/orderApi';
+  useUpdateLeftoversMutation,
+  useResetCacheMutation
+} from '../../../../store/api/leftover.api';
+import useNotifications from '../../../../hooks/useNotifications';
 
 import { IndigoButton } from '../../../ui/Button';
 import Expand from 'react-expand-animated';
 import { FancyInput } from '../../../ui/Input';
+import Loader from '../../../ui/Loader';
 
-import { notifyError, notifySuccess } from '../../../../utils/notify';
 import { cn } from '../../../../utils';
 
 
@@ -24,13 +26,18 @@ const LeftOver: FC = () => {
   const { data, isLoading, error } = useListLeftoversQuery(null);
   const [createLeftover, { isLoading: createLeftoverLoading }] = useCreateLeftoverMutation();
   const [updateLeftovers, { isLoading: updateLeftoversLoading }] = useUpdateLeftoversMutation();
+  const [resetCache, { isLoading: resetLeftoversLoading }] = useResetCacheMutation();
+  const { notifySuccess, notifyError } = useNotifications();
 
   let total = 0;
   let buffer = 0;
 
-  data?.forEach(leftover => { total += leftover.total; buffer += leftover.buffer_total });
+  data?.forEach(leftover => {
+    total += leftover.total;
+    buffer += leftover.buffer_total;
+  });
 
-  if (isLoading || createLeftoverLoading || updateLeftoversLoading) return <p>Loading...</p>;
+  if (isLoading || createLeftoverLoading || updateLeftoversLoading || resetLeftoversLoading) return <Loader isLoading={true}/>;
 
   if (error) return <p>error...</p>;
 
@@ -55,13 +62,22 @@ const LeftOver: FC = () => {
           />
           <IndigoButton
             type={'button'}
+            text={'Обновить кэш'}
+            handler={() => {
+              resetCache(null)
+                .unwrap()
+                .then(() => notifySuccess('Кэш обновлен'))
+                .catch(() => notifyError('Кэш не обновлен'));
+            }}
+          />
+          <IndigoButton
+            type={'button'}
             text={'Обновить'}
             handler={() => {
               updateLeftovers(null)
                 .unwrap()
-                .then(() => notifySuccess('123'))
-                .catch(() => notifyError('123'))
-              ;
+                .then(() => notifySuccess('Товары обновлены'))
+                .catch(() => notifyError('Товары не обновлены'));
             }}
           />
         </div>
@@ -108,12 +124,15 @@ const LeftOver: FC = () => {
                   </p>
                 </div>
                 <div className="flex flex-col w-full text-right space-y-2">
-                  {leftover.products.map((product, idx) => (
+                  {leftover.sorted_products.map((product, idx) => (
                     <div key={product.id}>
-                      <p className={cn(
-                        'text-[12px] md:text-sm',
-                        product.quantity !== leftover.buffer[idx].quantity ? 'text-red-500' : ''
-                      )}><span>{product.title}</span> - <span>{product.quantity}</span> / ({leftover.buffer[idx].quantity}шт)</p>
+                      <p
+                        className={cn(
+                          'text-[12px] md:text-sm',
+                          product.quantity !== leftover.sorted_buffer[idx].quantity ? 'text-red-500' : ''
+                        )}
+                      ><span>{product.title}</span> - <span>{product.quantity}</span> / ({leftover.sorted_buffer[idx].quantity}шт)
+                      </p>
                     </div>
                   ))}
                   <p>Всего - <span>{leftover.total}</span></p>
