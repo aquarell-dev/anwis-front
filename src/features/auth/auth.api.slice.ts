@@ -1,4 +1,4 @@
-import { apiSlice } from '../../store/api/apiSlice';
+import { apiSlice } from '../../store/api/api.slice';
 import { IUserCredentials } from '../../components/screens/Index/index.types';
 
 export const authApiSlice = apiSlice.injectEndpoints({
