@@ -8,7 +8,7 @@ const CategorySelect: FC<{ categories?: ICategory[]; setProduct: SetState<ICreat
 
   return (
     <Select
-      className="w-60"
+      className="w-full m-2"
       placeholder='Категория'
       name="category"
       onChange={(value) => value && setProduct(prev => ({ ...prev, category: parseInt(value.value) }))}
