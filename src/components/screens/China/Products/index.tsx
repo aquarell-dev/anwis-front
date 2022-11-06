@@ -1,30 +1,37 @@
-import React, { FC } from 'react';
-import { IProduct } from '../../../../features/order/types';
+import React, { FC, ReactNode } from 'react';
+import { IProduct } from '../../../../features/order/order.types';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import { FancyInput } from '../../../ui/Input';
-import { GreenButton, IndigoButton } from '../../../ui/Button';
 import useProducts from './hooks/useProducts';
-import { cn } from '../../../../utils';
+import Categories from './components/Categories';
+import Navigation from './components/Navigation';
+import '../../../../index.css';
+import Loader from '../../../ui/Loader';
 
 type Fields = GridColDef & { field: keyof IProduct }
 
 const columns: Fields[] = [
-  { field: 'id', headerName: 'ID', width: 70 },
+  { field: 'title', headerName: 'Название', width: 180 },
   {
     field: 'photo',
     headerName: 'Фотография',
     width: 150,
-    renderCell: (params) => <img
+    renderCell: (params) => <div className='img-wrapper'><img
       alt={'Фото'}
       src={params.value}
-      className='w-12 h-12 flex items-center justify-center'
+      className='w-12 h-12 flex items-center justify-center hover-zoom'
     />
+    </div>
   },
-  { field: 'title', headerName: 'Название', width: 180 },
   { field: 'article', headerName: 'Артикул', width: 180 },
+  { field: 'size', headerName: 'Размер', width: 180 },
+  { field: 'brand', headerName: 'Бренд', width: 180 },
+  { field: 'color', headerName: 'Цвет', width: 180 },
+  { field: 'id', headerName: 'ID', width: 70 },
 ];
 
-const Products: FC = () => {
+const ProductsPage: FC<{
+  customGrid?: ReactNode
+}> = ({ customGrid }) => {
   const {
     products,
     filteredProducts,
@@ -37,60 +44,38 @@ const Products: FC = () => {
     error
   } = useProducts();
 
-  if (isLoading) return <p>Loading...</p>;
+  if (isLoading) return <Loader isLoading={isLoading}/>;
 
   if (error) return <p>Error...</p>;
 
   return (
     <div className='my-6'>
-      <div className="my-2 flex items-center space-x-4">
-        <IndigoButton
-          type={'button'}
-          text={'Создать'}
-          handler={() => {
-          }}
-        />
-        <FancyInput
-          value={search}
-          handler={(e) => setSearch(e.target.value)}
-          placeholder={'Поиск продуктов'}
-        />
-      </div>
+      <Navigation
+        search={search}
+        setSearch={setSearch}
+        categories={categories}
+      />
       {products && (
-        <div className='flex space-x-4'>
-          <div className="ml-2 mr-8 flex flex-col space-y-1">
-            {categories && categories.map(category => (
-              <div
-                onClick={() => setSelectedCategory(category.category)}
-                key={category.id}
-                className={cn(
-                  'bg-gray-100 w-full rounded-md px-2 py-1 cursor-pointer hover:bg-gray-200 transition duration-300 ease-in-out',
-                  selectedCategory === category.category ? 'border border-indigo-600' : ''
-                )}
-              >
-                <p>{category.category}</p>
-              </div>
-            ))}
-            <GreenButton
-              type='button'
-              text='Сбросить фильтр'
-              customWidth='w-full'
-              handler={() => setSelectedCategory('')}
-            />
-          </div>
-          <DataGrid
-            autoHeight
-            checkboxSelection
-            density={'comfortable'}
-            columns={columns}
-            hideFooterPagination
-            disableSelectionOnClick
-            rows={filteredProducts ?? products}
+        <div className='flex space-x-8'>
+          <Categories
+            categories={categories}
+            selectedCategory={selectedCategory}
+            setSelectedCategory={setSelectedCategory}
           />
+          {customGrid ? customGrid : (
+            <DataGrid
+              autoHeight
+              checkboxSelection
+              density={'comfortable'}
+              columns={columns}
+              disableSelectionOnClick
+              rows={filteredProducts ?? products}
+            />
+          )}
         </div>
       )}
     </div>
   );
 };
 
-export default Products;
+export default ProductsPage;
