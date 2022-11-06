@@ -1,19 +1,24 @@
 import { axiosUpload } from '../utils/axios';
+import { AxiosResponse } from 'axios';
+import { TDocument } from '../features/documents/document.types';
+import { useActions } from './useActions';
+import useNotifications from './useNotifications';
 
 const useUploadDocument = (type: 'document' | 'photo') => {
-  const create = (file: File | undefined) => {
-    const formData = new FormData();
+  const { newDocument } = useActions();
+  const { notifyError } = useNotifications();
 
-    if (!file) return;
+  const create = (file: File): Promise<AxiosResponse<TDocument, any>> => {
+    const formData = new FormData();
 
     formData.append(type, file, file.name);
 
-    return axiosUpload.post<{ id: number }>(
+    return axiosUpload.post<TDocument>(
       type + '/',
       formData
     )
-      .then(res => res)
-      .catch(err => err);
+      .then(res => newDocument(res.data))
+      .catch(err => { notifyError('Картинка не добавлена'); return err; } );
   };
 
   return { create };
