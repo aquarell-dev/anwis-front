@@ -1,5 +1,4 @@
 import { FC } from 'react';
-import { SidebarContainer } from '../../ui/Container';
 import SubNavbar from '../../ui/SubNavbar';
 import { ISubNavElement } from '../../ui/SubNavbar/types';
 
@@ -27,9 +26,9 @@ const elements: ISubNavElement[] = [
 export const Layout: FC = () => {
 
   return (
-    <SidebarContainer>
+    <div className='mx-8'>
       <SubNavbar elements={elements} />
       <Outlet />
-    </SidebarContainer>
+    </div>
   )
 };
