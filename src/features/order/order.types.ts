@@ -109,7 +109,7 @@ export interface IProduct {
   url: string;
 }
 
-export type ICreateProduct = Modify<Omit<IProduct, 'id'>, { category: number | undefined; }>;
+export type ICreateProduct = Modify<Omit<IProduct, 'id'>, { category: number | undefined; photo: number | undefined }>;
 
 export type PartialProduct = { id: number } & Partial<ICreateProduct>;
 
