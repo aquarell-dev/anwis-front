@@ -2,10 +2,11 @@ import { FC } from 'react';
 
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 
-import { useNavigate } from 'react-router-dom';
-import { useListOrdersQuery } from '../../../../features/order/orderApi';
+import { useListOrdersQuery } from '../../../../store/api/order.api';
 
-import { orderService } from '../../../../features/order/orderServices';
+import { orderService } from '../../../../features/order/order.services';
+
+import Loader from '../../../ui/Loader';
 
 const columns: GridColDef[] = [
   { field: 'id', headerName: 'ID', width: 70 },
@@ -27,7 +28,7 @@ const Archive: FC = () => {
 
   const { data, error, isLoading } = useListOrdersQuery(null);
 
-  const navigate = useNavigate();
+  if (isLoading) return <Loader isLoading={isLoading} />;
 
   if (error) return <p>Error</p>;
 
