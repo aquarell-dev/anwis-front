@@ -1,5 +1,5 @@
 import { apiSlice } from './api.slice';
-import { IProduct } from '../../features/order/order.types';
+import { ICreateProduct, IProduct } from '../../features/order/order.types';
 
 export const productSlice = apiSlice.injectEndpoints({
   endpoints: build => ({
@@ -9,10 +9,9 @@ export const productSlice = apiSlice.injectEndpoints({
       }),
       providesTags: ['Product']
     }),
-    createProduct: build.mutation<void, FormData>({
+    createProduct: build.mutation<void, ICreateProduct>({
       query: product => ({
-        url: 'products/update/',
-        headers: { 'Content-Type': 'multipart/form-data' },
+        url: 'products/',
         method: 'POST',
         body: product
       }),
