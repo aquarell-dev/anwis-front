@@ -6,7 +6,7 @@ import { BaseQueryApi } from '@reduxjs/toolkit/dist/query/baseQueryTypes';
 // http://localhost:8000/api/
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: 'https://anwis-sklad.herokuapp.com/api/1',
+  baseUrl: 'https://anwis-sklad.herokuapp.com/api/',
   credentials: 'include',
   prepareHeaders: (headers, { getState }) => {
     // @ts-ignore
