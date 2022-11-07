@@ -9,10 +9,13 @@ import useAuth from '../../hooks/useAuth';
 const Layout: FC = () => {
   const { isAuth } = useAuth();
 
-  return <div className='min-h-screen'>
-    <Navbar />
-    <Outlet />
-  </div>
+
+  return <div
+    className='min-h-screen'
+  >
+    <Navbar/>
+    <Outlet/>
+  </div>;
 };
 
 export default Layout;
