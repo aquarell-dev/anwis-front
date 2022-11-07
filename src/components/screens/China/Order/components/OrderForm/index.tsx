@@ -34,7 +34,7 @@ const OrderForm: FC<{ order?: IOrder }> = ({ order }) => {
     setSelectedProducts
   } = useOrderData(order);
 
-  const { register, handleSubmit, formState: { errors }, control, setValue } = useForm<IOrderForm>();
+  const { register, handleSubmit, formState: { errors }, control, setValue, getValues } = useForm<IOrderForm>();
   const [selectedStatus, setSelectedStatus] = useState<TStatuses>(order ? order.status.status : 'Ожидает заказа в Китае');
   const show = useStatusShow(statuses, selectedStatus);
   const { onSubmit, mutationLoading } = useSubmitOrder({ order, selectedProducts });
@@ -93,6 +93,7 @@ const OrderForm: FC<{ order?: IOrder }> = ({ order }) => {
           <BottomControls
             register={register}
             order={order}
+            setValue={setValue}
           />
           <Notification
             order={order}

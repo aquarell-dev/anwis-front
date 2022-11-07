@@ -39,7 +39,7 @@ const CreateProductPopup: FC<PopupProps> = ({ open, setOpen, categories }) => {
           setProduct={setProduct}
         />
         <div className="w-full m-2">
-          <FileDragAndDrop accept={{ 'image/*': [] }}/>
+          <FileDragAndDrop accept={{ 'image/*': [] }} type='photo' />
         </div>
         <div className="flex items-center justify-center">
           <IndigoButton
