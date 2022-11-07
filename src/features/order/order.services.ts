@@ -66,6 +66,7 @@ class OrderService {
         price_rub: p.price_rub,
         product: p.product.id
       })),
+      documents: data.documents
     });
   };
 

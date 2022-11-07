@@ -65,6 +65,7 @@ export interface IOrder {
   packages: number;
   delivered: boolean;
   excel?: string;
+  documents?: { id: number, name: string, url: string; };
 }
 
 export interface ICargoInfo extends Pick<
@@ -81,6 +82,7 @@ export interface ICreateUpdateOrder extends Modify<IOrder, {
   products: ICreateProductSpecs[];
   status: number;
   tasks: number[];
+  documents: number[];
 }> {
 }
 

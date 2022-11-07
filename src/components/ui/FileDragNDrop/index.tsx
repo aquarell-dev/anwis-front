@@ -4,10 +4,10 @@ import { acceptStyle, baseStyle, focusedStyle, img, rejectStyle, thumb, thumbInn
 import useUploadDocument from '../../../hooks/useUploadDocument';
 
 type DragFile = File & { preview: string; };
-type DragNDropProps = { accept?: Accept };
+type DragNDropProps = { accept?: Accept, type: 'photo' | 'document' };
 
-const FileDragAndDrop: FC<DragNDropProps> = ({ accept }) => {
-  const { create } = useUploadDocument('photo');
+const FileDragAndDrop: FC<DragNDropProps> = ({ accept, type }) => {
+  const { create } = useUploadDocument(type);
 
   const [files, setFiles] = useState<DragFile[]>([]);
   const {
@@ -47,7 +47,7 @@ const FileDragAndDrop: FC<DragNDropProps> = ({ accept }) => {
     <div className="container">
       <div {...getRootProps({ style: (style as CSSProperties) })}>
         <input {...getInputProps()} />
-        <p>Перетащите сюда картинки или нажмите для выбора файла</p>
+        <p>Перетащите сюда файлы или нажмите для выбора файла</p>
       </div>
       <aside style={thumbsContainer}>
         {files.map((file: DragFile) => (

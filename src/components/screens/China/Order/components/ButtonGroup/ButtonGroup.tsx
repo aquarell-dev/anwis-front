@@ -14,8 +14,6 @@ const ButtonGroup: FC<{ order?: IOrder }> = ({ order }) => {
   const downloadRef = useRef<HTMLAnchorElement | null>(null);
   const { createExcel, isLoading, error } = useExcelCreate();
 
-  console.log(isLoading, error);
-
   return (
     <div className="flex justify-between items-center">
       <div className="flex items-center space-x-4">
