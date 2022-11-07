@@ -48,7 +48,7 @@ const China: FC = () => {
             />
           </div>
         </div>
-        <div className="grid grid-cols-3 gap-y-4 gap-x-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-y-4 gap-x-6 mb-4">
           {data?.map(order => (
             <React.Fragment key={order.id}>
               <Order
