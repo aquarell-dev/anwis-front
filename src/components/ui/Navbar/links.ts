@@ -8,7 +8,7 @@ export type ILink = {
 export const links: ILink[] = [
   {
     id: 1,
-    title: 'Заказы поставщикам',
+    title: 'Китай',
     link: 'china/',
   },
 ];

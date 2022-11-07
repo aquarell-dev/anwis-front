@@ -47,7 +47,22 @@ const Navbar: FC = () => {
           </div>
         </div>
         <div className='flex items-center'>
-          <div className='invisible lg:visible flex items-center space-x-4'>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className="w-8 h-8 block lg:hidden cursor-pointer hover:text-gray-200 transition duration-300 ease-in-out"
+            onClick={() => setSidebarOpen(true)}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+            />
+          </svg>
+          <div className='block h:hidden lg:flex items-center space-x-4'>
             <div
               className='individualException w-40 text-slate-800 py-1 px-2 bg-slate-100 rounded-md shadow-sm flex items-center justify-between cursor-pointer hover:bg-slate-200 transition duration-300 ease-in-out'
               onClick={() => setIndividualOpen(!individualOpen)}
@@ -111,21 +126,6 @@ const Navbar: FC = () => {
               />
             )}
           </div>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="w-8 h-8 block lg:hidden cursor-pointer hover:text-gray-200 transition duration-300 ease-in-out"
-            onClick={() => setSidebarOpen(true)}
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
-            />
-          </svg>
         </div>
       </div>
       <Sidebar setOpen={setSidebarOpen} open={sidebarOpen} />
