@@ -11,6 +11,7 @@ const BottomControls: FC<{
   setValue: UseFormSetValue<IOrderForm>;
 }> = ({ order, register, setValue }) => {
   useDocuments(setValue);
+  console.log('123')
 
   return (
     <>
