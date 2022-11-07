@@ -9,7 +9,7 @@ const actions = {
   ...authActions,
   ...notificationActions,
   ...individualActions,
-  ...documentActions
+  ...documentActions,
 };
 
 export const useActions = () => {

@@ -75,6 +75,7 @@ class OrderService {
       id: selectedProduct.product.id,
       quantity: selectedProduct.quantity,
       title: selectedProduct.product.title,
+      article: selectedProduct.product.article,
       size: selectedProduct.product.size,
       color: selectedProduct.product.color,
       photo: selectedProduct.product.photo ?? undefined,
