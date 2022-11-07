@@ -15,6 +15,7 @@ export interface IProductsRows {
   id: number;
   size: string;
   color: string;
+  article: string;
   title: string;
   quantity: number;
   photo: string | undefined;

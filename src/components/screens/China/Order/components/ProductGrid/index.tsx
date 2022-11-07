@@ -33,6 +33,7 @@ const ProductGrid: FC<{
         className='w-12 h-12 flex items-center justify-center'
       />
     },
+    { field: 'article', headerName: 'Артикул поставщика', width: 200 },
     { field: 'size', headerName: 'Размер', width: 100 },
     { field: 'color', headerName: 'Цвет', width: 120 },
     { field: 'quantity', headerName: 'Количество', width: 180, editable: true },
