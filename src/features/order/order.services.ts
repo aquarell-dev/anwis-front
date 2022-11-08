@@ -36,7 +36,6 @@ class OrderService {
 
     if (!order) return {} as PartialOrder;
 
-
     return {
       id: order.id,
       status: nextStatus ? nextStatus.id : order.status.id,
@@ -45,7 +44,9 @@ class OrderService {
       total_rub: price_rub,
       total_quantity: quantity,
       total_expenses: additional_expenses,
-      course: additional.course
+      course: additional.course,
+      expenses_cny: additional.expensesCny,
+      expenses_rub: additional.expensesRub
     };
   };
 
