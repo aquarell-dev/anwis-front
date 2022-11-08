@@ -37,13 +37,12 @@ export const thumbsContainer = {
 } as CSSProperties;
 
 export const thumb = {
-  display: 'inline-flex',
+  display: 'flex',
   borderRadius: 2,
   border: '1px solid #eaeaea',
+  alignItems: 'center',
   marginBottom: 8,
   marginRight: 8,
-  width: 100,
-  height: 100,
   padding: 4,
   boxSizing: 'border-box'
 } as CSSProperties;
