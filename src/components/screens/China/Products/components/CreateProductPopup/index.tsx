@@ -30,6 +30,10 @@ const CreateProductPopup: FC<PopupProps> = ({ open, setOpen, categories }) => {
       setState={setOpen}
     >
       <AbsoluteCenteredContainer>
+        <div className="w-full m-2">
+          <p>Прикрепите файл</p>
+          <FileDragAndDrop accept={{ 'image/*': [] }} type='photo' multiple={false} />
+        </div>
         <CreateProductFields
           product={product}
           setProduct={setProduct}
@@ -38,15 +42,11 @@ const CreateProductPopup: FC<PopupProps> = ({ open, setOpen, categories }) => {
           categories={categories}
           setProduct={setProduct}
         />
-        <div className="w-full m-2">
-          <FileDragAndDrop accept={{ 'image/*': [] }} type='photo' />
-        </div>
         <div className="flex items-center justify-center">
           <IndigoButton
             type='button'
             text='Создать'
             handler={() => { createProduct(); setOpen(false); }}
-
           />
         </div>
       </AbsoluteCenteredContainer>
