@@ -6,6 +6,10 @@ import { Outlet } from 'react-router-dom';
 
 const elements: ISubNavElement[] = [
   {
+    title: 'Заказы',
+    link: '/china/orders'
+  },
+  {
     title: 'Создать новый заказ',
     link: '/china/new-order'
   },
@@ -20,6 +24,10 @@ const elements: ISubNavElement[] = [
   {
     title: 'Остатки',
     link: '/china/leftover'
+  },
+  {
+    title: 'Дополнительно',
+    link: '/china/additional'
   },
 ];
 
