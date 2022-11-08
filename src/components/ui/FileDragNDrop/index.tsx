@@ -1,13 +1,14 @@
 import { Accept, useDropzone } from 'react-dropzone';
 import { CSSProperties, FC, useEffect, useMemo, useState } from 'react';
-import { acceptStyle, baseStyle, focusedStyle, img, rejectStyle, thumb, thumbInner, thumbsContainer } from './styles';
+import { acceptStyle, baseStyle, focusedStyle, rejectStyle, thumb, thumbInner, thumbsContainer } from './styles';
 import useUploadDocument from '../../../hooks/useUploadDocument';
+import { SpinnerComponent } from 'react-element-spinner';
 
 type DragFile = File & { preview: string; };
-type DragNDropProps = { accept?: Accept, type: 'photo' | 'document' };
+type DragNDropProps = { accept?: Accept, type: 'photo' | 'document', multiple?: boolean };
 
-const FileDragAndDrop: FC<DragNDropProps> = ({ accept, type }) => {
-  const { create } = useUploadDocument(type);
+const FileDragAndDrop: FC<DragNDropProps> = ({ accept, type, multiple }) => {
+  const { create, isLoading } = useUploadDocument(type);
 
   const [files, setFiles] = useState<DragFile[]>([]);
   const {
@@ -18,12 +19,13 @@ const FileDragAndDrop: FC<DragNDropProps> = ({ accept, type }) => {
     isDragReject
   } = useDropzone({
     accept,
+    multiple: !!multiple,
     onDrop: acceptedFiles => {
       setFiles(acceptedFiles.map(file => Object.assign(file, {
         preview: URL.createObjectURL(file)
       })));
 
-      create(acceptedFiles[0]).catch(err => console.log(err));
+      acceptedFiles?.forEach(file => create(file).catch(err => console.log(err)));
     }
   });
 
@@ -44,10 +46,19 @@ const FileDragAndDrop: FC<DragNDropProps> = ({ accept, type }) => {
   ]);
 
   return (
-    <div className="container">
+    <div className="container w-full">
       <div {...getRootProps({ style: (style as CSSProperties) })}>
-        <input {...getInputProps()} />
-        <p>Перетащите сюда файлы или нажмите для выбора файла</p>
+        {isLoading ? (
+          <SpinnerComponent
+            loading={true}
+            position={'inline'}
+          />
+        ) : (
+          <>
+            <input {...getInputProps()} />
+            <p>Перетащите сюда файлы или нажмите для выбора файла</p>
+          </>
+        )}
       </div>
       <aside style={thumbsContainer}>
         {files.map((file: DragFile) => (
@@ -56,14 +67,9 @@ const FileDragAndDrop: FC<DragNDropProps> = ({ accept, type }) => {
             key={file.name}
           >
             <div style={thumbInner}>
-              <img
-                src={file.preview}
-                style={img}
-                // Revoke data uri after image is loaded
-                onLoad={() => {
-                  URL.revokeObjectURL(file.preview);
-                }}
-              />
+              <p onLoad={() => URL.revokeObjectURL(file.preview)}>
+                {file.name}
+              </p>
             </div>
           </div>
         ))}
