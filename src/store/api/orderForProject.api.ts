@@ -1,5 +1,5 @@
 import { apiSlice } from './api.slice';
-import { ICreateOrderForProject, IOrderForProject } from '../../features/order/order.types';
+import { IChinaDistributor, ICreateOrderForProject, IOrderForProject } from '../../features/order/order.types';
 
 export const orderForProjectSlice = apiSlice.injectEndpoints({
   endpoints: build => ({
@@ -17,10 +17,27 @@ export const orderForProjectSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ['OrderForProject']
     }),
+    deleteOrderForProject: build.mutation<void, { id: number }>({
+      query: project => ({
+        url: `order-for-projects/${project.id}/`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['OrderForProject']
+    }),
+    updateOrderForProject: build.mutation<void, IOrderForProject>({
+      query: project => ({
+        url: `order-for-projects/${project.id}/`,
+        method: 'PUT',
+        body: project
+      }),
+      invalidatesTags: ['OrderForProject']
+    }),
   })
 });
 
 export const {
   useCreateOrderForProjectMutation,
   useListOrderForProjectsQuery,
+  useDeleteOrderForProjectMutation,
+  useUpdateOrderForProjectMutation
 } = orderForProjectSlice;

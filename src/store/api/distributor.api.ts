@@ -17,10 +17,27 @@ export const distributorSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ['ChinaDistributor']
     }),
+    deleteChinaDistributor: build.mutation<void, { id: number }>({
+      query: distributor => ({
+        url: `china-distributors/${distributor.id}/`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['ChinaDistributor']
+    }),
+    updateChinaDistributor: build.mutation<void, IChinaDistributor>({
+      query: distributor => ({
+        url: `china-distributors/${distributor.id}/`,
+        method: 'PUT',
+        body: distributor
+      }),
+      invalidatesTags: ['ChinaDistributor']
+    }),
   })
 });
 
 export const {
   useListChinaDistributorsQuery,
-  useCreateChinaDistributorMutation
+  useCreateChinaDistributorMutation,
+  useDeleteChinaDistributorMutation,
+  useUpdateChinaDistributorMutation
 } = distributorSlice;
