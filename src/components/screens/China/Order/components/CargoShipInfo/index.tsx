@@ -20,7 +20,7 @@ const CargoShipInfo: FC<{ order?: IOrder, statuses: IStatus[], setSelectedStatus
                                                                                                               statuses,
                                                                                                               setSelectedStatus
                                                                                                             }) => {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(!!order?.cargo_number);
   const [hasBeenDelivered, setHasBeenDelivered] = useState(true);
   const [file, setFile] = useState<File | null>(null);
 
@@ -39,7 +39,7 @@ const CargoShipInfo: FC<{ order?: IOrder, statuses: IStatus[], setSelectedStatus
       <div className="flex flex-col space-y-2">
         <div className="flex items-center space-x-4">
           <FileButton
-            onChange={e => e.target.files && setFile(e.target.files[0])}
+            onChange={e => { e.target.files && setFile(e.target.files[0]); setOpen(true); }}
             customWidth={'w-60'}
             text={'Загрузить файл карго'}
           />
