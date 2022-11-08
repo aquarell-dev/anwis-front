@@ -1,4 +1,5 @@
 import { Modify } from '../../utils/types';
+import { TDocument } from '../documents/document.types';
 
 export interface IIndividualEntrepreneur {
   id: number;
@@ -51,6 +52,8 @@ export interface IOrder {
   total_rub: number;
   total_cny: number;
   course: number;
+  expenses_cny: number;
+  expenses_rub: number;
   total_expenses: number;
   total_quantity: number;
   ready_date?: string;
@@ -65,7 +68,7 @@ export interface IOrder {
   packages: number;
   delivered: boolean;
   excel?: string;
-  documents?: { id: number, name: string, url: string; };
+  documents?: TDocument[];
 }
 
 export interface ICargoInfo extends Pick<
