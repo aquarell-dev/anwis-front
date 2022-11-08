@@ -57,7 +57,7 @@ const AdditionalExpenses: FC<{
         type={'number'}
         placeholder='Курс'
         value={additional.course}
-        handler={e => setAdditional(prev => ({ ...prev, course: parseInt(e.target.value) }))}
+        handler={e => setAdditional(prev => ({ ...prev, course: parseFloat(e.target.value) }))}
         showLabel
       />
       <FancyInput
@@ -65,14 +65,14 @@ const AdditionalExpenses: FC<{
         showLabel
         placeholder='Доп. затраты ¥'
         value={additional.expensesCny}
-        handler={e => setAdditional(prev => ({ ...prev, expensesCny: parseInt(e.target.value) }))}
+        handler={e => setAdditional(prev => ({ ...prev, expensesCny: parseFloat(e.target.value) }))}
       />
       <FancyInput
         type={'number'}
         showLabel
         placeholder='Доп. затраты ₽'
         value={additional.expensesRub}
-        handler={e => setAdditional(prev => ({ ...prev, expensesRub: parseInt(e.target.value) }))}
+        handler={e => setAdditional(prev => ({ ...prev, expensesRub: parseFloat(e.target.value) }))}
       />
       <IndigoButton
         type={'button'}
