@@ -37,6 +37,8 @@ const LeftOver: FC = () => {
     buffer += leftover.buffer_total;
   });
 
+  const resetRequired = data?.map(leftover => leftover.sorted_buffer.length > 0).some(x => !x);
+
   if (isLoading || createLeftoverLoading || updateLeftoversLoading || resetLeftoversLoading) return <Loader isLoading={true}/>;
 
   if (error) return <p>error...</p>;
@@ -81,6 +83,7 @@ const LeftOver: FC = () => {
             }}
           />
         </div>
+        {resetRequired && <p className='font-medium text-red-500 text-xl'>Обновите кэш для корректного отображения данных</p>}
         <Expand open={open}>
           <div className="flex flex-col space-y-2">
             <FancyInput
@@ -129,9 +132,9 @@ const LeftOver: FC = () => {
                       <p
                         className={cn(
                           'text-[12px] md:text-sm',
-                          product.quantity !== leftover.sorted_buffer[idx].quantity ? 'text-red-500' : ''
+                          leftover.buffer.length > 0 && product.quantity !== leftover.sorted_buffer[idx].quantity ? 'text-red-500' : ''
                         )}
-                      ><span>{product.title}</span> - <span>{product.quantity}</span> / ({leftover.sorted_buffer[idx].quantity}шт)
+                      ><span>{product.title}</span> - <span>{product.quantity}</span> / ({leftover.buffer.length > 0 ? leftover.sorted_buffer[idx].quantity : 'Нет данных'}шт)
                       </p>
                     </div>
                   ))}
