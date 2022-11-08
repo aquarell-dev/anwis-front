@@ -5,18 +5,20 @@ import { useListStatusesQuery } from '../../../../../store/api/status.api';
 import { useListProductsQuery } from '../../../../../store/api/product.api';
 
 import { TAdditional } from '../../types';
-import { IOrder, IProductSpecs } from '../../../../../features/order/order.types';
+import { IOrder, IProductSpecs, TStatuses } from '../../../../../features/order/order.types';
 
 
-const useOrderData = (order: IOrder | undefined) => {
+const useOrder = (order: IOrder | undefined) => {
   const { data: chinaDistributors, error: chinaError, isLoading: chinaLoading } = useListChinaDistributorsQuery(null);
   const { data: orderForProjects, error: orderError, isLoading: orderLoading } = useListOrderForProjectsQuery(null);
   const { data: statuses, error: statusError, isLoading: statusLoading } = useListStatusesQuery(null);
   const { data: products, error: productsError, isLoading: productsLoading } = useListProductsQuery(null);
 
+  const [selectedStatus, setSelectedStatus] = useState<TStatuses>(order ? order.status.status : 'Ожидает заказа в Китае');
+
   const [additional, setAdditional] = useState<TAdditional>({
-    expensesRub: order ? order.total_rub : undefined,
-    expensesCny: order ? order.total_cny : undefined,
+    expensesRub: order ? order.expenses_rub : undefined,
+    expensesCny: order ? order.expenses_cny : undefined,
     course: order ? order.course : undefined
   });
   const [selectedProducts, setSelectedProducts] = useState<IProductSpecs[]>(order?.products || []);
@@ -34,12 +36,18 @@ const useOrderData = (order: IOrder | undefined) => {
     }
   }, [additional.course, additional.indicator]);
 
+  useEffect(() => {
+    if (selectedStatus === 'Ожидает заказа в Китае')
+      if (selectedProducts.length >= 1) setSelectedStatus('Ожидает отправки поставщику');
+  }, [selectedProducts]);
+
   return {
     chinaDistributors, orderForProjects, statuses, products,
     isLoading, isError,
     additional, setAdditional,
-    selectedProducts, setSelectedProducts
-  }
+    selectedProducts, setSelectedProducts,
+    selectedStatus, setSelectedStatus
+  };
 };
 
-export default useOrderData;
+export default useOrder;
