@@ -4,6 +4,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker as MuiDatePicker } from '@mui/x-date-pickers/DatePicker';
 import { FC } from 'react';
 import moment from 'moment';
+import 'moment/locale/ru';
 import { SetState } from '../../../utils/types';
 
 type TDateValue = moment.Moment;
@@ -17,7 +18,7 @@ type DatePickerProps = {
 
 export const CustomDatePicker: FC<DatePickerProps> = ({ label, value, setValue, customOnChange }) => {
   return (
-    <LocalizationProvider dateAdapter={AdapterMoment}>
+    <LocalizationProvider dateAdapter={AdapterMoment} adapterLocale={moment.locale('ru')}>
       <MuiDatePicker
         label={label}
         openTo="day"
@@ -27,5 +28,6 @@ export const CustomDatePicker: FC<DatePickerProps> = ({ label, value, setValue, 
         onChange={customOnChange ? (value) => customOnChange(value) : (value) => value && setValue(value)}
         renderInput={(params) => <TextField {...params} />}
       />
-    </LocalizationProvider>);
+    </LocalizationProvider>
+  );
 };
