@@ -1,6 +1,6 @@
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import { useForm } from 'react-hook-form';
-import useOrderData from '../../hooks/useOrderData';
+import useOrder from '../../hooks/useOrder';
 import useSubmitOrder from '../../hooks/useSubmitOrder';
 import useStatusShow from '../../hooks/useStatusShow';
 import useStatusChange from '../../hooks/useStatusChange';
@@ -17,7 +17,8 @@ import Loader from '../../../../../ui/Loader';
 import Header from '../Header';
 
 import { IOrderForm } from '../../../types';
-import { IOrder, TStatuses } from '../../../../../../features/order/order.types';
+import { IOrder } from '../../../../../../features/order/order.types';
+import { ContentContainer } from '../../../../../ui/Container';
 
 
 const OrderForm: FC<{ order?: IOrder }> = ({ order }) => {
@@ -31,11 +32,12 @@ const OrderForm: FC<{ order?: IOrder }> = ({ order }) => {
     additional,
     setAdditional,
     selectedProducts,
-    setSelectedProducts
-  } = useOrderData(order);
+    setSelectedProducts,
+    selectedStatus,
+    setSelectedStatus
+  } = useOrder(order);
 
-  const { register, handleSubmit, formState: { errors }, control, setValue, getValues } = useForm<IOrderForm>();
-  const [selectedStatus, setSelectedStatus] = useState<TStatuses>(order ? order.status.status : 'Ожидает заказа в Китае');
+  const { register, handleSubmit, formState: { errors }, control, setValue } = useForm<IOrderForm>();
   const show = useStatusShow(statuses, selectedStatus);
   const { onSubmit, mutationLoading } = useSubmitOrder({ order, selectedProducts });
   useStatusChange({ selectedStatus, setValue, statuses });
@@ -45,7 +47,7 @@ const OrderForm: FC<{ order?: IOrder }> = ({ order }) => {
   if (isError) return <p>error</p>;
 
   return (
-    <div className='mx-4 my-6'>
+    <ContentContainer>
       {chinaDistributors && orderForProjects && statuses && products && (
         <form
           onSubmit={handleSubmit(onSubmit)}
@@ -76,7 +78,11 @@ const OrderForm: FC<{ order?: IOrder }> = ({ order }) => {
               />
             )
           }
-          {show('Заказ оформлен') && <ReadyOrderDate order={order}/>}
+          {show('Заказ оформлен') && <ReadyOrderDate
+            selectedStatus={selectedStatus}
+            order={order}
+            show={show}
+          />}
           {show('Отправлен из Китая') && <CargoShipInfo
             order={order}
             statuses={statuses}
@@ -102,7 +108,7 @@ const OrderForm: FC<{ order?: IOrder }> = ({ order }) => {
           <ButtonGroup order={order}/>
         </form>
       )}
-    </div>
+    </ContentContainer>
   );
 };
 
