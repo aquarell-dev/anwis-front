@@ -24,7 +24,7 @@ const Popup: FC<IPopup<boolean>> = ({ children, state, setState, width, height, 
         >
           {children}
           <div
-            className='absolute cursor-pointer hover:bg-gray-100 right-0 top-0 h-6 w-6'
+            className='absolute m-2 cursor-pointer hover:bg-gray-100 right-0 top-0 h-6 w-6'
             onClick={() => setState(prev => !prev)}
           >
             <svg
@@ -33,12 +33,12 @@ const Popup: FC<IPopup<boolean>> = ({ children, state, setState, width, height, 
               viewBox="0 0 24 24"
               strokeWidth={1.5}
               stroke="currentColor"
-              className="w-6 h-6 hover:text-gray-800"
+              className="w-6 h-6 hover:text-slate-700 duration-300 transition ease-in-out"
             >
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                d="M6 18L18 6M6 6l12 12"
               />
             </svg>
           </div>
