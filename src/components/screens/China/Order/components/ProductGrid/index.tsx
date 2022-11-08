@@ -106,7 +106,7 @@ const ProductGrid: FC<{
         if (field === 'product') return;
 
         // @ts-ignore
-        newProduct[field as keyof IProductSpecs] = parseInt(value);
+        newProduct[field as keyof IProductSpecs] = !isNaN(parseInt(value)) ? parseInt(value) : 0;
 
         setSelectedProducts(selectedProducts.map(selectedProduct => selectedProduct.product.id === id ?
           newProduct
