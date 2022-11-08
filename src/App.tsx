@@ -16,6 +16,8 @@ import Archive from './components/screens/China/Archive';
 import LeftOver from './components/screens/China/Leftover';
 import ProductsPage from './components/screens/China/Products';
 import { ToastContainer } from 'react-toastify';
+import Additional from './components/screens/China/Additional';
+import Orders from './components/screens/China/Orders';
 
 
 function App() {
@@ -30,11 +32,17 @@ function App() {
 
             <Route path={'/china'} element={<ChinaLayout />}>
               <Route index element={<China />} />
+
               <Route path={'/china/orders/:id'} element={<ExistingOrder />} />
               <Route path={'/china/new-order'} element={<NewOrder />} />
+              <Route path={'/china/orders'} element={<Orders />} />
               <Route path={'/china/archive'} element={<Archive />} />
+
               <Route path={'/china/leftover'} element={<LeftOver />} />
+
               <Route path={'/china/products'} element={<ProductsPage />} />
+
+              <Route path={'/china/additional'} element={<Additional />} />
             </Route>
           </Route>
         </Routes>
