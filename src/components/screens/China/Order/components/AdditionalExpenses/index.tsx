@@ -32,7 +32,7 @@ const AdditionalExpenses: FC<{
     selectedProducts,
     additional
   );
-  const updateOrder = useUpdatePartialOrder();
+  const { updateOrder } = useUpdatePartialOrder();
 
   const { split, skip } = useSplitBill(additional, selectedProducts, setSelectedProducts, setDialogContent, setDialogOpen);
 

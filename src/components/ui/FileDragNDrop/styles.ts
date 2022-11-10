@@ -55,6 +55,6 @@ export const thumbInner = {
 
 export const img = {
   display: 'block',
-  width: 'auto',
-  height: '100%'
+  width: '80px',
+  padding: '10px'
 };

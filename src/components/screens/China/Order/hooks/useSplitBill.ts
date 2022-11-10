@@ -35,7 +35,7 @@ const useSplitBill = (
 
       return {
         ...product,
-        additional_expenses: Math.round(totalExpenses / prev.length)
+        additional_expenses: Math.round(totalExpenses / product.quantity)
       };
     }));
 
@@ -49,6 +49,8 @@ const useSplitBill = (
     if (!additional.course) return notifyError('Не указан курс');
 
     let undefinedProducts = getUndefinedProductsCount(selectedProducts);
+
+    setSelectedProducts(prev => prev.map(product => ({ ...product, additional_expenses: 0 })));
 
     setDialogContent(`У Вас есть 5 секунд, чтобы принять решение, иначе произойдет переход на следующий статус. Количество незаполненных товаров: ${undefinedProducts}`);
     setDialogOpen(true);

@@ -1,8 +1,8 @@
 import React, { FC } from 'react';
-import Popup from '../../../../../ui/Popup';
-import { SetState } from '../../../../../../utils/types';
-import { AbsoluteCenteredContainer } from '../../../../../ui/Container';
-import { IndigoButton, RedButton } from '../../../../../ui/Button';
+import Popup from '../../../../ui/Popup';
+import { SetState } from '../../../../../utils/types';
+import { AbsoluteCenteredContainer } from '../../../../ui/Container';
+import { IndigoButton, RedButton } from '../../../../ui/Button';
 
 const DeletePopup: FC<{
   open: boolean,

@@ -1,9 +1,9 @@
 import React, { FC, useEffect } from 'react';
-import Popup from '../../../../../ui/Popup';
-import { AbsoluteCenteredContainer } from '../../../../../ui/Container';
-import { SetState } from '../../../../../../utils/types';
-import { FancyInput } from '../../../../../ui/Input';
-import { IndigoButton } from '../../../../../ui/Button';
+import Popup from '../../../../ui/Popup';
+import { AbsoluteCenteredContainer } from '../../../../ui/Container';
+import { SetState } from '../../../../../utils/types';
+import { FancyInput } from '../../../../ui/Input';
+import { IndigoButton } from '../../../../ui/Button';
 
 const ChangePopup: FC<{
   open: boolean,

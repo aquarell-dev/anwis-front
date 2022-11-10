@@ -3,13 +3,14 @@ import React, { FC, useState } from 'react';
 import { DataGrid, GridSelectionModel } from '@mui/x-data-grid';
 
 import { IProductFields } from '../Products/types';
-import { IOrder, IProduct, IProductSpecs } from '../../../../../../features/order/order.types';
-
-import { orderService } from '../../../../../../features/order/order.services';
+import { IOrder, IProductSpecs } from '../../../../../../features/order/order.types';
 import CustomToolbar from '../CustomToolbar';
 import { SetState } from '../../../../../../utils/types';
 import { TAdditional } from '../../../types';
 import CustomFooter from '../CustomFooter';
+import ImagePreview from '../../../components/ImagePreview';
+import QuantityTextField from '../QuantityTextField';
+import { orderService } from '../../../../../../features/order/order.services';
 
 
 const ProductGrid: FC<{
@@ -27,38 +28,45 @@ const ProductGrid: FC<{
       field: 'photo',
       headerName: 'Фотография',
       width: 115,
-      renderCell: (params) => <img
-        alt={'Фото'}
+      renderCell: (params) => <ImagePreview
         src={params.value}
-        className='w-12 h-12 flex items-center justify-center'
+        alt={'Фото'}
       />
     },
     { field: 'article', headerName: 'Артикул поставщика', width: 200 },
     { field: 'size', headerName: 'Размер', width: 100 },
     { field: 'color', headerName: 'Цвет', width: 120 },
-    { field: 'quantity', headerName: 'Количество', width: 180, editable: true },
+    {
+      field: 'quantity',
+      headerName: 'Количество',
+      width: 180,
+      editable: true,
+      // renderEditCell: params => <QuantityTextField {...params} />
+    },
     { field: 'price_cny', headerName: 'Цена, ¥', width: 140, editable: true },
     { field: 'price_rub', headerName: 'Цена, ₽', width: 140, editable: true },
     { field: 'additional_expenses', headerName: 'Доп. затраты ₽', width: 180 },
     { field: 'id', headerName: 'ID', width: 70 },
     {
-      field: 'delete', headerName: 'Убрать', width: 80, renderCell: params => <svg
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        strokeWidth={1.5}
-        stroke="currentColor"
-        className="w-6 h-6 cursor-pointer hover:text-gray-500 duration-300 ease-in-out"
-        onClick={() => setSelectedProducts(
-         selectedProducts.filter(selectedProduct => selectedProduct.product.id !== params.id)
-        )}
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M6 18L18 6M6 6l12 12"
-        />
-      </svg>
+      field: 'delete', headerName: 'Убрать', width: 80, renderCell: params => (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth={1.5}
+          stroke="currentColor"
+          className="w-6 h-6 cursor-pointer hover:text-gray-500 duration-300 ease-in-out"
+          onClick={() => setSelectedProducts(
+            selectedProducts.filter(selectedProduct => selectedProduct.product.id !== params.id)
+          )}
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M6 18L18 6M6 6l12 12"
+          />
+        </svg>
+      )
     }
   ];
 

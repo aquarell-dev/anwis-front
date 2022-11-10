@@ -19,6 +19,7 @@ import Header from '../Header';
 import { IOrderForm } from '../../../types';
 import { IOrder } from '../../../../../../features/order/order.types';
 import { ContentContainer } from '../../../../../ui/Container';
+import { BigImage } from '../../../components/ImagePreview';
 
 
 const OrderForm: FC<{ order?: IOrder }> = ({ order }) => {
@@ -101,11 +102,8 @@ const OrderForm: FC<{ order?: IOrder }> = ({ order }) => {
             order={order}
             setValue={setValue}
           />
-          <Notification
-            order={order}
-            control={control}
-          />
-          <ButtonGroup order={order}/>
+          <Notification order={order}/>
+          <ButtonGroup selectedStatus={selectedStatus} order={order} setSelectedStatus={setSelectedStatus} />
         </form>
       )}
     </ContentContainer>

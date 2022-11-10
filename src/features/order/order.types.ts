@@ -59,6 +59,7 @@ export interface IOrder {
   ready_date?: string;
   shipping_from_china_date?: string;
   in_moscow_date?: string;
+  real_in_moscow_date?: string;
   cargo_number?: string;
   cargo_weight?: string;
   cargo_volume?: string;
@@ -69,13 +70,15 @@ export interface IOrder {
   delivered: boolean;
   excel?: string;
   documents?: TDocument[];
+  archive: boolean;
+  ready: boolean;
 }
 
 export interface ICargoInfo extends Pick<
   IOrder,
   'cargo_number' | 'cargo_weight' | 'cargo_volume'
   | 'price_per_kg' | 'package_price' | 'total_delivery'
-  | 'shipping_from_china_date' | 'in_moscow_date' | 'packages'> {}
+  | 'shipping_from_china_date' | 'in_moscow_date' | 'packages' | 'real_in_moscow_date'> {}
 
 export interface ICreateUpdateOrder extends Modify<IOrder, {
   id?: number;
@@ -84,7 +87,7 @@ export interface ICreateUpdateOrder extends Modify<IOrder, {
   order_for_project: number;
   products: ICreateProductSpecs[];
   status: number;
-  tasks: number[];
+  tasks: Omit<ITask, 'id'>[];
   documents: number[];
 }> {
 }
@@ -112,9 +115,10 @@ export interface IProduct {
   color: string;
   brand: string;
   url: string;
+  photo_id: number;
 }
 
-export type ICreateProduct = Modify<Omit<IProduct, 'id'>, { category: number | undefined; photo: number | undefined }>;
+export type ICreateProduct = Modify<Omit<IProduct, 'id' | 'photo_id'>, { category: number | undefined; photo: number | undefined }>;
 
 export type PartialProduct = { id: number } & Partial<ICreateProduct>;
 

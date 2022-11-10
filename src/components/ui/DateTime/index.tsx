@@ -14,9 +14,10 @@ type DatePickerProps = {
   value: TDateValue,
   setValue: SetState<TDateValue>,
   customOnChange?: (value: (TDateValue | null), keyboardInputValue?: (string | undefined)) => void;
+  customStyling?: string;
 };
 
-export const CustomDatePicker: FC<DatePickerProps> = ({ label, value, setValue, customOnChange }) => {
+export const CustomDatePicker: FC<DatePickerProps> = ({ label, value, setValue, customOnChange, customStyling }) => {
   return (
     <LocalizationProvider dateAdapter={AdapterMoment} adapterLocale={moment.locale('ru')}>
       <MuiDatePicker
@@ -25,6 +26,7 @@ export const CustomDatePicker: FC<DatePickerProps> = ({ label, value, setValue, 
         views={['year', 'month', 'day']}
         value={value}
         inputFormat={'DD/MM/YYYY'}
+        className={customStyling}
         onChange={customOnChange ? (value) => customOnChange(value) : (value) => value && setValue(value)}
         renderInput={(params) => <TextField {...params} />}
       />

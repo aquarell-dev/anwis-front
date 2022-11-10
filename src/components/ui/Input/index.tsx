@@ -48,7 +48,7 @@ export const FancyInput: FC<IInput> = ({
         min={'0'}
         max={'999999999'}
         onChange={handler}
-        value={value}
+        value={value ?? ''}
         {...restProps}
       />
     </div>

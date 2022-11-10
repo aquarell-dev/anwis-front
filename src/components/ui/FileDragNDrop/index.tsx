@@ -1,13 +1,13 @@
 import { Accept, useDropzone } from 'react-dropzone';
 import { CSSProperties, FC, useEffect, useMemo, useState } from 'react';
-import { acceptStyle, baseStyle, focusedStyle, rejectStyle, thumb, thumbInner, thumbsContainer } from './styles';
+import { acceptStyle, baseStyle, focusedStyle, img, rejectStyle, thumb, thumbInner, thumbsContainer } from './styles';
 import useUploadDocument from '../../../hooks/useUploadDocument';
 import { SpinnerComponent } from 'react-element-spinner';
 
 type DragFile = File & { preview: string; };
-type DragNDropProps = { accept?: Accept, type: 'photo' | 'document', multiple?: boolean };
+type DragNDropProps = { accept?: Accept, type: 'photo' | 'document', multiple?: boolean, preview?: boolean };
 
-const FileDragAndDrop: FC<DragNDropProps> = ({ accept, type, multiple }) => {
+const FileDragAndDrop: FC<DragNDropProps> = ({ accept, type, multiple, preview }) => {
   const { create, isLoading } = useUploadDocument(type);
 
   const [files, setFiles] = useState<DragFile[]>([]);
@@ -67,9 +67,43 @@ const FileDragAndDrop: FC<DragNDropProps> = ({ accept, type, multiple }) => {
             key={file.name}
           >
             <div style={thumbInner}>
-              <p onLoad={() => URL.revokeObjectURL(file.preview)}>
-                {file.name}
-              </p>
+              {preview ? (
+                <div className='relative'>
+                  <div className="absolute right-0 top-0 h-6 w-6 cursor-pointer rounded-full bg-rose-600 hover:bg-rose-700 duration-300 transition ease-in-out flex items-center justify-center">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="currentColor"
+                      className="w-6 h-6 text-white"
+                      style={{
+                        flex: '0 0 auto'
+                      }}
+                      onClick={() => setFiles(prev => prev.filter(f => f.name !== file.name))}
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M6 18L18 6M6 6l12 12"
+                      />
+                    </svg>
+                  </div>
+                  <img
+                    src={file.preview}
+                    style={img}
+                    alt={'Фото'}
+                    // Revoke data uri after image is loaded
+                    onLoad={() => {
+                      URL.revokeObjectURL(file.preview);
+                    }}
+                  />
+                </div>
+              ) : (
+                <p onLoad={() => URL.revokeObjectURL(file.preview)}>
+                  {file.name}
+                </p>
+              )}
             </div>
           </div>
         ))}

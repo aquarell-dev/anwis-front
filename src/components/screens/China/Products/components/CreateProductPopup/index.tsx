@@ -4,7 +4,7 @@ import Popup from '../../../../../ui/Popup';
 import { AbsoluteCenteredContainer } from '../../../../../ui/Container';
 import CategorySelect from '../CategorySelect';
 
-import { ICategory } from '../../../../../../features/order/order.types';
+import { ICategory, IProduct } from '../../../../../../features/order/order.types';
 import { SetState } from '../../../../../../utils/types';
 import FileDragAndDrop from '../../../../../ui/FileDragNDrop';
 import CreateProductFields from '../CreateProductFields';
@@ -16,10 +16,18 @@ type PopupProps = {
   open: boolean;
   setOpen: SetState<boolean>;
   categories?: ICategory[];
+  product?: IProduct | null;
 };
 
-const CreateProductPopup: FC<PopupProps> = ({ open, setOpen, categories }) => {
-  const { createProduct, product, setProduct } = useCreateProduct();
+const MutateProductPopup: FC<PopupProps> = ({ open, setOpen, categories, product }) => {
+  const {
+    mutate,
+    currentProduct,
+    setCurrentProduct,
+    categoryLabel,
+    defaultPhoto,
+    update
+  } = useCreateProduct(product ?? undefined, categories);
 
   return (
     <Popup
@@ -30,23 +38,47 @@ const CreateProductPopup: FC<PopupProps> = ({ open, setOpen, categories }) => {
       setState={setOpen}
     >
       <AbsoluteCenteredContainer>
-        <div className="w-full m-2">
-          <p>Прикрепите файл</p>
-          <FileDragAndDrop accept={{ 'image/*': [] }} type='photo' multiple={false} />
+        <div className="w-full m-2 flex space-x-8 items-start">
+          <div>
+            <p>Прикрепите файл</p>
+            <div className='w-[650px]'>
+              <FileDragAndDrop
+                accept={{ 'image/*': [] }}
+                type='photo'
+                multiple={false}
+                preview
+              />
+            </div>
+          </div>
+          {defaultPhoto && (
+            <div className='flex flex-col my-2 space-y1-'>
+              <p>Текущее фото</p>
+              <img
+                src={defaultPhoto}
+                className='w-16'
+                alt={'Текущее фото'}
+              />
+            </div>
+          )}
         </div>
         <CreateProductFields
-          product={product}
-          setProduct={setProduct}
+          product={currentProduct}
+          setProduct={setCurrentProduct}
         />
         <CategorySelect
+          label={categoryLabel}
+          product={currentProduct}
           categories={categories}
-          setProduct={setProduct}
+          setProduct={setCurrentProduct}
         />
         <div className="flex items-center justify-center">
           <IndigoButton
             type='button'
-            text='Создать'
-            handler={() => { createProduct(); setOpen(false); }}
+            text={update ? 'Обновить' : 'Создать'}
+            handler={() => {
+              mutate();
+              setOpen(false);
+            }}
           />
         </div>
       </AbsoluteCenteredContainer>
@@ -54,4 +86,4 @@ const CreateProductPopup: FC<PopupProps> = ({ open, setOpen, categories }) => {
   );
 };
 
-export default CreateProductPopup;
+export default MutateProductPopup;

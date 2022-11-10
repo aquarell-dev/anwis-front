@@ -1,5 +1,5 @@
 import { apiSlice } from './api.slice';
-import { ICreateProduct, IProduct } from '../../features/order/order.types';
+import { ICreateProduct, IProduct, PartialProduct } from '../../features/order/order.types';
 
 export const productSlice = apiSlice.injectEndpoints({
   endpoints: build => ({
@@ -17,10 +17,27 @@ export const productSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ['Product']
     }),
+    updatePartialProduct: build.mutation<void, PartialProduct>({
+      query: product => ({
+        url: `products/partial/${product.id}/`,
+        method: 'PUT',
+        body: product
+      }),
+      invalidatesTags: ['Product']
+    }),
+    deleteProduct: build.mutation<void, number>({
+      query: id => ({
+        url: `products/${id}/`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['Product']
+    }),
   })
 });
 
 export const {
   useCreateProductMutation,
   useListProductsQuery,
+  useUpdatePartialProductMutation,
+  useDeleteProductMutation,
 } = productSlice;

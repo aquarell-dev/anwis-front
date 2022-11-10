@@ -2,7 +2,7 @@ import React, { FC, useState } from 'react';
 
 import { IndigoButton } from '../../../../../ui/Button';
 import ProductSearch from '../ProductSearch';
-import CreateProductPopup from '../../../Products/components/CreateProductPopup';
+import MutateProductPopup from '../../../Products/components/CreateProductPopup';
 import ProductGrid from '../ProductGrid';
 
 import { IOrder, IProduct, IProductSpecs } from '../../../../../../features/order/order.types';
@@ -43,7 +43,7 @@ const Products: FC<IProductsProps> = ({
 
   return (
     <>
-      <CreateProductPopup
+      <MutateProductPopup
         open={createProductOpen}
         setOpen={setCreateProductOpen}
       />

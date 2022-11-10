@@ -5,7 +5,7 @@ export const orderSlice = apiSlice.injectEndpoints({
   endpoints: build => ({
     listOrders: build.query<IOrder[], any>({
       query: p => ({
-        url: 'orders/'
+        url: 'orders/?archive=0'
       }),
       providesTags: ['Order']
     }),
@@ -39,6 +39,19 @@ export const orderSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ['Order']
     }),
+    listArchiveOrders: build.query<IOrder[], any>({
+      query: p => ({
+        url: 'orders/?archive=1'
+      }),
+      providesTags: ['Order']
+    }),
+    deleteOrder: build.mutation<void, number>({
+      query: id => ({
+        url: `orders/${id}/`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['Order']
+    }),
   })
 });
 
@@ -48,4 +61,6 @@ export const {
   useCreateOrderMutation,
   useGetOrderByIdQuery,
   useListOrdersQuery,
+  useListArchiveOrdersQuery,
+  useDeleteOrderMutation
 } = orderSlice;

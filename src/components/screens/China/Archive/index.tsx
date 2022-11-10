@@ -2,11 +2,12 @@ import { FC } from 'react';
 
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 
-import { useListOrdersQuery } from '../../../../store/api/order.api';
+import { useListArchiveOrdersQuery } from '../../../../store/api/order.api';
 
 import { orderService } from '../../../../features/order/order.services';
 
 import Loader from '../../../ui/Loader';
+import { Link } from 'react-router-dom';
 
 const columns: GridColDef[] = [
   { field: 'id', headerName: 'ID', width: 70 },
@@ -22,13 +23,35 @@ const columns: GridColDef[] = [
     headerName: 'Статус',
     width: 150,
   },
+  {
+    field: 'redirect',
+    headerName: 'Перейти',
+    width: 150,
+    renderCell: params =>
+      <Link to={`../../china/orders/${params.row.id}/`}>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth={1.5}
+          stroke="currentColor"
+          className="w-6 h-6"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75"
+          />
+        </svg>
+      </Link>
+  },
 ];
 
 const Archive: FC = () => {
 
-  const { data, error, isLoading } = useListOrdersQuery(null);
+  const { data, error, isLoading } = useListArchiveOrdersQuery(null);
 
-  if (isLoading) return <Loader isLoading={isLoading} />;
+  if (isLoading) return <Loader isLoading={isLoading}/>;
 
   if (error) return <p>Error</p>;
 

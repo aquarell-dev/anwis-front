@@ -6,15 +6,73 @@ import { useListOrdersQuery } from '../../../../store/api/order.api';
 import Loader from '../../../ui/Loader';
 import Order from '../Order/components/styled/Order';
 
-import { getFourDigitId } from '../../../../utils';
+import { getDateDiff, getFourDigitId } from '../../../../utils';
+import { IOrder } from '../../../../features/order/order.types';
 
+type OrderInfo = { label: string; value: string | number | undefined };
+
+const fill = (order: IOrder): OrderInfo[] => [
+  {
+    label: 'Компания',
+    value: order.individual_entrepreneur.individual_entrepreneur
+  },
+  {
+    label: 'Посредник',
+    value: order.china_distributor.china_distributor
+  },
+  {
+    label: 'Кол-во товаров',
+    value: order.total_quantity
+  },
+  {
+    label: 'Сумма ¥',
+    value: order.total_cny
+  },
+  {
+    label: 'Сумма, ₽',
+    value: order.total_rub
+  },
+  {
+    label: 'Курс',
+    value: order.course
+  },
+  {
+    label: 'Доп Затраты, ₽',
+    value: order.total_expenses
+  },
+  {
+    label: 'Дней До Изготовления Товара',
+    value: order.ready_date ? getDateDiff(new Date(), new Date(order.ready_date)) > 0 ? getDateDiff(new Date(), new Date(order.ready_date)) : 'Товар Изготовлен ✅' : undefined
+  },
+  {
+    label: 'Номер Карго',
+    value: order?.cargo_number
+  },
+  {
+    label: 'Объем, м3',
+    value: order?.cargo_volume
+  },
+  {
+    label: 'Общая сумма Доставки, $',
+    value: order?.total_delivery
+  },
+  {
+    label: 'Дата Отправки Из Китая',
+    value: order.shipping_from_china_date
+  },
+  {
+    label: 'Приблизительная Дата Приезда в Москву',
+    value: order.in_moscow_date
+  },
+
+];
 
 const Orders: FC = () => {
   const { data, error, isLoading } = useListOrdersQuery(null);
 
   const navigate = useNavigate();
 
-  if (isLoading) return <Loader isLoading={isLoading} />;
+  if (isLoading) return <Loader isLoading={isLoading}/>;
 
   if (error) return <p>Error</p>;
 
@@ -47,32 +105,54 @@ const Orders: FC = () => {
             />
           </div>
         </div>
-        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-y-4 gap-x-6 mb-4">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-y-4 gap-x-6 mb-4">
           {data?.map(order => (
             <React.Fragment key={order.id}>
               <Order
-                border={order.status.color}
-                hover={order.status.hover_color}
+                border={order.draft ? '#6b7280' : order.status.color}
+                hover={order.draft ? '#fff9f9' : order.status.hover_color}
                 onClick={() => navigate(`/china/orders/${order.id}`)}
               >
-                <div className='flex flex-col space-y-2 w-1/2'>
-                  <img
-                    src={order.status.photo}
-                    alt={'Статус'}
-                    className={'h-16 w-16'}
-                    style={{ flex: '0 0 auto' }}
-                  />
-                  <div className="flex items-center space-x-2">
-                    <div className="h-4 w-4 rounded-full" style={{ backgroundColor: order.status.color, flex: '0 0 auto' }} />
-                    <p className='text-[12px]'>{order.status.status}</p>
+                <div className="flex w-full h-full justify-center">
+                  <div className='flex flex-col justify-between h-full w-[40%] border-r-2 border-slate-800'>
+                    <div className="flex h-full justify-center items-center flex-col space-y-4">
+                      <img
+                        src={order.status.photo}
+                        alt={'Статус'}
+                        className={'h-16 w-16'}
+                        style={{ flex: '0 0 auto' }}
+                      />
+                      <div className="flex items-center w-5/6 justify-center space-x-2 mx-auto">
+                        <div
+                          className="h-4 w-4 rounded-full"
+                          style={{ backgroundColor: order.status.color, flex: '0 0 auto' }}
+                        />
+                        <p className='text-sm md:text-[16px] font-medium'>{order.status.status}</p>
+                      </div>
+                    </div>
+                    <div className="h-[30%] flex items-center px-3 border-t-2 border-slate-800">
+                      <p className='text-sm md:text-[16px]'>Создание: <span className="font-medium">{order.date}</span>
+                      </p>
+                    </div>
                   </div>
-                </div>
-                <div className="w-full text-right">
-                  <p>
-                    Заказ {getFourDigitId(order.id)}
-                  </p>
-                  <p>ИП: {order.individual_entrepreneur.individual_entrepreneur}</p>
-                  <p>КП: {order.china_distributor.china_distributor}</p>
+                  <div className="w-full flex flex-col text-right">
+                    <div className='h-[14%] border-b-2 border-slate-800 px-8 flex items-center justify-between text-xl font-medium'>
+                      {order.draft && (<p className=''>Черновик</p>)}
+                      <p>Заказ {getFourDigitId(order.id, true)}</p>
+                    </div>
+                    <div className='flex flex-col mt-1 items-end'>
+                      {fill(order).map(field => !!field.value && (
+                        <div
+                          className='border-b w-fit border-slate-800 py-1 px-4'
+                          key={field.label}
+                        >
+                          <p>
+                            <span className='font-medium'>{field.label}</span>: <span style={{ whiteSpace: 'nowrap' }}>{field.value}</span>
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                 </div>
               </Order>
             </React.Fragment>

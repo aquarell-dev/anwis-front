@@ -6,7 +6,7 @@ import { FancyInput } from '../../../../../ui/Input';
 import { SetState } from '../../../../../../utils/types';
 
 import { FiPlusCircle } from 'react-icons/fi';
-import CreateProductPopup from '../CreateProductPopup';
+import MutateProductPopup from '../CreateProductPopup';
 import { ICategory } from '../../../../../../features/order/order.types';
 import CategoryPopup from '../CategoryPopup';
 
@@ -39,7 +39,7 @@ const Navigation: FC<{
           placeholder={'Поиск продуктов'}
         />
       </div>
-      <CreateProductPopup
+      <MutateProductPopup
         open={createProductOpen}
         setOpen={setCreateProductOpen}
         categories={categories}

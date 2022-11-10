@@ -3,7 +3,7 @@ import useUpdatePartialOrder from '../../../hooks/useUpdatePartialOrder';
 import { Alert } from '@mui/material';
 import moment from 'moment';
 
-import { IndigoButton } from '../../../../../ui/Button';
+import { IndigoButton, RedButton } from '../../../../../ui/Button';
 
 import { convertDateToUSFormat, getDateDiff } from '../../../../../../utils';
 
@@ -24,7 +24,7 @@ const ReadyOrderDate: FC<{
   const [readyDate, setReadyDate] = useState(moment(order ? orderDate : '', 'DD/MM/YYYY'));
 
   const { notifyError } = useNotifications();
-  const updateOrder = useUpdatePartialOrder();
+  const { updateOrder } = useUpdatePartialOrder();
 
   useEffect(() => {
     if (show('Отправлен из Китая')) setExpanded(false);
@@ -61,21 +61,27 @@ const ReadyOrderDate: FC<{
           )}
         </svg>
       </div>
-      <Expand open={expanded} className='flex items-center space-x-4'>
+      <Expand
+        open={expanded}
+        className='flex items-center space-x-4'
+      >
         <div className="w-[420px]">
           <Alert
             variant="filled"
-            severity={daysLeft ? daysLeft <= 5 ? 'error' : 'success' : 'error'}
+            severity={order?.ready ? 'success' : daysLeft ? daysLeft <= 5 ? 'error' : 'success' : 'error'}
             className='flex items-center'
             style={{
               color: 'white',
-              backgroundColor: !order?.ready_date ? '#fb7185' : undefined
+              backgroundColor: !order?.ready_date && !order?.ready ? '#fb7185' : undefined
             }}
           >
-            {daysLeft ?
-              daysLeft <= 0 ? <p className='text-xl'>Товар уже изготовлен</p> :
+            {order?.ready ? (
+              <p className='text-xl'>Товар уже изготовлен</p>
+            ) : daysLeft ?
+              (daysLeft <= 0) ? <p className='text-xl'>Товар уже изготовлен</p> :
                 <p className='text-xl'>Дней до изготовления товара: <span className='font-bold'>{daysLeft}</span></p>
-              : !order?.cargo_number ? <p className='text-xl'>Укажите дату изготовления товара</p> : <p className='text-xl'>Неизвестная ошибка</p>
+              : !order?.cargo_number ? <p className='text-xl'>Укажите дату изготовления товара</p> :
+                <p className='text-xl'>Неизвестная ошибка</p>
             }
           </Alert>
         </div>
@@ -89,7 +95,16 @@ const ReadyOrderDate: FC<{
           text={'Сохранить'}
           handler={() => {
             if (!order) return notifyError('Не указан заказ');
-            updateOrder({ id: order.id, ready_date: readyDate.format('DD/MM/YYYY') });
+            updateOrder({ id: order.id, ready_date: readyDate.format('DD/MM/YYYY'), ready: false });
+          }}
+        />
+        <RedButton
+          type={'button'}
+          text={'Товар есть в наличии в Китае'}
+          customWidth='w-80'
+          handler={() => {
+            if (!order) return notifyError('Не указан заказ');
+            updateOrder({ id: order.id, ready: true });
           }}
         />
       </Expand>

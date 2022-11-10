@@ -15,6 +15,11 @@ const useCargo = (order: IOrder | undefined, file: File | null) => {
       convertDateToUSFormat(order.in_moscow_date)
       : null, 'DD/MM/YYYY'
   ));
+  const [realInMoscow, setRealInMoscow] = useState(moment(
+    order?.real_in_moscow_date ?
+      convertDateToUSFormat(order.real_in_moscow_date)
+      : null, 'DD/MM/YYYY'
+  ));
 
   const [cargoInfo, setCargoInfo] = useState<ICargoInfo>({
     cargo_number: order?.cargo_number ?? '',
@@ -25,21 +30,23 @@ const useCargo = (order: IOrder | undefined, file: File | null) => {
     total_delivery: order?.total_delivery ?? 0,
     packages: order?.packages ?? 0,
     shipping_from_china_date: fromChina.format('DD/MM/YYYY'),
-    in_moscow_date: inMoscow.format('DD/MM/YYYY')
+    in_moscow_date: inMoscow.format('DD/MM/YYYY'),
+    real_in_moscow_date: realInMoscow.format('DD/MM/YYYY')
   });
 
   useEffect(() => {
     setCargoInfo(prev => ({
       ...prev,
       in_moscow_date: inMoscow.format('DD/MM/YYYY'),
-      shipping_from_china_date: fromChina.format('DD/MM/YYYY')
+      shipping_from_china_date: fromChina.format('DD/MM/YYYY'),
+      real_in_moscow_date: realInMoscow.isValid() ? realInMoscow.format('DD/MM/YYYY') : undefined
     }));
-  }, [fromChina, inMoscow]);
+  }, [fromChina, inMoscow, realInMoscow]);
 
   useEffect(() => {
     if (file)
       readXlsxFile(file).then((rows) => {
-        const shipping_from_china_date = new Date(rows[5][3].toString()).toLocaleDateString('en-GB');
+        const shipping_from_china_date = new Date(rows[5][3].toString()).toLocaleDateString('us-US');
         const cargo_number = rows[5][8].toString();
         const packages = parseInt(cargo_number.split('-')[1]);
         const cargo_weight = rows[5][13].toString();
@@ -63,7 +70,7 @@ const useCargo = (order: IOrder | undefined, file: File | null) => {
       });
   }, [file]);
 
-  return { fromChina, setFromChina, inMoscow, setInMoscow, cargoInfo, setCargoInfo };
+  return { fromChina, setFromChina, inMoscow, setInMoscow, cargoInfo, setCargoInfo, realInMoscow, setRealInMoscow };
 };
 
 export default useCargo;

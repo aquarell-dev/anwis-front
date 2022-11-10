@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react';
-import DeletePopup from '../DeletePopup';
-import ChangePopup from '../ChangePopup';
+import DeletePopup from '../../../components/DeletePopup';
+import ChangePopup from '../../../components/ChangePopup';
 import { SetState } from '../../../../../../utils/types';
 
 const CRUDContent: FC<{
