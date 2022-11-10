@@ -9,39 +9,40 @@ import { fields } from './fields';
 
 const CustomGrid: FC<CustomGridProps> = ({ products, selectionModel, setSelectionModel, buffer, setBuffer }) => {
   return (
-    <DataGrid
-      autoHeight
-      checkboxSelection
-      density={'comfortable'}
-      columns={fields}
-      disableSelectionOnClick
-      rows={buffer}
-      onSelectionModelChange={selectionModel => setSelectionModel(selectionModel)}
-      selectionModel={selectionModel}
-      initialState={{
-        sorting: {
-          sortModel: [{ field: 'id', sort: 'asc' }],
-        },
-      }}
-      onCellEditCommit={params => {
-        const { id, field, value } = params;
+    <div className='h-[400px] xl:h-[600px]'>
+      <DataGrid
+        checkboxSelection
+        density={'comfortable'}
+        columns={fields}
+        disableSelectionOnClick
+        rows={buffer}
+        onSelectionModelChange={selectionModel => setSelectionModel(selectionModel)}
+        selectionModel={selectionModel}
+        initialState={{
+          sorting: {
+            sortModel: [{ field: 'id', sort: 'asc' }],
+          },
+        }}
+        onCellEditCommit={params => {
+          const { id, field, value } = params;
 
-        const intId = parseInt(id.toString());
+          const intId = parseInt(id.toString());
 
-        if (field !== 'quantity') return;
+          if (field !== 'quantity') return;
 
-        const product = products.find(product => product.id === intId);
+          const product = products.find(product => product.id === intId);
 
-        if (!product) return;
+          if (!product) return;
 
-        let intValue = parseInt(value);
+          let intValue = parseInt(value);
 
-        setBuffer(prev => prev.map(buff => buff.id === id ? {
-          ...product,
-          quantity: !isNaN(intValue) ? intValue : 0
-        } : buff));
-      }}
-    />
+          setBuffer(prev => prev.map(buff => buff.id === id ? {
+            ...product,
+            quantity: !isNaN(intValue) ? intValue : 0
+          } : buff));
+        }}
+      />
+    </div>
   );
 };
 
@@ -70,13 +71,16 @@ const AddProductPopup: FC<AddProductProps> = props => {
     >
       <div className="mx-4">
         <ProductsPage
-          customGrid={<CustomGrid
-            buffer={buffer}
-            setBuffer={setBuffer}
-            selectionModel={selected}
-            setSelectionModel={setSelected}
-            products={products}
-          />}
+          customGrid={
+            <div className={'w-full'}>
+              <CustomGrid
+                buffer={buffer}
+                setBuffer={setBuffer}
+                selectionModel={selected}
+                setSelectionModel={setSelected}
+                products={products}
+              />
+            </div>}
         />
         <div className="absolute left-0 bottom-0 m-4">
           <IndigoButton
@@ -111,7 +115,7 @@ const AddProductPopup: FC<AddProductProps> = props => {
                     product
                   }];
 
-                return prev
+                return prev;
               }));
 
               setAddProductsFromDictionaryOpen(false);
