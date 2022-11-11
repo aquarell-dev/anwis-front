@@ -1,5 +1,5 @@
 import React, { FC, ReactNode, useState } from 'react';
-import { DataGrid } from '@mui/x-data-grid';
+import { DataGrid, GridSelectionModel } from '@mui/x-data-grid';
 import useProducts from './hooks/useProducts';
 import Categories from './components/Categories';
 import Navigation from './components/Navigation';
@@ -12,6 +12,7 @@ import { useCreateProductMutation, useDeleteProductMutation } from '../../../../
 import DeletePopup from '../components/DeletePopup';
 import useNotifications from '../../../../hooks/useNotifications';
 import CreateSameProduct from './components/CreateSameProduct';
+import Toolbar from './components/Toolbar';
 
 
 const ProductsPage: FC<{
@@ -41,6 +42,8 @@ const ProductsPage: FC<{
   const [productUpToChange, setProductUpToChange] = useState<IProduct | null>(null);
   const [productUpToDeletion, setProductUpToDeletion] = useState<{ content: string; id: number } | null>(null);
   const [copyProductId, setCopyProductId] = useState<number | null>(null);
+
+  const [selectionModel, setSelectionModel] = useState<GridSelectionModel>([]);
 
   const columns: Fields[] = [...fields,
     {
@@ -137,6 +140,13 @@ const ProductsPage: FC<{
               checkboxSelection
               density={'comfortable'}
               columns={columns}
+              components={{
+                Toolbar: Toolbar
+              }}
+              componentsProps={{
+                toolbar: { selectionModel }
+              }}
+              onSelectionModelChange={(newModel) => setSelectionModel(newModel)}
               disableSelectionOnClick
               rows={filteredProducts ?? products}
             />
