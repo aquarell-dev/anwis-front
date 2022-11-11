@@ -1,4 +1,4 @@
-import { Control, FieldErrors, UseFormRegister } from "react-hook-form";
+import { Control, FieldErrors, UseFormRegister } from 'react-hook-form';
 import {
   IChinaDistributor,
   IOrder,
@@ -7,9 +7,9 @@ import {
   IProductSpecs,
   IStatus,
   TStatuses,
-} from "../../../features/order/order.types";
-import { SetState } from "../../../utils/types";
-import { GridColDef, GridSelectionModel } from "@mui/x-data-grid";
+} from '../../../features/order/order.types';
+import { SetState } from '../../../utils/types';
+import { GridColDef, GridSelectionModel } from '@mui/x-data-grid';
 
 export interface IFormControls {
   register: UseFormRegister<any>;
@@ -86,6 +86,29 @@ export type CustomGridProps = {
   setSelectionModel: SetState<GridSelectionModel>;
   buffer: Buffer[];
   setBuffer: SetState<Buffer[]>;
-} & Pick<AddProductProps, "products">;
+} & Pick<AddProductProps, 'products'>;
 
-export type Buffer = IProduct & Pick<IProductSpecs, "quantity">;
+export type Buffer = IProduct & Pick<IProductSpecs, 'quantity'>;
+
+export type Popups = {
+  productChangeOpen: boolean;
+  createSameOpen: boolean;
+  productDeleteOpen: boolean;
+  setCreateSameOpen: SetState<boolean>;
+  setProductDeleteOpen: SetState<boolean>;
+  setProductChangeOpen: SetState<boolean>;
+}
+
+export type Values = {
+  copyProductId: number | null;
+  setCopyProductId: SetState<number | null>,
+
+  productUpToChange: IProduct | null;
+  setProductUpToChange: SetState<IProduct | null>;
+
+  size: string;
+  setSize: SetState<string>;
+
+  productUpToDeletion: { content: string; id: number } | null;
+  setProductUpToDeletion: SetState<{ content: string; id: number } | null>;
+}

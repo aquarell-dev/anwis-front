@@ -8,7 +8,7 @@ import { ICategory, IProduct } from '../../../../../../features/order/order.type
 import { SetState } from '../../../../../../utils/types';
 import FileDragAndDrop from '../../../../../ui/FileDragNDrop';
 import CreateProductFields from '../CreateProductFields';
-import useCreateProduct from '../../hooks/useCreateProduct';
+import useMutateProduct from '../../hooks/useMutateProduct';
 import { IndigoButton } from '../../../../../ui/Button';
 
 
@@ -27,7 +27,7 @@ const MutateProductPopup: FC<PopupProps> = ({ open, setOpen, categories, product
     categoryLabel,
     defaultPhoto,
     update
-  } = useCreateProduct(product ?? undefined, categories);
+  } = useMutateProduct(product ?? undefined, categories);
 
   return (
     <Popup
