@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useListChinaDistributorsQuery } from '../../../../../store/api/distributor.api';
-import { useListOrderForProjectsQuery } from '../../../../../store/api/orderForProject.api';
+import { useListOrderForProjectsQuery } from '../../../../../store/api/project.api';
 import { useListStatusesQuery } from '../../../../../store/api/status.api';
 import { useListProductsQuery } from '../../../../../store/api/product.api';
 

@@ -1,7 +1,7 @@
 import { apiSlice } from './api.slice';
-import { IChinaDistributor, ICreateOrderForProject, IOrderForProject } from '../../features/order/order.types';
+import { ICreateOrderForProject, IOrderForProject } from '../../features/order/order.types';
 
-export const orderForProjectSlice = apiSlice.injectEndpoints({
+export const projectSlice = apiSlice.injectEndpoints({
   endpoints: build => ({
     listOrderForProjects: build.query<IOrderForProject[], any>({
       query: (p: any) => ({
@@ -40,4 +40,4 @@ export const {
   useListOrderForProjectsQuery,
   useDeleteOrderForProjectMutation,
   useUpdateOrderForProjectMutation
-} = orderForProjectSlice;
+} = projectSlice;

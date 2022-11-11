@@ -1,4 +1,4 @@
-import { useCreateOrderForProjectMutation } from "../../../../../store/api/orderForProject.api";
+import { useCreateOrderForProjectMutation } from "../../../../../store/api/project.api";
 import { useCreateChinaDistributorMutation } from "../../../../../store/api/distributor.api";
 
 

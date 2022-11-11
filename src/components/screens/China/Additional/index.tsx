@@ -11,7 +11,7 @@ import {
   useCreateOrderForProjectMutation,
   useDeleteOrderForProjectMutation,
   useUpdateOrderForProjectMutation
-} from '../../../../store/api/orderForProject.api';
+} from '../../../../store/api/project.api';
 
 import Loader from '../../../ui/Loader';
 import { ContentContainer } from '../../../ui/Container';

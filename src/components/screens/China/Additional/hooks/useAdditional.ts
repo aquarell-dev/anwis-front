@@ -1,5 +1,5 @@
 import { useListChinaDistributorsQuery } from '../../../../../store/api/distributor.api';
-import { useListOrderForProjectsQuery } from '../../../../../store/api/orderForProject.api';
+import { useListOrderForProjectsQuery } from '../../../../../store/api/project.api';
 import { useState } from 'react';
 
 const useAdditional = () => {
