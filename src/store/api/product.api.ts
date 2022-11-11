@@ -32,6 +32,13 @@ export const productSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ['Product']
     }),
+    deleteProducts: build.mutation<void, number[]>({
+      query: products => ({
+        url: `products/delete-multiple/?products=${products.join(',')}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['Product']
+    }),
   })
 });
 
@@ -40,4 +47,5 @@ export const {
   useListProductsQuery,
   useUpdatePartialProductMutation,
   useDeleteProductMutation,
+  useDeleteProductsMutation,
 } = productSlice;
