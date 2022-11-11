@@ -132,7 +132,7 @@ const LeftOver: FC = () => {
                       <p
                         className={cn(
                           'text-[12px] md:text-sm',
-                          leftover.buffer.length > 0 && product.quantity !== leftover.sorted_buffer[idx].quantity ? 'text-red-500' : ''
+                          leftover.buffer.length > 0 && product.quantity < leftover.sorted_buffer[idx].quantity ? 'text-red-500' : ''
                         )}
                       ><span>{product.title}</span> - <span>{product.quantity}</span> / ({leftover.buffer.length > 0 ? leftover.sorted_buffer[idx].quantity : 'Нет данных'}шт)
                       </p>
