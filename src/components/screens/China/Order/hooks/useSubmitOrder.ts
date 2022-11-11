@@ -39,7 +39,7 @@ const useSubmitOrder = (args: SubmitOrder) => {
     if (redirectId) navigate(`../../china/orders/${redirectId}`)
   }, [redirectId]);
 
-  const onSubmit = (data: IOrderForm) => {
+  const onSubmit = (data: IOrderForm, redirect?: string) => {
     const transformedData: ICreateUpdateOrder = {
       ...orderService.transformSubmitData(data, selectedProducts),
       id: order?.id,
@@ -49,12 +49,12 @@ const useSubmitOrder = (args: SubmitOrder) => {
     if (creation) {
       createOrder(transformedData)
         .unwrap()
-        .then(() => notifySuccess('Заказ успешно создан'))
+        .then(() => { notifySuccess('Заказ успешно создан'); redirect && navigate(redirect) })
         .catch(() => notifyError('Заказ не был создан'))
     } else if (!creation) {
       updateOrder(transformedData)
         .unwrap()
-        .then(() => notifySuccess('Заказ успешно обновлен'))
+        .then(() => { notifySuccess('Заказ успешно обновлен'); redirect && navigate(redirect) })
         .catch(() => notifyError('Заказ не был обновлен'))
     }
   };
