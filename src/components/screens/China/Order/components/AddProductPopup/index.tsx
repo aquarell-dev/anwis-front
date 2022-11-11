@@ -36,6 +36,14 @@ const CustomGrid: FC<CustomGridProps> = ({ products, selectionModel, setSelectio
 
           let intValue = parseInt(value);
 
+          setSelectionModel(prev => {
+            if (prev.includes(params.id)) {
+              return prev; // return if already selected
+            }
+
+            return prev.concat(params.id)
+          });
+
           setBuffer(prev => prev.map(buff => buff.id === id ? {
             ...product,
             quantity: !isNaN(intValue) ? intValue : 0
