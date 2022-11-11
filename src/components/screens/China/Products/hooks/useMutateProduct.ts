@@ -15,7 +15,7 @@ const initialState: ICreateProduct = {
   photo: undefined
 };
 
-const useCreateProduct = (product?: IProduct, categories?: ICategory[]) => {
+const useMutateProduct = (product?: IProduct, categories?: ICategory[]) => {
   const [currentProduct, setCurrentProduct] = useState<ICreateProduct>(initialState);
 
   useEffect(() => {
@@ -60,4 +60,4 @@ const useCreateProduct = (product?: IProduct, categories?: ICategory[]) => {
   return { mutate, currentProduct, setCurrentProduct, categoryLabel: product?.category, defaultPhoto: product?.photo, update };
 };
 
-export default useCreateProduct;
+export default useMutateProduct;
