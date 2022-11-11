@@ -11,7 +11,6 @@ const CustomToolbar: FC<{
   selectedProducts: IProductSpecs[],
   setSelectedProducts: SetState<IProductSpecs[]>
 }> = ({ selectionModel, selectedProducts, setSelectedProducts }) => {
-
   return (
     <GridToolbarContainer>
       <Button
