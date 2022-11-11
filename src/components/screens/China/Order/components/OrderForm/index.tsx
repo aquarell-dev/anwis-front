@@ -19,7 +19,6 @@ import Header from '../Header';
 import { IOrderForm } from '../../../types';
 import { IOrder } from '../../../../../../features/order/order.types';
 import { ContentContainer } from '../../../../../ui/Container';
-import { BigImage } from '../../../components/ImagePreview';
 
 
 const OrderForm: FC<{ order?: IOrder }> = ({ order }) => {
@@ -50,61 +49,68 @@ const OrderForm: FC<{ order?: IOrder }> = ({ order }) => {
   return (
     <ContentContainer>
       {chinaDistributors && orderForProjects && statuses && products && (
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          onKeyDown={(e) => e.code === 'Enter' && e.preventDefault()}
-          className='flex flex-col space-y-4'
-        >
-          <Header order={order}/>
-          <FormControls
-            errors={errors}
-            register={register}
-            orderForProjects={orderForProjects}
-            chinaDistributors={chinaDistributors}
-            statuses={statuses}
-            order={order}
-            control={control}
-            setSelectedStatus={setSelectedStatus}
-          />
-          {
-            show('Отправлен поставщику для просчета') && (
-              <AdditionalExpenses
-                additional={additional}
-                setAdditional={setAdditional}
-                selectedProducts={selectedProducts}
-                setSelectedProducts={setSelectedProducts}
-                setSelectedStatus={setSelectedStatus}
-                order={order}
-                statuses={statuses}
-              />
-            )
-          }
-          {show('Заказ оформлен') && <ReadyOrderDate
+        <>
+          <form
+            onKeyDown={(e) => e.code === 'Enter' && e.preventDefault()}
+            className='flex flex-col space-y-4'
+          >
+            <Header order={order}/>
+            <FormControls
+              errors={errors}
+              register={register}
+              orderForProjects={orderForProjects}
+              chinaDistributors={chinaDistributors}
+              statuses={statuses}
+              order={order}
+              control={control}
+              setSelectedStatus={setSelectedStatus}
+            />
+            {
+              show('Отправлен поставщику для просчета') && (
+                <AdditionalExpenses
+                  additional={additional}
+                  setAdditional={setAdditional}
+                  selectedProducts={selectedProducts}
+                  setSelectedProducts={setSelectedProducts}
+                  setSelectedStatus={setSelectedStatus}
+                  order={order}
+                  statuses={statuses}
+                />
+              )
+            }
+            {show('Заказ оформлен') && <ReadyOrderDate
+              selectedStatus={selectedStatus}
+              order={order}
+              show={show}
+            />}
+            {show('Отправлен из Китая') && <CargoShipInfo
+              order={order}
+              statuses={statuses}
+              setSelectedStatus={setSelectedStatus}
+            />}
+            <Products
+              products={products}
+              selectedProducts={selectedProducts}
+              setSelectedProducts={setSelectedProducts}
+              additional={additional}
+              setAdditional={setAdditional}
+              order={order}
+            />
+            <BottomControls
+              register={register}
+              order={order}
+              setValue={setValue}
+            />
+            <Notification order={order}/>
+          </form>
+          <ButtonGroup
             selectedStatus={selectedStatus}
             order={order}
-            show={show}
-          />}
-          {show('Отправлен из Китая') && <CargoShipInfo
-            order={order}
-            statuses={statuses}
             setSelectedStatus={setSelectedStatus}
-          />}
-          <Products
-            products={products}
-            selectedProducts={selectedProducts}
-            setSelectedProducts={setSelectedProducts}
-            additional={additional}
-            setAdditional={setAdditional}
-            order={order}
+            handleSubmit={handleSubmit}
+            onSubmit={onSubmit}
           />
-          <BottomControls
-            register={register}
-            order={order}
-            setValue={setValue}
-          />
-          <Notification order={order}/>
-          <ButtonGroup selectedStatus={selectedStatus} order={order} setSelectedStatus={setSelectedStatus} />
-        </form>
+        </>
       )}
     </ContentContainer>
   );

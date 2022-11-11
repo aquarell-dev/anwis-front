@@ -1,4 +1,4 @@
-import { FC, useRef } from 'react';
+import { BaseSyntheticEvent, FC, useRef } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 
@@ -10,35 +10,36 @@ import useExcelCreate from '../../hooks/useExcelCreate';
 import { SpinnerComponent } from 'react-element-spinner';
 import { SetState } from '../../../../../../utils/types';
 import useUpdatePartialOrder from '../../../hooks/useUpdatePartialOrder';
-import { useDeleteOrderMutation } from '../../../../../../store/api/order.api';
-import useNotifications from '../../../../../../hooks/useNotifications';
+import { SubmitErrorHandler, SubmitHandler } from 'react-hook-form';
+import { IOrderForm } from '../../../types';
+import DeleteOrderButton from '../DeleteOrderButton';
 
-const ButtonGroup: FC<{ order?: IOrder, selectedStatus: TStatuses, setSelectedStatus: SetState<TStatuses> }> = ({
-                                                                                                                  order,
-                                                                                                                  selectedStatus,
-                                                                                                                  setSelectedStatus
-                                                                                                                }) => {
+const ButtonGroup: FC<{
+  order?: IOrder,
+  selectedStatus: TStatuses,
+  setSelectedStatus: SetState<TStatuses>,
+  handleSubmit: (onValid: SubmitHandler<IOrderForm>, onInvalid?: SubmitErrorHandler<IOrderForm>) => (e?: BaseSyntheticEvent) => Promise<void>,
+  onSubmit: (data: IOrderForm, redirect?: string) => void
+}> = ({ order, selectedStatus, setSelectedStatus, handleSubmit, onSubmit }) => {
   const navigate = useNavigate();
   const downloadRef = useRef<HTMLAnchorElement | null>(null);
   const { createExcel, isLoading, error } = useExcelCreate(selectedStatus, setSelectedStatus);
-  const [deleteOrder, _] = useDeleteOrderMutation();
-  const { notifySuccess, notifyError } = useNotifications();
 
   const { updateOrder } = useUpdatePartialOrder();
 
   return (
-    <div className="flex justify-between items-center">
+    <div className="flex justify-between items-center mt-6 mb-4 border-t pt-2 border-slate-600">
       <div className="flex items-center space-x-4">
         <IndigoButton
-          type={'submit'}
+          type={'button'}
           text={order ? 'Обновить' : 'Создать'}
-          handler={() => null}
+          handler={handleSubmit(data => onSubmit(data))}
         />
         <IndigoButton
-          type={'submit'}
+          type={'button'}
           customWidth={'w-60'}
-          text={order ? 'Сохранить и закрыть' : 'Создать и закрыть'}
-          handler={() => navigate('/china/orders/')}
+          text={order ? 'Обновить и закрыть' : 'Создать и закрыть'}
+          handler={handleSubmit(data => onSubmit(data, '../orders'))}
         />
         <RedButton
           type={'button'}
@@ -46,20 +47,7 @@ const ButtonGroup: FC<{ order?: IOrder, selectedStatus: TStatuses, setSelectedSt
           text={'Закрыть'}
           handler={() => navigate('/china')}
         />
-        {order && (
-          <RedButton
-            type='button'
-            text='Удалить'
-            handler={() => deleteOrder(order.id)
-              .unwrap()
-              .then(() => {
-                navigate('china/orders/');
-                notifySuccess('Заказ был успешно удален');
-              })
-              .catch(() => notifyError('Заказ не был удален'))
-            }
-          />
-        )}
+        <DeleteOrderButton order={order} />
         {selectedStatus === 'Заказ в Москве' && !order?.archive && (
           <IndigoButton
             type='button'
@@ -116,7 +104,8 @@ const ButtonGroup: FC<{ order?: IOrder, selectedStatus: TStatuses, setSelectedSt
         target='_blank'
         download
         href={order?.excel}
-      />
+        rel="noreferrer"
+      >Скачать</a>
     </div>
   );
 };
