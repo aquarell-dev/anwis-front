@@ -6,28 +6,29 @@ export interface IIndividualEntrepreneur {
   individual_entrepreneur: string;
 }
 
-export interface ICreateIndividualEntrepreneur extends Omit<IIndividualEntrepreneur, 'id'> {
-}
+export interface ICreateIndividualEntrepreneur extends Omit<IIndividualEntrepreneur, 'id'> {}
 
 export interface IChinaDistributor {
   id: number;
   china_distributor: string;
 }
 
-export interface ICreateChinaDistributor extends Omit<IChinaDistributor, 'id'> {
-}
+export interface ICreateChinaDistributor extends Omit<IChinaDistributor, 'id'> {}
 
 export interface IOrderForProject {
   id: number;
   order_for_project: string;
 }
 
-export interface ICreateOrderForProject extends Omit<IOrderForProject, 'id'> {
-}
+export interface ICreateOrderForProject extends Omit<IOrderForProject, 'id'> {}
 
-export type TStatuses = 'Заказ в Москве' | 'Отправлен из Китая'
-  | 'Заказ оформлен' | 'Отправлен поставщику для просчета'
-  | 'Ожидает заказа в Китае' | 'Ожидает отправки поставщику';
+export type TStatuses =
+  | 'Заказ в Москве'
+  | 'Отправлен из Китая'
+  | 'Заказ оформлен'
+  | 'Отправлен поставщику для просчета'
+  | 'Ожидает заказа в Китае'
+  | 'Ожидает отправки поставщику';
 
 export interface IStatus {
   id: number;
@@ -72,25 +73,38 @@ export interface IOrder {
   documents?: TDocument[];
   archive: boolean;
   ready: boolean;
+  acceptance?: number;
 }
 
-export interface ICargoInfo extends Pick<
-  IOrder,
-  'cargo_number' | 'cargo_weight' | 'cargo_volume'
-  | 'price_per_kg' | 'package_price' | 'total_delivery'
-  | 'shipping_from_china_date' | 'in_moscow_date' | 'packages' | 'real_in_moscow_date'> {}
+export interface ICargoInfo
+  extends Pick<
+    IOrder,
+    | 'cargo_number'
+    | 'cargo_weight'
+    | 'cargo_volume'
+    | 'price_per_kg'
+    | 'package_price'
+    | 'total_delivery'
+    | 'shipping_from_china_date'
+    | 'in_moscow_date'
+    | 'packages'
+    | 'real_in_moscow_date'
+  > {}
 
-export interface ICreateUpdateOrder extends Modify<IOrder, {
-  id?: number;
-  individual_entrepreneur: number;
-  china_distributor: number;
-  order_for_project: number;
-  products: ICreateProductSpecs[];
-  status: number;
-  tasks: Omit<ITask, 'id'>[];
-  documents: number[];
-}> {
-}
+export interface ICreateUpdateOrder
+  extends Modify<
+    IOrder,
+    {
+      id?: number;
+      individual_entrepreneur: number;
+      china_distributor: number;
+      order_for_project: number;
+      products: ICreateProductSpecs[];
+      status: number;
+      tasks: Omit<ITask, 'id'>[];
+      documents: number[];
+    }
+  > {}
 
 export type PartialOrder = { id: number } & Partial<ICreateUpdateOrder>;
 
@@ -101,7 +115,6 @@ export interface IOrderRows {
   order_for_project: string;
   status: string;
 }
-
 
 // standard ----------
 
@@ -118,12 +131,14 @@ export interface IProduct {
   photo_id: number;
 }
 
-export type ICreateProduct = Modify<Omit<IProduct, 'id' | 'photo_id'>, { category: number | undefined; photo: number | undefined }>;
+export type ICreateProduct = Modify<
+  Omit<IProduct, 'id' | 'photo_id'>,
+  { category: number | undefined; photo: number | undefined }
+>;
 
 export type PartialProduct = { id: number } & Partial<ICreateProduct>;
 
 // standard --------
-
 
 export interface IProductSpecs {
   product: IProduct;
@@ -153,8 +168,7 @@ export interface ITask {
   datetime: string;
 }
 
-export interface ICreateTask extends Omit<ITask, 'id'> {
-}
+export interface ICreateTask extends Omit<ITask, 'id'> {}
 
 export interface ILeftOverProduct {
   id: number;
