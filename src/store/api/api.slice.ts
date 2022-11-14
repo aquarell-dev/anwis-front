@@ -1,6 +1,6 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { setCredentials, logOut } from '../../features/auth/auth.slice';
 import { BaseQueryApi } from '@reduxjs/toolkit/dist/query/baseQueryTypes';
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { logOut, setCredentials } from '../../features/auth/auth.slice';
 
 // https://anwis-sklad.herokuapp.com/api/
 // http://localhost:8000/api/
@@ -17,7 +17,7 @@ const baseQuery = fetchBaseQuery({
     headers.set('Content-Type', 'application/json');
 
     if (token) {
-      headers.set('Authorization', `Bearer ${token}`)
+      headers.set('Authorization', `Bearer ${token}`);
     }
 
     return headers;
@@ -33,11 +33,13 @@ const baseQueryWithReauth = async (args: any, api: BaseQueryApi, extraOptions: a
       // @ts-ignore
       const user = api.getState().auth.user;
 
-      api.dispatch(setCredentials({ user: (user as string) , accessToken: (refreshRes.data as string) }))
+      api.dispatch(
+        setCredentials({ user: user as string, accessToken: refreshRes.data as string })
+      );
 
       res = await baseQuery(args, api, extraOptions);
     } else {
-      api.dispatch(logOut())
+      api.dispatch(logOut());
     }
   }
 
@@ -47,8 +49,17 @@ const baseQueryWithReauth = async (args: any, api: BaseQueryApi, extraOptions: a
 export const apiSlice = createApi({
   baseQuery: baseQueryWithReauth,
   tagTypes: [
-    'IndividualEntrepreneur', 'ChinaDistributor', 'OrderForProject', 'Order',
-    'Category', 'Task', 'Leftover', 'Product'
+    'IndividualEntrepreneur',
+    'ChinaDistributor',
+    'OrderForProject',
+    'Order',
+    'Category',
+    'Task',
+    'Leftover',
+    'Product',
+    'Acceptance',
+    'Members',
+    'Packages'
   ],
-  endpoints: build => ({})
+  endpoints: (build) => ({})
 });
