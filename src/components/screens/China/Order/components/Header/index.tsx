@@ -6,14 +6,17 @@ import { IOrder } from '../../../../../../features/order/order.types';
 
 const Header: FC<{ order?: IOrder }> = ({ order }) => {
   const date = useMemo(
-    () => order ? order.date : new Date().toLocaleTimeString('en-GB') + ' ' + new Date().toLocaleDateString('en-GB'),
+    () =>
+      order
+        ? order.date
+        : new Date().toLocaleTimeString('en-GB') + ' ' + new Date().toLocaleDateString('en-GB'),
     []
   );
 
   return (
-    <h1 className='text-3xl mb-3'>
-      Заказ {getFourDigitId(order?.id)} поставщику
-      в <span className='underline text-indigo-600'>Китай</span> от {date}
+    <h1 className="text-lg md:text-xl lg:text-2xl xl:text-3xl mb-3">
+      Заказ {getFourDigitId(order?.id)} поставщику в{' '}
+      <span className="underline text-indigo-600">Китай</span> от {date}
     </h1>
   );
 };

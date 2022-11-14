@@ -1,3 +1,4 @@
+import { GridColDef, GridSelectionModel } from '@mui/x-data-grid';
 import { Control, FieldErrors, UseFormRegister } from 'react-hook-form';
 import {
   IChinaDistributor,
@@ -6,10 +7,9 @@ import {
   IProduct,
   IProductSpecs,
   IStatus,
-  TStatuses,
+  TStatuses
 } from '../../../features/order/order.types';
 import { SetState } from '../../../utils/types';
-import { GridColDef, GridSelectionModel } from '@mui/x-data-grid';
 
 export interface IFormControls {
   register: UseFormRegister<any>;
@@ -19,6 +19,7 @@ export interface IFormControls {
   errors: FieldErrors<IOrderForm>;
   order?: IOrder;
   control: Control<IOrderForm, any>;
+  selectedStatus: TStatuses;
   setSelectedStatus: SetState<TStatuses>;
 }
 
@@ -97,11 +98,11 @@ export type Popups = {
   setCreateSameOpen: SetState<boolean>;
   setProductDeleteOpen: SetState<boolean>;
   setProductChangeOpen: SetState<boolean>;
-}
+};
 
 export type Values = {
   copyProductId: number | null;
-  setCopyProductId: SetState<number | null>,
+  setCopyProductId: SetState<number | null>;
 
   productUpToChange: IProduct | null;
   setProductUpToChange: SetState<IProduct | null>;
@@ -111,4 +112,4 @@ export type Values = {
 
   productUpToDeletion: { content: string; id: number } | null;
   setProductUpToDeletion: SetState<{ content: string; id: number } | null>;
-}
+};

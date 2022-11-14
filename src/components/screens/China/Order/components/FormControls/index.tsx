@@ -2,37 +2,43 @@ import { FC, useState } from 'react';
 
 import { IFormControls } from '../../../types';
 
-import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+import { SpinnerComponent } from 'react-element-spinner';
+import { useNavigate } from 'react-router-dom';
+import { GreenButton, IndigoButton } from '../../../../../ui/Button';
+import useCreateAcceptance from '../../hooks/useCreateAcceptance';
+import ChoseCreateBlock from '../ChooseCreateBlock';
 import FormSelect, { StatusSelect } from '../FormSelect';
 import Popups from '../Popups';
-import ChoseCreateBlock from '../ChooseCreateBlock';
-
 
 const FormControls: FC<IFormControls> = ({
-                                           chinaDistributors,
-                                           orderForProjects,
-                                           statuses,
-                                           control,
-                                           order,
-                                           setSelectedStatus
-                                         }) => {
+  chinaDistributors,
+  orderForProjects,
+  statuses,
+  control,
+  order,
+  selectedStatus,
+  setSelectedStatus
+}) => {
   const [orderForProjectOpen, setOrderForProjectOpen] = useState(false);
   const [chinaDistributorOpen, setChinaDistributorOpen] = useState(false);
 
   const [orderForProjectValue, setOrderForProjectValue] = useState('');
   const [chinaDistributorValue, setChinaDistributorValue] = useState('');
 
+  const { createAcceptance, isLoading } = useCreateAcceptance(order);
+  const navigate = useNavigate();
+
   return (
     <>
-      <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-8">
+      <div className="flex items-center justify-center xl:justify-between">
+        <div className="flex flex-col xl:flex-row items-start xl:items-start space-y-4 xl:space-y-0 xl:space-x-3 2xl:space-x-8">
           <ChoseCreateBlock setState={setChinaDistributorOpen}>
             <FormSelect
               control={control}
               name={'china_distributor'}
-              options={chinaDistributors.map(chinaDistributor => ({
+              options={chinaDistributors.map((chinaDistributor) => ({
                 label: chinaDistributor.china_distributor,
                 value: chinaDistributor.id.toString()
               }))}
@@ -44,7 +50,7 @@ const FormControls: FC<IFormControls> = ({
             <FormSelect
               control={control}
               name={'order_for_project'}
-              options={orderForProjects.map(orderForProject => ({
+              options={orderForProjects.map((orderForProject) => ({
                 label: orderForProject.order_for_project,
                 value: orderForProject.id.toString()
               }))}
@@ -52,28 +58,50 @@ const FormControls: FC<IFormControls> = ({
               defaultValue={order ? order.order_for_project.id.toString() : ''}
             />
           </ChoseCreateBlock>
-          <StatusSelect
-            control={control}
-            options={statuses.map(status => ({
-              label: status.status,
-              value: status.id.toString(),
-              color: status.color
-            }))}
-            defaultValue={order ? order.status.id.toString() : '1'}
-            setSelectedStatus={setSelectedStatus}
-          />
+          <div className="flex flex-col space-y-2 w-64 xl:w-96">
+            <StatusSelect
+              control={control}
+              options={statuses.map((status) => ({
+                label: status.status,
+                value: status.id.toString(),
+                color: status.color
+              }))}
+              defaultValue={order ? order.status.id.toString() : '1'}
+              setSelectedStatus={setSelectedStatus}
+            />
+            {selectedStatus === 'Заказ в Москве' && !order?.acceptance ? (
+              <IndigoButton
+                type="button"
+                customWidth="w-full"
+                handler={() => order && createAcceptance()}
+              >
+                {isLoading ? (
+                  <SpinnerComponent
+                    loading
+                    position="inline"
+                  />
+                ) : (
+                  'Создать приемку'
+                )}
+              </IndigoButton>
+            ) : (
+              <GreenButton
+                type="button"
+                text="Перейти к приемке"
+                customWidth="w-full"
+                handler={() => navigate(`../../acceptance/acceptances/${order?.acceptance}/`)}
+              />
+            )}
+          </div>
         </div>
       </div>
       <Popups
         chinaDistributorOpen={chinaDistributorOpen}
         setChinaDistributorOpen={setChinaDistributorOpen}
-
         chinaDistributorValue={chinaDistributorValue}
         setChinaDistributorValue={setChinaDistributorValue}
-
         orderForProjectOpen={orderForProjectOpen}
         setOrderForProjectOpen={setOrderForProjectOpen}
-
         orderForProjectValue={orderForProjectValue}
         setOrderForProjectValue={setOrderForProjectValue}
       />

@@ -6,8 +6,9 @@ import { useListArchiveOrdersQuery } from '../../../../store/api/order.api';
 
 import { orderService } from '../../../../features/order/order.services';
 
-import Loader from '../../../ui/Loader';
 import { Link } from 'react-router-dom';
+import { ContentContainer } from '../../../ui/Container';
+import Loader from '../../../ui/Loader';
 
 const columns: GridColDef[] = [
   { field: 'id', headerName: 'ID', width: 70 },
@@ -16,18 +17,18 @@ const columns: GridColDef[] = [
   {
     field: 'order_for_project',
     headerName: 'Заказ под проект',
-    width: 150,
+    width: 150
   },
   {
     field: 'status',
     headerName: 'Статус',
-    width: 150,
+    width: 150
   },
   {
     field: 'redirect',
     headerName: 'Перейти',
     width: 150,
-    renderCell: params =>
+    renderCell: (params) => (
       <Link to={`../../china/orders/${params.row.id}/`}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -44,25 +45,25 @@ const columns: GridColDef[] = [
           />
         </svg>
       </Link>
-  },
+    )
+  }
 ];
 
 const Archive: FC = () => {
-
   const { data, error, isLoading } = useListArchiveOrdersQuery(null);
 
-  if (isLoading) return <Loader isLoading={isLoading}/>;
+  if (isLoading) return <Loader isLoading={isLoading} />;
 
   if (error) return <p>Error</p>;
 
   return (
-    <div className='mt-8'>
-      <div className='w-full'>
-        <p className='text-xl font-medium'>Заказы в архиве</p>
-        <div
-          style={{ height: 600, width: '100%' }}
-        >
-          {isLoading ? <p>Loading</p> : (
+    <ContentContainer>
+      <div className="w-full">
+        <p className="text-xl font-medium">Заказы в архиве</p>
+        <div style={{ height: 600, width: '100%' }}>
+          {isLoading ? (
+            <p>Loading</p>
+          ) : (
             <>
               {data && (
                 <DataGrid
@@ -71,14 +72,14 @@ const Archive: FC = () => {
                   pageSize={2}
                   checkboxSelection={true}
                   rowsPerPageOptions={[2]}
-                  onCellDoubleClick={((params) => console.log(params.id))}
+                  onCellDoubleClick={(params) => console.log(params.id)}
                 />
               )}
             </>
           )}
         </div>
       </div>
-    </div>
+    </ContentContainer>
   );
 };
 

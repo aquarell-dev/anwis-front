@@ -11,4 +11,9 @@ export const links: ILink[] = [
     title: 'Китай',
     link: 'china/',
   },
+  {
+    id: 2,
+    title: 'Приемка товара',
+    link: 'acceptance/',
+  },
 ];

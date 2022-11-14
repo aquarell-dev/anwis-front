@@ -1,12 +1,10 @@
 import { ButtonHTMLAttributes, ChangeEvent, FC, ReactNode, useRef } from 'react';
 import { cn } from '../../../utils';
 import { SetState } from '../../../utils/types';
-import { SpinnerComponent } from 'react-element-spinner';
-import Loader from '../Loader';
 
 interface IButton {
   type: ButtonHTMLAttributes<string>['type'] | undefined;
-  text: string;
+  text?: string;
   handler: () => any;
   customWidth?: string;
   customColors?: string;
@@ -14,7 +12,15 @@ interface IButton {
   children?: ReactNode;
 }
 
-export const Button: FC<IButton> = ({ children, text, handler, type, customWidth, customColors, icon }) => {
+export const Button: FC<IButton> = ({
+  children,
+  text,
+  handler,
+  type,
+  customWidth,
+  customColors,
+  icon
+}) => {
   return (
     <div
       onClick={handler}
@@ -25,28 +31,28 @@ export const Button: FC<IButton> = ({ children, text, handler, type, customWidth
       )}
     >
       {icon}
-      <button
-        type={type ?? 'submit'}
-      >
-        {children ? children : text}
-      </button>
+      <button type={type ?? 'submit'}>{children ? children : text}</button>
     </div>
   );
 };
 
-type FileButton =
-  { setFiles?: SetState<FileList | null>, multiple?: boolean, text?: string, accept?: string | undefined; onChange?: (e: ChangeEvent<HTMLInputElement>) => void }
-  & Omit<IButton, 'type' | 'text' | 'handler'>
+type FileButton = {
+  setFiles?: SetState<FileList | null>;
+  multiple?: boolean;
+  text?: string;
+  accept?: string | undefined;
+  onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
+} & Omit<IButton, 'type' | 'text' | 'handler'>;
 
-export const FileButton: FC<FileButton> = props => {
+export const FileButton: FC<FileButton> = (props) => {
   const hiddenInput = useRef<HTMLInputElement | null>(null);
 
-  const { setFiles, multiple, text, accept, onChange,  ...button } = props;
+  const { setFiles, multiple, text, accept, onChange, ...button } = props;
 
   return (
     <>
       <IndigoButton
-        type='button'
+        type="button"
         text={text ?? 'Загрузить файл'}
         handler={() => hiddenInput.current?.click()}
         {...button}
@@ -54,7 +60,7 @@ export const FileButton: FC<FileButton> = props => {
       <input
         type="file"
         ref={hiddenInput}
-        onChange={onChange ? e => onChange(e) : e => setFiles && setFiles(e.target.files)}
+        onChange={onChange ? (e) => onChange(e) : (e) => setFiles && setFiles(e.target.files)}
         style={{ display: 'none' }}
         multiple={multiple ?? false}
         accept={accept}
@@ -63,7 +69,7 @@ export const FileButton: FC<FileButton> = props => {
   );
 };
 
-export const IndigoButton: FC<IButton> = props => {
+export const IndigoButton: FC<IButton> = (props) => {
   return (
     <Button
       {...props}
@@ -72,7 +78,7 @@ export const IndigoButton: FC<IButton> = props => {
   );
 };
 
-export const GreenButton: FC<IButton> = props => {
+export const GreenButton: FC<IButton> = (props) => {
   return (
     <Button
       {...props}
@@ -81,7 +87,7 @@ export const GreenButton: FC<IButton> = props => {
   );
 };
 
-export const RedButton: FC<IButton> = props => {
+export const RedButton: FC<IButton> = (props) => {
   return (
     <Button
       {...props}

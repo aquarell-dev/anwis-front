@@ -1,37 +1,37 @@
-import React, { FC, useState } from 'react';
+import { FC, useState } from 'react';
 
 import { DataGrid, GridSelectionModel } from '@mui/x-data-grid';
 
-import { IProductFields } from '../Products/types';
+import { orderService } from '../../../../../../features/order/order.services';
 import { IOrder, IProductSpecs } from '../../../../../../features/order/order.types';
-import CustomToolbar from '../CustomToolbar';
 import { SetState } from '../../../../../../utils/types';
+import ImagePreview from '../../../components/ImagePreview';
 import { TAdditional } from '../../../types';
 import CustomFooter from '../CustomFooter';
-import ImagePreview from '../../../components/ImagePreview';
-import QuantityTextField from '../QuantityTextField';
-import { orderService } from '../../../../../../features/order/order.services';
-
+import CustomToolbar from '../CustomToolbar';
+import { IProductFields } from '../Products/types';
 
 const ProductGrid: FC<{
-  selectedProducts: IProductSpecs[],
-  setSelectedProducts: SetState<IProductSpecs[]>,
-  additional: TAdditional,
-  setAdditional: SetState<TAdditional>,
-  order: IOrder | undefined
+  selectedProducts: IProductSpecs[];
+  setSelectedProducts: SetState<IProductSpecs[]>;
+  additional: TAdditional;
+  setAdditional: SetState<TAdditional>;
+  order: IOrder | undefined;
 }> = ({ selectedProducts, setSelectedProducts, setAdditional, order }) => {
   const [selectionModel, setSelectionModel] = useState<GridSelectionModel>([]);
 
   const columns: IProductFields[] = [
-    { field: 'title', headerName: 'Название', width: 300 },
+    { field: 'title', headerName: 'Название', width: 220 },
     {
       field: 'photo',
       headerName: 'Фотография',
       width: 115,
-      renderCell: (params) => <ImagePreview
-        src={params.value}
-        alt={'Фото'}
-      />
+      renderCell: (params) => (
+        <ImagePreview
+          src={params.value}
+          alt={'Фото'}
+        />
+      )
     },
     { field: 'article', headerName: 'Артикул поставщика', width: 200 },
     { field: 'size', headerName: 'Размер', width: 100 },
@@ -39,16 +39,18 @@ const ProductGrid: FC<{
     {
       field: 'quantity',
       headerName: 'Количество',
-      width: 180,
-      editable: true,
-      // renderEditCell: params => <QuantityTextField {...params} />
+      width: 80,
+      editable: true
     },
-    { field: 'price_cny', headerName: 'Цена, ¥', width: 140, editable: true },
-    { field: 'price_rub', headerName: 'Цена, ₽', width: 140, editable: true },
-    { field: 'additional_expenses', headerName: 'Доп. затраты ₽', width: 180 },
+    { field: 'price_cny', headerName: 'Цена, ¥', width: 80, editable: true },
+    { field: 'price_rub', headerName: 'Цена, ₽', width: 80, editable: true },
+    { field: 'additional_expenses', headerName: 'Доп. затраты, ₽', width: 120 },
     { field: 'id', headerName: 'ID', width: 70 },
     {
-      field: 'delete', headerName: 'Убрать', width: 80, renderCell: params => (
+      field: 'delete',
+      headerName: 'Убрать',
+      width: 80,
+      renderCell: (params) => (
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -56,9 +58,11 @@ const ProductGrid: FC<{
           strokeWidth={1.5}
           stroke="currentColor"
           className="w-6 h-6 cursor-pointer hover:text-gray-500 duration-300 ease-in-out"
-          onClick={() => setSelectedProducts(
-            selectedProducts.filter(selectedProduct => selectedProduct.product.id !== params.id)
-          )}
+          onClick={() =>
+            setSelectedProducts(
+              selectedProducts.filter((selectedProduct) => selectedProduct.product.id !== params.id)
+            )
+          }
         >
           <path
             strokeLinecap="round"
@@ -95,17 +99,17 @@ const ProductGrid: FC<{
           order
         }
       }}
-      onSelectionModelChange={selectionModel => setSelectionModel(selectionModel)}
+      onSelectionModelChange={(selectionModel) => setSelectionModel(selectionModel)}
       selectionModel={selectionModel}
-      onCellEditCommit={(params => {
+      onCellEditCommit={(params) => {
         const { id, field, value } = params;
 
-        setAdditional(prev => ({
+        setAdditional((prev) => ({
           ...prev,
           indicator: !prev.indicator
         }));
 
-        const product = selectedProducts.find(product => product.product.id === id);
+        const product = selectedProducts.find((product) => product.product.id === id);
 
         if (!product) return;
 
@@ -116,11 +120,12 @@ const ProductGrid: FC<{
         // @ts-ignore
         newProduct[field as keyof IProductSpecs] = !isNaN(parseInt(value)) ? parseInt(value) : 0;
 
-        setSelectedProducts(selectedProducts.map(selectedProduct => selectedProduct.product.id === id ?
-          newProduct
-          :
-          selectedProduct));
-      })}
+        setSelectedProducts(
+          selectedProducts.map((selectedProduct) =>
+            selectedProduct.product.id === id ? newProduct : selectedProduct
+          )
+        );
+      }}
     />
   );
 };
