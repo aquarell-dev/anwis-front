@@ -28,15 +28,14 @@ const elements: ISubNavElement[] = [
   {
     title: 'Дополнительно',
     link: '/china/additional'
-  },
+  }
 ];
 
 export const Layout: FC = () => {
-
   return (
-    <div className='mx-8'>
+    <div>
       <SubNavbar elements={elements} />
       <Outlet />
     </div>
-  )
+  );
 };
