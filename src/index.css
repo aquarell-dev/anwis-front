@@ -3,6 +3,12 @@
 @tailwind utilities;
 @tailwind screens;
 
+@layer utilities {
+  .d-none {
+    display: none;
+  }
+}
+
 body {
   margin: 0;
   font-family: 'Montserrat', sans-serif;
