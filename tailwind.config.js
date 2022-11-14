@@ -4,6 +4,7 @@ module.exports = {
   theme: {
     screens: {
       'h': '1px',
+      
       'sm': '640px',
 
       'md': '768px',
@@ -13,6 +14,8 @@ module.exports = {
       'xl': '1280px',
 
       '2xl': '1536px',
+
+      '3xl': '1900px'
     },
     extend: {},
   },
