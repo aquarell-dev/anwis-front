@@ -49,7 +49,9 @@ const useCreateAcceptance = (order: IOrder | undefined) => {
       .catch(() => notifyError('Приемка не создана'))
   }
 
-  const createAcceptanceFromOrder = () => {}
+  const createAcceptanceFromOrder = () => {
+    if (!order) return
+  }
 
   return {
     createAcceptance,

@@ -1,5 +1,5 @@
-import { Acceptance, CreateAcceptance } from '../../types/acceptance.types';
-import { apiSlice } from './api.slice';
+import { Acceptance, CreateAcceptance } from '../../types/acceptance.types'
+import { apiSlice } from './api.slice'
 
 export const acceptanceSlice = apiSlice.injectEndpoints({
   endpoints: (build) => ({
@@ -21,8 +21,20 @@ export const acceptanceSlice = apiSlice.injectEndpoints({
         method: 'POST',
         body: acceptance
       })
+    }),
+    createAcceptanceFromOrder: build.mutation<Acceptance, { order_id: number }>({
+      query: (body) => ({
+        url: 'acceptances/from-order/',
+        method: 'POST',
+        body: body
+      })
     })
   })
-});
+})
 
-export const { useListAcceptancesQuery, useGetAcceptanceByIdQuery, useCreateAcceptanceMutation } = acceptanceSlice;
+export const {
+  useListAcceptancesQuery,
+  useGetAcceptanceByIdQuery,
+  useCreateAcceptanceMutation,
+  useCreateAcceptanceFromOrderMutation
+} = acceptanceSlice
