@@ -57,6 +57,9 @@ export interface IOrder {
   expenses_rub: number;
   total_expenses: number;
   total_quantity: number;
+  dollar_to_rub: number;
+  delivery_expenses: number;
+  real_total_delivery: number;
   ready_date?: string;
   shipping_from_china_date?: string;
   in_moscow_date?: string;
@@ -89,6 +92,9 @@ export interface ICargoInfo
     | 'in_moscow_date'
     | 'packages'
     | 'real_in_moscow_date'
+    | 'dollar_to_rub'
+    | 'real_total_delivery'
+    | 'delivery_expenses'
   > {}
 
 export interface ICreateUpdateOrder

@@ -1,4 +1,4 @@
-import { IProductSpecs } from '../features/order/order.types';
+import { IProduct, IProductSpecs } from '../features/order/order.types';
 import { Modify } from '../utils/types';
 
 export type Acceptance = {
@@ -40,3 +40,11 @@ export type StaffMember = {
 };
 
 export type CreateStaffMember = Omit<StaffMember, 'id'>;
+
+//*************************
+//-------------------------
+//*************************
+
+export type AcceptanceProduct = {
+  cost?: number;
+} & Omit<IProduct, 'url'>;
