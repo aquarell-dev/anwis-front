@@ -1,8 +1,7 @@
 import { FC } from 'react';
-
 import { useParams } from 'react-router-dom';
-import { useGetAcceptanceByIdQuery } from '../../../../store/api/acceptance.api';
 
+import { useGetAcceptanceByIdQuery } from '../../../../store/api/acceptance.api';
 import { ContentContainer } from '../../../ui/Container';
 import Loader from '../../../ui/Loader';
 import AcceptanceInfo from './components/AcceptanceInfo';
