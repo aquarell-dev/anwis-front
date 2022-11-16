@@ -3,6 +3,10 @@
   "tabWidth": 2,
   "printWidth": 100,
   "singleQuote": true,
+  "jsxSingleQuote": true,
   "trailingComma": "none",
-  "singleAttributePerLine": true
+  "singleAttributePerLine": true,
+  "importOrder": ["^react(.*)", "use", "^components/(.*)$", "<THIRD_PARTY_MODULES>", "@/(.*)", "^[./]"],
+  "importOrderSeparation": true,
+  "importOrderSortSpecifiers": true
 }
