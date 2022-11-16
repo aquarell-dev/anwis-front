@@ -1,11 +1,12 @@
 import { BaseQueryApi } from '@reduxjs/toolkit/dist/query/baseQueryTypes';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+
 import { logOut, setCredentials } from '../../features/auth/auth.slice';
 
 // https://anwis-sklad.herokuapp.com/api/
 // http://localhost:8000/api/
 
-export const API_LINK = 'https://anwis-sklad.herokuapp.com/api/';
+export const API_LINK = 'http://localhost:8000/api/';
 
 const baseQuery = fetchBaseQuery({
   baseUrl: API_LINK,
