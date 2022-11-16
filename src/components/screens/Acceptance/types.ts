@@ -1,6 +1,7 @@
 import { GridColDef } from '@mui/x-data-grid';
+
 import { IProduct, IProductSpecs } from '../../../features/order/order.types';
-import { Acceptance, StaffMember } from '../../../types/acceptance.types';
+import { Acceptance, AcceptanceProduct, StaffMember } from '../../../types/acceptance.types';
 
 export type Row = Pick<
   Acceptance,
@@ -15,3 +16,7 @@ export type AcceptanceProductRow = Omit<IProductSpecs, 'product' | 'cny_to_rub_c
   Omit<IProduct, 'photo_id' | 'url' | 'category' | 'color'>;
 
 export type StaffMemberFields = Pick<StaffMember, 'username' | 'password'>;
+
+export type RussianProductColumn = GridColDef & { field: keyof AcceptanceProduct };
+
+export type RussianProductRow = Pick<AcceptanceProduct, 'id' | 'article' | 'brand' | 'color'>;
