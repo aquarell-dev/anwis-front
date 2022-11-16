@@ -1,9 +1,21 @@
 import { FC } from 'react';
 
+import { IndigoButton } from '../../../../../ui/Button';
+
 const Navigation: FC = () => {
   return (
-    <div className="flex items-center space-x-4">
-      <h1 className="text-2xl font-medium">Товары</h1>
+    <div className='flex items-center space-x-8'>
+      <h1 className='text-2xl font-medium'>Русские Товары</h1>
+      <IndigoButton
+        type='button'
+        handler={() => {}}
+        text='Товар'
+      />
+      <IndigoButton
+        type='button'
+        handler={() => {}}
+        text='Категория'
+      />
     </div>
   );
 };
