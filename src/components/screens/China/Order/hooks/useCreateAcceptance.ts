@@ -1,36 +1,36 @@
-import { useEffect } from 'react';
+import { useEffect } from 'react'
 
-import useNotifications from '../../../../../hooks/useNotifications';
-import useUpdatePartialOrder from '../../hooks/useUpdatePartialOrder';
+import useNotifications from '../../../../../hooks/useNotifications'
+import useUpdatePartialOrder from '../../hooks/useUpdatePartialOrder'
 
-import { IOrder, IProductSpecs } from '../../../../../features/order/order.types';
-import { useCreateAcceptanceMutation } from '../../../../../store/api/acceptance.api';
-import { getFourDigitId } from '../../../../../utils';
+import { IOrder, IProductSpecs } from '../../../../../features/order/order.types'
+import { useCreateAcceptanceMutation } from '../../../../../store/api/acceptance.api'
+import { getFourDigitId } from '../../../../../utils'
 
-type ModifiedProducts = IProductSpecs & { id: number };
+type ModifiedProducts = IProductSpecs & { id: number }
 
 const useCreateAcceptance = (order: IOrder | undefined) => {
-  const [create, { data, isLoading: acceptanceLoading, error }] = useCreateAcceptanceMutation();
-  const { updateOrder, isLoading: orderLoading } = useUpdatePartialOrder();
-  const { notifyError, notifySuccess } = useNotifications();
+  const [create, { data, isLoading: acceptanceLoading, error }] = useCreateAcceptanceMutation()
+  const { updateOrder, isLoading: orderLoading } = useUpdatePartialOrder()
+  const { notifyError, notifySuccess } = useNotifications()
 
   useEffect(() => {
     if (data && order) {
-      updateOrder({ id: order.id, acceptance: data.id });
+      updateOrder({ id: order.id, acceptance: data.id })
     }
-  }, [data]);
+  }, [data])
 
   const createAcceptance = () => {
-    if (!order) return notifyError('Не указан заказ');
+    if (!order) return notifyError('Не указан заказ')
 
-    if (!order?.real_in_moscow_date) return notifyError('Не указана дата прибытия в Москву');
-    if (!order?.shipping_from_china_date) return notifyError('Не указана дата отправки из Китая');
+    if (!order?.real_in_moscow_date) return notifyError('Не указана дата прибытия в Москву')
+    if (!order?.shipping_from_china_date) return notifyError('Не указана дата отправки из Китая')
 
-    if (!order?.cargo_number) return notifyError('Не указан номер карго');
-    if (!order?.cargo_volume) return notifyError('Не указан объем карго');
-    if (!order?.cargo_weight) return notifyError('Не указан вес карго');
+    if (!order?.cargo_number) return notifyError('Не указан номер карго')
+    if (!order?.cargo_volume) return notifyError('Не указан объем карго')
+    if (!order?.cargo_weight) return notifyError('Не указан вес карго')
 
-    const { products } = order;
+    const { products } = order
 
     create({
       title: `Приемка ${getFourDigitId(order.id)}`,
@@ -44,12 +44,19 @@ const useCreateAcceptance = (order: IOrder | undefined) => {
     })
       .unwrap()
       .then(() => {
-        notifySuccess('Приемка создана');
+        notifySuccess('Приемка создана')
       })
-      .catch(() => notifyError('Приемка не создана'));
-  };
+      .catch(() => notifyError('Приемка не создана'))
+  }
 
-  return { createAcceptance, isLoading: orderLoading || acceptanceLoading, error };
-};
+  const createAcceptanceFromOrder = () => {}
 
-export default useCreateAcceptance;
+  return {
+    createAcceptance,
+    createAcceptanceFromOrder,
+    isLoading: orderLoading || acceptanceLoading,
+    error
+  }
+}
+
+export default useCreateAcceptance
