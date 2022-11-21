@@ -1,26 +1,24 @@
-import React, { FC } from 'react';
+import { FC } from 'react'
+import { Outlet } from 'react-router-dom'
 
-import { Outlet } from 'react-router-dom';
+import useAuth from '../../hooks/useAuth'
 
-import Navbar from '../ui/Navbar';
-
-import useAuth from '../../hooks/useAuth';
-import ImagePreviewContextProvider from '../../context/PreviewImageContext';
-import { BigImage } from '../screens/China/components/ImagePreview';
+import ImagePreviewContextProvider from '../../context/PreviewImageContext'
+import { BigImage } from '../ui/ImagePreview'
+import Navbar from '../ui/Navbar'
 
 const Layout: FC = () => {
-  const { isAuth } = useAuth();
+  const { isAuth } = useAuth()
 
+  return (
+    <div className='min-h-screen'>
+      <Navbar />
+      <ImagePreviewContextProvider>
+        <BigImage />
+        <Outlet />
+      </ImagePreviewContextProvider>
+    </div>
+  )
+}
 
-  return <div
-    className='min-h-screen'
-  >
-    <Navbar/>
-    <ImagePreviewContextProvider>
-      <BigImage />
-      <Outlet/>
-    </ImagePreviewContextProvider>
-  </div>;
-};
-
-export default Layout;
+export default Layout

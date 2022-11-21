@@ -1,22 +1,23 @@
-import { DataGrid } from '@mui/x-data-grid';
-import { FC } from 'react';
-import { Acceptance } from '../../../../../../types/acceptance.types';
-import { AcceptanceProductRow } from '../../../types';
-import { fields } from './columns';
+import { FC } from 'react'
+
+import { DataGrid } from '@mui/x-data-grid'
+
+import { Acceptance } from '../../../../../../types/acceptance.types'
+import { AcceptanceProductRow } from '../../../types'
+import { fields } from './columns'
 
 const AcceptanceProductGrid: FC<{ acceptance: Acceptance }> = ({ acceptance }) => {
-  const rows: AcceptanceProductRow[] = acceptance.products.map((product) => ({
-    id: product.product.id,
-    title: product.product.title,
-    article: product.product.article,
-    brand: product.product.brand,
-    size: product.product.size,
-    quantity: product.quantity,
-    additional_expenses: product.additional_expenses,
-    price_cny: product.price_cny,
-    price_rub: product.price_rub,
-    photo: product.product.photo
-  }));
+  const rows: AcceptanceProductRow[] = acceptance.products.map(specification => ({
+    id: specification.product.id,
+    title: specification.product.title,
+    article: specification.product.article,
+    linked_china_product_article: specification.product.linked_china_product_article,
+    brand: specification.product.brand,
+    size: specification.product.size,
+    quantity: specification.quantity,
+    photo: specification.product.photo,
+    cost: specification.cost
+  }))
 
   return (
     <DataGrid
@@ -24,7 +25,7 @@ const AcceptanceProductGrid: FC<{ acceptance: Acceptance }> = ({ acceptance }) =
       rows={rows}
       autoHeight
     />
-  );
-};
+  )
+}
 
-export default AcceptanceProductGrid;
+export default AcceptanceProductGrid

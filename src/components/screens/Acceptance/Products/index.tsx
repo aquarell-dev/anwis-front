@@ -1,23 +1,86 @@
-import { FC } from 'react';
+import { FC } from 'react'
 
-import useRussianProducts from './hooks/useRussianProducts';
+import useCategories from '../../../common/hooks/useCategories'
+import useMutateRussianProduct from '../../China/Products/hooks/useMutateRussianProduct'
+import useMutateRussianCategories from './hooks/useMutateRussianCategories'
+import useRussianProducts from './hooks/useRussianProducts'
 
-import { ContentContainer } from '../../../ui/Container';
-import Loader from '../../../ui/Loader';
-import Navigation from './components/Navigation';
-import ProductsGrid from './components/ProductsGrid';
+import Categories from '../../../common/Categories'
+import ConfirmationPopup from '../../../ui/ConfirmationPopup'
+import { ContentContainer } from '../../../ui/Container'
+import Loader from '../../../ui/Loader'
+import MutateRussianProduct from './components/MutateRussianProduct'
+import Navigation from './components/Navigation'
+import ProductsGrid from './components/ProductsGrid'
 
 const Products: FC = () => {
-  const { isLoading, rows } = useRussianProducts();
+  const {
+    isLoading,
+    rows,
+    search,
+    setSearch,
+    selectedProduct,
+    setSelectedProduct,
+    updateOpen,
+    setUpdateOpen,
+    deleteOpen,
+    setDeleteOpen,
+    deleteProduct,
+    deleteLoading,
+    ...rest
+  } = useRussianProducts()
 
-  if (isLoading) return <Loader isLoading />;
+  const { categories, products } = rest
+
+  const [update, _delete] = useMutateRussianCategories()
+
+  const russianProduct = useMutateRussianProduct(selectedProduct ?? undefined, categories)
+
+  const { isLoading: mutateLoading } = russianProduct
+
+  const categoriesProps = useCategories(update, _delete)
+
+  if (isLoading) return <Loader isLoading />
 
   return (
     <ContentContainer>
-      <Navigation />
-      <ProductsGrid rows={rows} />
+      <Navigation
+        products={products}
+        search={search}
+        setSearch={setSearch}
+        setCreateOpen={setUpdateOpen}
+      />
+      <div className='flex items-start'>
+        <Categories
+          {...rest}
+          {...categoriesProps}
+        />
+        <ProductsGrid
+          loading={deleteLoading || mutateLoading}
+          rows={rows}
+          setSelectedProduct={setSelectedProduct}
+          setUpdateOpen={setUpdateOpen}
+          setDeleteOpen={setDeleteOpen}
+          products={products}
+        />
+      </div>
+      <MutateRussianProduct
+        open={updateOpen}
+        categories={categories}
+        setOpen={setUpdateOpen}
+        russianProduct={russianProduct}
+      />
+      <ConfirmationPopup
+        open={deleteOpen}
+        setOpen={setDeleteOpen}
+        deleteQuestion={`Вы уверены, что хотите удалить "${
+          selectedProduct ? selectedProduct.title : ''
+        }"`}
+        onConfirm={deleteProduct}
+        closeOnStart
+      />
     </ContentContainer>
-  );
-};
+  )
+}
 
-export default Products;
+export default Products
