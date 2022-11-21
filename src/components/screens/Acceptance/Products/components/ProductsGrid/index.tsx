@@ -2,7 +2,7 @@ import { FC, useState } from 'react'
 
 import { DataGrid, GridSelectionModel } from '@mui/x-data-grid'
 
-import { AcceptanceProduct } from '../../../../../../types/acceptance.types'
+import { AcceptanceCategory, AcceptanceProduct } from '../../../../../../types/acceptance.types'
 import { SetState } from '../../../../../../utils/types'
 import { RussianProductColumn, RussianProductRow } from '../../../types'
 import Toolbar from '../Toolbar'
@@ -15,7 +15,16 @@ const ProductsGrid: FC<{
   setDeleteOpen: SetState<boolean>
   products: AcceptanceProduct[] | undefined
   loading: boolean
-}> = ({ rows, setSelectedProduct, setUpdateOpen, setDeleteOpen, products, loading }) => {
+  categories: AcceptanceCategory[] | undefined
+}> = ({
+  rows,
+  setSelectedProduct,
+  setUpdateOpen,
+  setDeleteOpen,
+  products,
+  loading,
+  categories
+}) => {
   const cols: RussianProductColumn[] = getColumns(
     products,
     setSelectedProduct,
@@ -49,7 +58,8 @@ const ProductsGrid: FC<{
         componentsProps={{
           toolbar: {
             selection,
-            products
+            products,
+            categories: categories ?? []
           }
         }}
         loading={loading}

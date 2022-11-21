@@ -62,6 +62,7 @@ const Products: FC = () => {
           setUpdateOpen={setUpdateOpen}
           setDeleteOpen={setDeleteOpen}
           products={products}
+          categories={categories}
         />
       </div>
       <MutateRussianProduct

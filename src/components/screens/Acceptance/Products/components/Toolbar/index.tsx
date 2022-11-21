@@ -5,16 +5,18 @@ import useDeleteMultipleProducts from '../../hooks/useDeleteMultipleProducts'
 
 import { GridSelectionModel, GridToolbarContainer } from '@mui/x-data-grid'
 
-import { AcceptanceProduct } from '../../../../../../types/acceptance.types'
+import { AcceptanceCategory, AcceptanceProduct } from '../../../../../../types/acceptance.types'
 import { GreenButton, IndigoButton, RedButton } from '../../../../../ui/Button'
 import SlideAlert from '../../../../../ui/SlideAlert'
 import { ValidatedLabel, ValidatedProduct } from '../../../types'
 import LabelsPopup from '../LabelsPopup'
+import MultipleCategoryChange from '../MultipleCategoryChange'
 
-const Toolbar: FC<{ selection: GridSelectionModel; products: AcceptanceProduct[] | undefined }> = ({
-  selection,
-  products
-}) => {
+const Toolbar: FC<{
+  selection: GridSelectionModel
+  products: AcceptanceProduct[] | undefined
+  categories: AcceptanceCategory[]
+}> = ({ selection, products, categories }) => {
   const [alerts, setAlerts] = useState({
     parsePhotos: false,
     deleteProducts: false
@@ -22,6 +24,7 @@ const Toolbar: FC<{ selection: GridSelectionModel; products: AcceptanceProduct[]
   const [printOpen, setPrintOpen] = useState(false)
   const [disabled, setDisabled] = useState(false)
   const [validatedProducts, setValidatedProducts] = useState<ValidatedLabel[]>([])
+  const [multipleCategoryChangeOpen, setMultipleCategoryChangeOpen] = useState(false)
 
   const { deleteMultipleProducts, isLoading: deleteLoading } = useDeleteMultipleProducts()
 
@@ -33,6 +36,11 @@ const Toolbar: FC<{ selection: GridSelectionModel; products: AcceptanceProduct[]
 
   return (
     <>
+      <MultipleCategoryChange
+        categories={categories ?? []}
+        open={multipleCategoryChangeOpen}
+        setOpen={setMultipleCategoryChangeOpen}
+      />
       <LabelsPopup
         open={printOpen}
         setOpen={setPrintOpen}
@@ -61,6 +69,13 @@ const Toolbar: FC<{ selection: GridSelectionModel; products: AcceptanceProduct[]
         open={alerts.parsePhotos}
       />
       <GridToolbarContainer className='flex items-center justify-end space-x-4 mx-4 my-1'>
+        <IndigoButton
+          type='button'
+          handler={() => setMultipleCategoryChangeOpen(true)}
+          text='Перенести категории'
+          customWidth='w-60'
+          disabled={disabled}
+        />
         <GreenButton
           type='button'
           handler={() => setAlerts({ ...alerts, parsePhotos: true })}

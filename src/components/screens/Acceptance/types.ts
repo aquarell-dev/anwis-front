@@ -39,7 +39,9 @@ export type ValidatedLabel = Label
 
 export type ValidatedProduct = Omit<ValidatedLabel, 'quantity'>
 
-export type LabelResponse = {
-    status: string;
-    url: string;
-} | undefined
+export type LabelResponse =
+  | {
+      status: string
+      url: string
+    }
+  | undefined

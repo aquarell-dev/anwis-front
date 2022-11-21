@@ -58,6 +58,16 @@ const acceptanceProductsApi = apiSlice.injectEndpoints({
         url: 'acceptance/update-leftovers/',
         method: 'PUT'
       })
+    }),
+    updateMultipleCategories: build.mutation<
+      { status: 'ok' | 'error' },
+      { products: number[]; category: number }
+    >({
+      query: body => ({
+        url: 'acceptance/update-categories/',
+        method: 'PUT',
+        body
+      })
     })
   })
 })
@@ -69,5 +79,6 @@ export const {
   useUpdateRussianProductMutation,
   useCreateRussianProductWithoutRefetchingMutation,
   useUpdateColorsMutation,
-  useUpdateLefoversMutation
+  useUpdateLefoversMutation,
+  useUpdateMultipleCategoriesMutation
 } = acceptanceProductsApi
