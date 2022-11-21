@@ -1,74 +1,77 @@
-import { CreatePopup } from '../../../../../ui/Popup';
+import { FC } from 'react'
 
-import { SetState } from '../../../../../../utils/types';
+import useNotifications from '../../../../../../hooks/useNotifications'
+import useCreateDataMutations from '../../hooks/useCreateDataMutations'
 
-import useCreateDataMutations from '../../hooks/useCreateDataMutations';
-
-import { FC } from 'react';
-import useNotifications from '../../../../../../hooks/useNotifications';
+import { SetState } from '../../../../../../utils/types'
+import MutatePopup from '../../../../../ui/MutatePopup'
 
 interface IPopupsProps {
-  chinaDistributorOpen: boolean;
-  setChinaDistributorOpen: SetState<boolean>;
-  chinaDistributorValue: string;
-  setChinaDistributorValue: SetState<string>;
-  orderForProjectOpen: boolean;
-  setOrderForProjectOpen: SetState<boolean>;
-  orderForProjectValue: string;
-  setOrderForProjectValue: SetState<string>;
+  chinaDistributorOpen: boolean
+  setChinaDistributorOpen: SetState<boolean>
+  chinaDistributorValue: string
+  setChinaDistributorValue: SetState<string>
+  orderForProjectOpen: boolean
+  setOrderForProjectOpen: SetState<boolean>
+  orderForProjectValue: string
+  setOrderForProjectValue: SetState<string>
 }
 
 const Popups: FC<IPopupsProps> = ({
-                                    chinaDistributorOpen,
-                                    setChinaDistributorOpen,
-                                    chinaDistributorValue,
-                                    setChinaDistributorValue,
-                                    orderForProjectOpen,
-                                    orderForProjectValue,
-                                    setOrderForProjectOpen,
-                                    setOrderForProjectValue
-                                  }) => {
+  chinaDistributorOpen,
+  setChinaDistributorOpen,
+  chinaDistributorValue,
+  setChinaDistributorValue,
+  orderForProjectOpen,
+  orderForProjectValue,
+  setOrderForProjectOpen,
+  setOrderForProjectValue
+}) => {
   const {
-    createChinaDistributor, createOrderForProject,
-    chinaDistributorLoading, orderForProjectLoading
-  } = useCreateDataMutations();
+    createChinaDistributor,
+    createOrderForProject,
+    chinaDistributorLoading,
+    orderForProjectLoading
+  } = useCreateDataMutations()
 
-  const { notifySuccess, notifyError } = useNotifications();
+  const { notifySuccess, notifyError } = useNotifications()
 
   return (
     <>
-      <CreatePopup
+      <MutatePopup
         value={chinaDistributorValue}
         setValue={setChinaDistributorValue}
-        state={chinaDistributorOpen}
-        setState={setChinaDistributorOpen}
-        isLoading={chinaDistributorLoading}
-        handler={() => {
+        open={chinaDistributorOpen}
+        setOpen={setChinaDistributorOpen}
+        loading={chinaDistributorLoading}
+        placeholder='Посредник'
+        onMutate={() => {
           createChinaDistributor({ china_distributor: chinaDistributorValue })
             .unwrap()
             .then(() => notifySuccess(`Успешно создан ${chinaDistributorValue}`))
             .catch(() => notifyError(`Ошибка при создании ${chinaDistributorValue}`))
-            .finally(() => setChinaDistributorOpen(false));
+            .finally(() => setChinaDistributorOpen(false))
         }}
-        title={'Китайский посредник'}
+        content={'Вы уверены, что хотите создать "Китайский посредник"'}
       />
-      <CreatePopup
+      <MutatePopup
         value={orderForProjectValue}
         setValue={setOrderForProjectValue}
-        state={orderForProjectOpen}
-        isLoading={orderForProjectLoading}
-        handler={() => {
+        open={orderForProjectOpen}
+        loading={orderForProjectLoading}
+        placeholder='Заказ'
+        onMutate={() => {
           createOrderForProject({ order_for_project: orderForProjectValue })
             .unwrap()
             .then(() => notifySuccess(`Успешно создан ${orderForProjectValue}`))
             .catch(() => notifyError(`Ошибка при создании ${orderForProjectValue}`))
-            .finally(() => setOrderForProjectOpen(false));
+            .finally(() => setOrderForProjectOpen(false))
         }}
-        title={'Заказ под проект'}
-        setState={setOrderForProjectOpen}
+        content={'Вы уверены, что хотите создать "Заказ под проект"'}
+        setOpen={setOrderForProjectOpen}
       />
     </>
-  );
-};
+  )
+}
 
-export default Popups;
+export default Popups

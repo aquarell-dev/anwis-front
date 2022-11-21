@@ -1,101 +1,131 @@
-import React, { FC } from 'react';
+import { FC } from 'react'
 
-import useAdditional from './hooks/useAdditional';
+import useNotifications from '../../../../hooks/useNotifications'
+import useAdditional from './hooks/useAdditional'
+
 import {
   useCreateChinaDistributorMutation,
   useDeleteChinaDistributorMutation,
   useUpdateChinaDistributorMutation
-} from '../../../../store/api/distributor.api';
-import useNotifications from '../../../../hooks/useNotifications';
+} from '../../../../store/api/distributor.api'
 import {
   useCreateOrderForProjectMutation,
   useDeleteOrderForProjectMutation,
   useUpdateOrderForProjectMutation
-} from '../../../../store/api/project.api';
-
-import Loader from '../../../ui/Loader';
-import { ContentContainer } from '../../../ui/Container';
-import CRUDContainer from './components/CRUDContainer';
-import CRUDContent from './components/CRUDContent';
-
+} from '../../../../store/api/project.api'
+import { ContentContainer } from '../../../ui/Container'
+import Loader from '../../../ui/Loader'
+import CRUDContainer from './components/CRUDContainer'
+import CRUDContent from './components/CRUDContent'
 
 const Additional: FC = () => {
-  const { error, isLoading, distributors, projects, value, setValue, createValue, setCreateValue } = useAdditional();
+  const {
+    error,
+    isLoading,
+    distributors,
+    projects,
+    changeValue,
+    setChangeValue,
+    createValue,
+    setCreateValue
+  } = useAdditional()
 
-  const { notifySuccess, notifyError } = useNotifications();
+  const { notifySuccess, notifyError } = useNotifications()
 
-  const [deleteDistributor, deleteDistributorResult] = useDeleteChinaDistributorMutation();
-  const [updateDistributor, updateDistributorResult] = useUpdateChinaDistributorMutation();
-  const [createDistributor, createDistributorResult] = useCreateChinaDistributorMutation();
+  const [deleteDistributor, deleteDistributorResult] = useDeleteChinaDistributorMutation()
+  const [updateDistributor, updateDistributorResult] = useUpdateChinaDistributorMutation()
+  const [createDistributor, createDistributorResult] = useCreateChinaDistributorMutation()
 
-  const [deleteProject, deleteProjectResult] = useDeleteOrderForProjectMutation();
-  const [updateProject, updateProjectResult] = useUpdateOrderForProjectMutation();
-  const [createProject, createProjectResult] = useCreateOrderForProjectMutation();
+  const [deleteProject, deleteProjectResult] = useDeleteOrderForProjectMutation()
+  const [updateProject, updateProjectResult] = useUpdateOrderForProjectMutation()
+  const [createProject, createProjectResult] = useCreateOrderForProjectMutation()
 
-  if (isLoading) return <Loader isLoading={true}/>;
+  if (isLoading) return <Loader isLoading={true} />
 
-  if (error) return <p>error...</p>;
+  if (error) return <p>error...</p>
 
   return (
     <ContentContainer>
-      <div className="w-full flex flex-col items-center md:items-start md:flex-row space-y-2 md:space-y-0 md:space-x-16">
+      <div className='w-full flex flex-col items-center md:items-start md:flex-row space-y-2 md:space-y-0 md:space-x-16'>
         <CRUDContainer
-          title={'Посредники'}
+          loading={createDistributorResult.isLoading}
+          title={'Посредник'}
           data={
-            distributors && distributors.map(distributor => <CRUDContent
-              value={value}
-              setValue={setValue}
-              onDelete={() => deleteDistributor({ id: distributor.id })
-                .unwrap()
-                .then(() => notifySuccess('Успешное удаление'))
-                .catch(() => notifyError('Посредник не был удален'))
-              }
-              onUpdate={() => updateDistributor({ ...distributor, china_distributor: value })
-                .unwrap()
-                .then(() => notifySuccess('Успешное обновление'))
-                .catch(() => notifyError('Посредник обновлен'))}
-              id={distributor.id}
-              key={distributor.id}
-              content={distributor.china_distributor}
-            />)
+            distributors &&
+            distributors.map(distributor => (
+              <CRUDContent
+                value={changeValue}
+                placeholder='Посредник'
+                loading={deleteDistributorResult.isLoading || updateDistributorResult.isLoading}
+                setValue={setChangeValue}
+                onDelete={() =>
+                  deleteDistributor({ id: distributor.id })
+                    .unwrap()
+                    .then(() => notifySuccess('Успешное удаление'))
+                    .catch(() => notifyError('Посредник не был удален'))
+                }
+                onUpdate={() =>
+                  updateDistributor({ ...distributor, china_distributor: changeValue })
+                    .unwrap()
+                    .then(() => notifySuccess('Успешное обновление'))
+                    .catch(() => notifyError('Посредник обновлен'))
+                }
+                id={distributor.id}
+                key={distributor.id}
+                content={distributor.china_distributor}
+              />
+            ))
           }
-          onCreate={() => createDistributor({ china_distributor: createValue })
-            .unwrap()
-            .then(() => notifySuccess('Успешное удаление'))
-            .catch(() => notifyError('Посредник не был удален'))}
+          onMutate={() =>
+            createDistributor({ china_distributor: createValue })
+              .unwrap()
+              .then(() => notifySuccess('Успешное удаление'))
+              .catch(() => notifyError('Посредник не был удален'))
+          }
           setValue={setCreateValue}
           value={createValue}
         />
         <CRUDContainer
-          title={'Проекты'}
+          title={'Проект'}
+          loading={createProjectResult.isLoading}
           data={
-            projects && projects.map(project => <CRUDContent
-              value={value}
-              setValue={setValue}
-              onDelete={() => deleteProject({ id: project.id })
-                .unwrap()
-                .then(() => notifySuccess('Проект был удален'))
-                .catch(() => notifyError('Проект не был удален'))
-              }
-              onUpdate={() => updateProject({ ...project, order_for_project: value })
-                .unwrap()
-                .then(() => notifySuccess('Проект был обновлен'))
-                .catch(() => notifyError('Посредник не был удален'))}
-              id={project.id}
-              key={project.id}
-              content={project.order_for_project}
-            />)
+            projects &&
+            projects.map(project => (
+              <CRUDContent
+                placeholder='Проект'
+                loading={updateProjectResult.isLoading || deleteProjectResult.isLoading}
+                value={changeValue}
+                setValue={setChangeValue}
+                onDelete={() =>
+                  deleteProject({ id: project.id })
+                    .unwrap()
+                    .then(() => notifySuccess('Проект был удален'))
+                    .catch(() => notifyError('Проект не был удален'))
+                }
+                onUpdate={() =>
+                  updateProject({ ...project, order_for_project: changeValue })
+                    .unwrap()
+                    .then(() => notifySuccess('Проект был обновлен'))
+                    .catch(() => notifyError('Посредник не был удален'))
+                }
+                id={project.id}
+                key={project.id}
+                content={project.order_for_project}
+              />
+            ))
           }
-          onCreate={() => createProject({ order_for_project: createValue })
-            .unwrap()
-            .then(() => notifySuccess('Успешно создан'))
-            .catch(() => notifyError('Проект не был создан'))}
+          onMutate={() =>
+            createProject({ order_for_project: createValue })
+              .unwrap()
+              .then(() => notifySuccess('Успешно создан'))
+              .catch(() => notifyError('Проект не был создан'))
+          }
           setValue={setCreateValue}
           value={createValue}
         />
       </div>
     </ContentContainer>
-  );
-};
+  )
+}
 
-export default Additional;
+export default Additional

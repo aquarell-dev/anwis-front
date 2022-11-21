@@ -1,16 +1,15 @@
-import { FC, useState } from 'react';
+import { FC, useState } from 'react'
+import { SpinnerComponent } from 'react-element-spinner'
+import { useNavigate } from 'react-router-dom'
+import 'react-toastify/dist/ReactToastify.css'
 
-import { IFormControls } from '../../../types';
+import useCreateAcceptance from '../../hooks/useCreateAcceptance'
 
-import 'react-toastify/dist/ReactToastify.css';
-
-import { SpinnerComponent } from 'react-element-spinner';
-import { useNavigate } from 'react-router-dom';
-import { GreenButton, IndigoButton } from '../../../../../ui/Button';
-import useCreateAcceptance from '../../hooks/useCreateAcceptance';
-import ChoseCreateBlock from '../ChooseCreateBlock';
-import FormSelect, { StatusSelect } from '../FormSelect';
-import Popups from '../Popups';
+import { GreenButton, IndigoButton } from '../../../../../ui/Button'
+import { IFormControls } from '../../../types'
+import ChoseCreateBlock from '../ChooseCreateBlock'
+import FormSelect, { StatusSelect } from '../FormSelect'
+import Popups from '../Popups'
 
 const FormControls: FC<IFormControls> = ({
   chinaDistributors,
@@ -21,24 +20,24 @@ const FormControls: FC<IFormControls> = ({
   selectedStatus,
   setSelectedStatus
 }) => {
-  const [orderForProjectOpen, setOrderForProjectOpen] = useState(false);
-  const [chinaDistributorOpen, setChinaDistributorOpen] = useState(false);
+  const [orderForProjectOpen, setOrderForProjectOpen] = useState(false)
+  const [chinaDistributorOpen, setChinaDistributorOpen] = useState(false)
 
-  const [orderForProjectValue, setOrderForProjectValue] = useState('');
-  const [chinaDistributorValue, setChinaDistributorValue] = useState('');
+  const [orderForProjectValue, setOrderForProjectValue] = useState('')
+  const [chinaDistributorValue, setChinaDistributorValue] = useState('')
 
-  const { createAcceptance, isLoading } = useCreateAcceptance(order);
-  const navigate = useNavigate();
+  const { createAcceptanceFromOrder, isLoading } = useCreateAcceptance(order)
+  const navigate = useNavigate()
 
   return (
     <>
-      <div className="flex items-center justify-center xl:justify-between">
-        <div className="flex flex-col xl:flex-row items-start xl:items-start space-y-4 xl:space-y-0 xl:space-x-3 2xl:space-x-8">
+      <div className='flex items-center justify-center xl:justify-between'>
+        <div className='flex flex-col xl:flex-row items-start xl:items-start space-y-4 xl:space-y-0 xl:space-x-3 2xl:space-x-8'>
           <ChoseCreateBlock setState={setChinaDistributorOpen}>
             <FormSelect
               control={control}
               name={'china_distributor'}
-              options={chinaDistributors.map((chinaDistributor) => ({
+              options={chinaDistributors.map(chinaDistributor => ({
                 label: chinaDistributor.china_distributor,
                 value: chinaDistributor.id.toString()
               }))}
@@ -50,7 +49,7 @@ const FormControls: FC<IFormControls> = ({
             <FormSelect
               control={control}
               name={'order_for_project'}
-              options={orderForProjects.map((orderForProject) => ({
+              options={orderForProjects.map(orderForProject => ({
                 label: orderForProject.order_for_project,
                 value: orderForProject.id.toString()
               }))}
@@ -58,10 +57,10 @@ const FormControls: FC<IFormControls> = ({
               defaultValue={order ? order.order_for_project.id.toString() : ''}
             />
           </ChoseCreateBlock>
-          <div className="flex flex-col space-y-2 w-64 xl:w-96">
+          <div className='flex flex-col space-y-2 w-64 xl:w-96'>
             <StatusSelect
               control={control}
-              options={statuses.map((status) => ({
+              options={statuses.map(status => ({
                 label: status.status,
                 value: status.id.toString(),
                 color: status.color
@@ -71,26 +70,28 @@ const FormControls: FC<IFormControls> = ({
             />
             {selectedStatus === 'Заказ в Москве' && !order?.acceptance ? (
               <IndigoButton
-                type="button"
-                customWidth="w-full"
-                handler={() => order && createAcceptance()}
+                type='button'
+                customWidth='w-full'
+                handler={() => order && createAcceptanceFromOrder()}
               >
                 {isLoading ? (
                   <SpinnerComponent
                     loading
-                    position="inline"
+                    position='inline'
                   />
                 ) : (
                   'Создать приемку'
                 )}
               </IndigoButton>
             ) : (
-              <GreenButton
-                type="button"
-                text="Перейти к приемке"
-                customWidth="w-full"
-                handler={() => navigate(`../../acceptance/acceptances/${order?.acceptance}/`)}
-              />
+              selectedStatus === 'Заказ в Москве' && (
+                <GreenButton
+                  type='button'
+                  text='Перейти к приемке'
+                  customWidth='w-full'
+                  handler={() => navigate(`../../acceptance/acceptances/${order?.acceptance}/`)}
+                />
+              )
             )}
           </div>
         </div>
@@ -106,7 +107,7 @@ const FormControls: FC<IFormControls> = ({
         setOrderForProjectValue={setOrderForProjectValue}
       />
     </>
-  );
-};
+  )
+}
 
-export default FormControls;
+export default FormControls

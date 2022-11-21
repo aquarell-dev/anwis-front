@@ -1,15 +1,19 @@
-import React, { FC, ReactNode } from 'react';
-import useProducts from './hooks/useProducts';
-import Categories from './components/Categories';
-import Navigation from './components/Navigation';
-import '../../../../index.css';
-import Loader from '../../../ui/Loader';
-import MutateProductPopup from './components/CreateProductPopup';
-import DeletePopup from '../components/DeletePopup';
-import CreateSameProduct from './components/CreateSameProduct';
-import DefaultProductGrid from './components/DefaultProductGrid';
-import useProductMutations from './hooks/useProductMutations';
+import { FC, ReactNode } from 'react'
 
+import useCategories from '../../../common/hooks/useCategories'
+import useMutateCategory from './hooks/useMutateCategory'
+import useProductMutations from './hooks/useProductMutations'
+import useProducts from './hooks/useProducts'
+
+import '../../../../index.css'
+import Categories from '../../../common/Categories'
+import ConfirmationPopup from '../../../ui/ConfirmationPopup'
+import { ContentContainer } from '../../../ui/Container'
+import Loader from '../../../ui/Loader'
+import CreateSameProduct from './components/CreateSameProduct'
+import DefaultProductGrid from './components/DefaultProductGrid'
+import MutateChinaPopup from './components/MutateChinaPopup'
+import Navigation from './components/Navigation'
 
 const ProductsPage: FC<{
   customGrid?: ReactNode
@@ -24,9 +28,9 @@ const ProductsPage: FC<{
     categories,
     isLoading,
     error
-  } = useProducts();
+  } = useProducts()
 
-  const { popups, values, onDelete, onCommit } = useProductMutations(products, categories);
+  const { popups, values, onDelete, onCommit } = useProductMutations(products, categories)
 
   const {
     productChangeOpen,
@@ -35,16 +39,20 @@ const ProductsPage: FC<{
     setProductChangeOpen,
     createSameOpen,
     setCreateSameOpen
-  } = popups;
+  } = popups
 
-  const {productUpToChange, productUpToDeletion, size, setSize} = values;
+  const { productUpToChange, productUpToDeletion, size, setSize } = values
 
-  if (isLoading) return <Loader isLoading={isLoading}/>;
+  const [update, _delete] = useMutateCategory()
 
-  if (error) return <p>Error...</p>;
+  const categoriesProps = useCategories(update, _delete)
+
+  if (isLoading) return <Loader isLoading={isLoading} />
+
+  if (error) return <p>Error...</p>
 
   return (
-    <div className='my-6'>
+    <ContentContainer>
       <Navigation
         search={search}
         setSearch={setSearch}
@@ -53,11 +61,14 @@ const ProductsPage: FC<{
       {products && (
         <div className='flex space-x-8'>
           <Categories
+            {...categoriesProps}
             categories={categories}
             selectedCategory={selectedCategory}
             setSelectedCategory={setSelectedCategory}
           />
-          {customGrid ? customGrid : (
+          {customGrid ? (
+            customGrid
+          ) : (
             <DefaultProductGrid
               values={values}
               popups={popups}
@@ -67,17 +78,17 @@ const ProductsPage: FC<{
           )}
         </div>
       )}
-      <MutateProductPopup
+      <MutateChinaPopup
         open={productChangeOpen}
         setOpen={setProductChangeOpen}
         categories={categories}
         product={productUpToChange}
       />
-      <DeletePopup
+      <ConfirmationPopup
         open={productDeleteOpen}
         setOpen={setProductDeleteOpen}
-        content={productUpToDeletion?.content ?? ''}
-        onDelete={onDelete}
+        deleteQuestion={`Вы уверены, что хотите удалить ${productUpToDeletion?.content ?? ''}`}
+        onConfirm={onDelete}
       />
       <CreateSameProduct
         onCommit={onCommit}
@@ -86,8 +97,8 @@ const ProductsPage: FC<{
         size={size}
         setSize={setSize}
       />
-    </div>
-  );
-};
+    </ContentContainer>
+  )
+}
 
-export default ProductsPage;
+export default ProductsPage
