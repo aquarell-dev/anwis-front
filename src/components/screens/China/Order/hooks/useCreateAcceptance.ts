@@ -4,21 +4,35 @@ import useNotifications from '../../../../../hooks/useNotifications'
 import useUpdatePartialOrder from '../../hooks/useUpdatePartialOrder'
 
 import { IOrder, IProductSpecs } from '../../../../../features/order/order.types'
-import { useCreateAcceptanceMutation } from '../../../../../store/api/acceptance.api'
+import {
+  useCreateAcceptanceFromOrderMutation,
+  useCreateAcceptanceMutation
+} from '../../../../../store/api/acceptance.api'
 import { getFourDigitId } from '../../../../../utils'
 
 type ModifiedProducts = IProductSpecs & { id: number }
 
 const useCreateAcceptance = (order: IOrder | undefined) => {
-  const [create, { data, isLoading: acceptanceLoading, error }] = useCreateAcceptanceMutation()
+  const [create, { data: orderResult, isLoading: acceptanceLoading, error }] =
+    useCreateAcceptanceMutation()
+  const [createFromOrder, { data: createFromOrderResult, isLoading: acceptanceFromOrderLoading }] =
+    useCreateAcceptanceFromOrderMutation()
   const { updateOrder, isLoading: orderLoading } = useUpdatePartialOrder()
   const { notifyError, notifySuccess } = useNotifications()
 
   useEffect(() => {
-    if (data && order) {
-      updateOrder({ id: order.id, acceptance: data.id })
+    if (orderResult && order) {
+      updateOrder({ id: order.id, acceptance: orderResult.id })
     }
-  }, [data])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [orderResult])
+
+  useEffect(() => {
+    if (createFromOrderResult && order) {
+      updateOrder({ id: order.id, acceptance: createFromOrderResult.acceptance_id })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [createFromOrderResult])
 
   const createAcceptance = () => {
     if (!order) return notifyError('Не указан заказ')
@@ -51,12 +65,17 @@ const useCreateAcceptance = (order: IOrder | undefined) => {
 
   const createAcceptanceFromOrder = () => {
     if (!order) return
+
+    createFromOrder({ order_id: order.id })
+      .unwrap()
+      .then(() => notifySuccess('Приемка создана'))
+      .catch(() => notifyError('Приемка не создана'))
   }
 
   return {
     createAcceptance,
     createAcceptanceFromOrder,
-    isLoading: orderLoading || acceptanceLoading,
+    isLoading: orderLoading || acceptanceLoading || acceptanceFromOrderLoading,
     error
   }
 }

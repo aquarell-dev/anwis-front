@@ -1,24 +1,32 @@
-import { useDeleteCategoryMutation, useUpdateCategoryMutation } from '../../../../../store/api/category.api';
-import { ICategory } from '../../../../../features/order/order.types';
-import useNotifications from '../../../../../hooks/useNotifications';
+import useNotifications from '../../../../../hooks/useNotifications'
+
+import { ICategory } from '../../../../../features/order/order.types'
+import {
+  useDeleteCategoryMutation,
+  useUpdateCategoryMutation
+} from '../../../../../store/api/category.api'
 
 const useMutateCategory = () => {
-  const [updateCategory, updateResult] = useUpdateCategoryMutation();
-  const [deleteCategory, deleteResult] = useDeleteCategoryMutation();
+  const [updateCategory, updateResult] = useUpdateCategoryMutation()
+  const [deleteCategory, deleteResult] = useDeleteCategoryMutation()
 
-  const { notifyError, notifySuccess } = useNotifications();
+  const { notifyError, notifySuccess } = useNotifications()
 
-  const update = (category: ICategory, onFulfil: () => void) => updateCategory(category)
-    .unwrap()
-    .then(() => { notifySuccess('Категория была обновлена'); onFulfil(); })
-    .catch(() => { notifyError('Категория не была обновлена'); onFulfil(); });
+  const update = (category: ICategory, onFulfil: () => void) =>
+    updateCategory(category)
+      .unwrap()
+      .then(() => notifySuccess('Категория была обновлена'))
+      .catch(() => notifyError('Категория не была обновлена'))
+      .finally(() => onFulfil())
 
-  const deleteCat = (category: ICategory, onFulfil: () => void) => deleteCategory(category.id)
-    .unwrap()
-    .then(() => { notifySuccess('Категория была удалена'); onFulfil(); })
-    .catch(() => { notifyError('Категория не была удалена'); onFulfil(); });
+  const deleteCat = (category: ICategory, onFulfil: () => void) =>
+    deleteCategory(category.id)
+      .unwrap()
+      .then(() => notifySuccess('Категория была удалена'))
+      .catch(() => notifyError('Категория не была удалена'))
+      .finally(() => onFulfil())
 
-  return [update, deleteCat];
-};
+  return [update, deleteCat]
+}
 
-export default useMutateCategory;
+export default useMutateCategory
