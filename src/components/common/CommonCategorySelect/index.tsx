@@ -1,6 +1,7 @@
+import { useEffect, useState } from 'react'
 import Select from 'react-select'
 
-import { SetState } from '../../../utils/types'
+import { SelectValue, SetState } from '../../../utils/types'
 import { CreateCommonProduct } from '../common.types'
 
 type CommonCategorySelectProps<T = CreateCommonProduct> = {
@@ -13,22 +14,32 @@ type CommonCategorySelectProps<T = CreateCommonProduct> = {
 const CommonCategorySelect = <T extends CreateCommonProduct>(
   props: CommonCategorySelectProps<T>
 ) => {
-  const { categories, label, product, setProduct } = props
+  const { categories, product, setProduct } = props
 
   const options = categories?.map(category => ({
-    value: category.id.toString(),
+    value: category.id,
     label: category.category
   }))
+
+  const [selectedCategory, setSelectedCategory] = useState<SelectValue | null>(null)
+
+  useEffect(() => {
+    if (product.category && categories) {
+      const category = categories.find(c => c.id === product.category)
+      if (category) setSelectedCategory({ value: category.id, label: category.category })
+    }
+  }, [product, categories])
 
   return (
     <Select
       className='w-full m-2'
       placeholder='Категория'
       name='category'
-      value={product?.category && label && { value: product.category.toString(), label: label }}
-      onChange={value =>
-        value && setProduct(prev => ({ ...prev, category: parseInt(value.value) }))
-      }
+      value={selectedCategory}
+      onChange={newValue => {
+        setSelectedCategory(newValue)
+        if (newValue) setProduct(prev => ({ ...prev, category: newValue.value }))
+      }}
       options={options}
     />
   )
