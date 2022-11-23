@@ -2,23 +2,35 @@ import { FC, useState } from 'react'
 
 import { DataGrid, GridSelectionModel, ruRU } from '@mui/x-data-grid'
 
-import { AcceptanceProductSpecification } from '../../../../../../types/acceptance.types'
+import { AcceptanceProductSpecificationWithDetailedBoxes } from '../../../../../../types/acceptance.types'
 import { SetState } from '../../../../../../utils/types'
 import SlideAlert from '../../../../../ui/SlideAlert'
 import { AcceptanceProductRow } from '../../../types'
 import Toolbar from '../Toolbar'
-import { getColumns } from './columns'
+import { getColumns, getColumnVisibilityModel } from './columns'
 
 const AcceptanceProductGrid: FC<{
   selection: GridSelectionModel
   setSelection: SetState<GridSelectionModel>
   rows: AcceptanceProductRow[]
   loading: boolean
-  setProducts: SetState<AcceptanceProductSpecification[]>
+  setProducts: SetState<AcceptanceProductSpecificationWithDetailedBoxes[]>
   onUpdate: () => Promise<void>
   onDetailedUpdate: (id: number) => Promise<void>
-}> = ({ rows, selection, setSelection, loading, setProducts, onUpdate, onDetailedUpdate }) => {
-  const columns = getColumns(id => onDetailedUpdate(id))
+  boxesCount: number
+  setBoxesCount: SetState<number>
+}> = ({
+  rows,
+  selection,
+  setSelection,
+  loading,
+  setProducts,
+  onUpdate,
+  onDetailedUpdate,
+  boxesCount,
+  setBoxesCount
+}) => {
+  const columns = getColumns(id => onDetailedUpdate(id), boxesCount, setBoxesCount)
 
   const [pageSize, setPageSize] = useState(5)
 
@@ -49,9 +61,7 @@ const AcceptanceProductGrid: FC<{
         pagination
         rowsPerPageOptions={[5, 10, 20, 50, 75, 100]}
         onPageSizeChange={pageSize => setPageSize(pageSize)}
-        columnVisibilityModel={{
-          id: false
-        }}
+        columnVisibilityModel={getColumnVisibilityModel(boxesCount)}
         selectionModel={selection}
         onSelectionModelChange={newSelection => setSelection(newSelection)}
         checkboxSelection
@@ -78,13 +88,34 @@ const AcceptanceProductGrid: FC<{
             )
           }
 
-          const re = new RegExp('\\d{1,3}-\\d{1,3}-\\d{1,3}')
+          if (field.includes('box')) {
+            const re = new RegExp('\\d{1,3}-\\d{1,3}-\\d{1,3}; \\d')
 
-          const box = '1-1-2'.match(re)
+            const box = String(value).match(re)
 
-          const pass = (box || []).length > 0
+            const pass = !String(value) || (box || []).length > 0
 
-          if (!pass) return
+            if (!pass) {
+              setProducts(prev => prev.map(p => ({ ...p, boxes: p.boxes })))
+              return setValueAndOpenAlert(`${value.toString()}. Пример: 1-1-1; 45`)
+            }
+
+            const [boxNumber, boxQuantity] = String(value)
+              .split(';')
+              .map(v => v.trim())
+
+            setProducts(prev =>
+              prev.map(p => ({
+                ...p,
+                boxes: p.boxes.map(box => {
+                  if (box.box === boxNumber)
+                    return { id: box?.id, box: boxNumber, quantity: Number(boxQuantity) }
+
+                  return box
+                })
+              }))
+            )
+          }
         }}
         components={{
           Toolbar: Toolbar

@@ -21,7 +21,9 @@ const AcceptOrder: FC = () => {
     isFetching,
     rows,
     products,
-    setProducts
+    setProducts,
+    boxesCount,
+    setBoxesCount
   } = useProducts(id)
 
   const { updateAcceptanceProducts, updateAcceptanceProduct, updateFetching } =
@@ -43,6 +45,8 @@ const AcceptOrder: FC = () => {
       />
       <Management acceptance={acceptance} />
       <AcceptanceProductGrid
+        boxesCount={boxesCount}
+        setBoxesCount={setBoxesCount}
         rows={rows}
         onUpdate={async () => await updateAcceptanceProducts()}
         onDetailedUpdate={async id => await updateAcceptanceProduct(id)}

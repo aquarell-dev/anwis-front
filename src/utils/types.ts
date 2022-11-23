@@ -12,8 +12,8 @@ import {
 
 export type SetState<T> = Dispatch<SetStateAction<T>>
 
-export type AnyObject = {
-  [k: string]: any
+export type AnyObject<T = any> = {
+  [k: string]: T
 }
 
 export type Mutation<T> = MutationTrigger<

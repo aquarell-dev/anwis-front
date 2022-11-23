@@ -79,6 +79,11 @@ export type AcceptanceProductSpecification = {
   actual_quantity?: number
 }
 
+export type AcceptanceProductSpecificationWithDetailedBoxes = Modify<
+  AcceptanceProductSpecification,
+  { boxes: Modify<Box, { id?: number }>[] }
+>
+
 export type PartialUpdateProductSpecification = Partial<
   Modify<AcceptanceProductSpecification, { product: number; id: number }>
 >

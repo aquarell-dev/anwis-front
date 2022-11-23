@@ -14,6 +14,7 @@ const useProducts = (id: string | undefined) => {
   } = useGetAcceptanceByIdQuery(parseInt(id ? id : '0'))
 
   const [products, setProducts] = useState<AcceptanceProductSpecification[]>([])
+  const [boxesCount, setBoxesCount] = useState(1)
   const [rows, setRows] = useState<AcceptanceProductRow[]>([])
   const [selection, setSelection] = useState<GridSelectionModel>([])
 
@@ -41,7 +42,18 @@ const useProducts = (id: string | undefined) => {
       )
   }, [products])
 
-  return { selection, setSelection, isLoading, isFetching, acceptance, rows, products, setProducts }
+  return {
+    selection,
+    setSelection,
+    isLoading,
+    isFetching,
+    acceptance,
+    rows,
+    products,
+    setProducts,
+    boxesCount,
+    setBoxesCount
+  }
 }
 
 export default useProducts
