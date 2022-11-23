@@ -6,11 +6,16 @@ import useCreateMultipleProducts from './useCreateMultipleProducts'
 import readXlsxFile from 'read-excel-file'
 
 import { AcceptanceProduct, CreateAcceptanceProduct } from '../../../../../types/acceptance.types'
+import { SetState } from '../../../../../utils/types'
 import { DragFile } from '../../../../ui/FileDragNDrop'
 
 const getColor = (article: string): string => (article.includes('-') ? article.split('-')[1] : '-')
 
-const useParseProducts = (open: boolean, products: AcceptanceProduct[] | undefined) => {
+const useParseProducts = (
+  open: boolean,
+  setOpen: SetState<boolean>,
+  products: AcceptanceProduct[] | undefined
+) => {
   const [files, setFiles] = useState<DragFile[]>([])
 
   const [disabled, setDisabled] = useState({
@@ -69,6 +74,7 @@ const useParseProducts = (open: boolean, products: AcceptanceProduct[] | undefin
         await createMultipleProducts(newProducts)
       })
       .catch(e => notifyError('Произошла ошибка при парсинге'))
+      .finally(() => setOpen(false))
   }
 
   return {

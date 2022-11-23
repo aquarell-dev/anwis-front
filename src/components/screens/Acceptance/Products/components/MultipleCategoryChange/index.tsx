@@ -1,5 +1,6 @@
-import { FC, useState } from 'react'
-import Select from 'react-select/'
+import { FC, useEffect, useState } from 'react'
+import Select from 'react-select'
+
 import { AcceptanceCategory } from '../../../../../../types/acceptance.types'
 import { SelectValue, SetState } from '../../../../../../utils/types'
 import { IndigoButton, RedButton } from '../../../../../ui/Button'
@@ -10,12 +11,24 @@ type MultipleCategoryChangeProps = {
   categories: AcceptanceCategory[]
   open: boolean
   setOpen: SetState<boolean>
+  onUpdate: (data: { products: number[]; category: number }) => Promise<void>
+  selectedProducts: number[]
 }
 
-const MultipleCategoryChange: FC<MultipleCategoryChangeProps> = ({ categories, open, setOpen }) => {
+const MultipleCategoryChange: FC<MultipleCategoryChangeProps> = ({
+  categories,
+  open,
+  setOpen,
+  onUpdate,
+  selectedProducts
+}) => {
   const options = categories.map(category => ({ label: category.category, value: category.id }))
 
   const [selectedCategory, setSelectedCategory] = useState<SelectValue | null>(null)
+
+  useEffect(() => {
+    if (!open) setSelectedCategory(null)
+  }, [open])
 
   return (
     <Popup
@@ -35,8 +48,13 @@ const MultipleCategoryChange: FC<MultipleCategoryChangeProps> = ({ categories, o
           <div className='flex space-x-4 items-center'>
             <IndigoButton
               type='button'
-              handler={() => {}}
+              handler={async () => {
+                if (!selectedCategory) return
+                setOpen(false)
+                await onUpdate({ products: selectedProducts, category: selectedCategory.value })
+              }}
               text='Продолжить'
+              disabled={!selectedCategory}
             />
             <RedButton
               type='button'

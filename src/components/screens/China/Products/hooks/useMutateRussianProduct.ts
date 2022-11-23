@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 
+import useLoading from '../../../../../context/GridLoadingContext/hooks/useLoading'
 import useNotifications from '../../../../../hooks/useNotifications'
 import { useTypedSelector } from '../../../../../hooks/useTypedSelector'
 import usePartialUpdateRussianProduct from './usePartialUpdateRussianProduct'
@@ -41,6 +42,8 @@ const useMutateRussianProduct = (product?: AcceptanceProduct, categories?: ICate
   const [createProduct, { isLoading: createLoading }] = useCreateRussianProductMutation()
 
   const { lastUpdatedDocument } = useTypedSelector(state => state.document)
+
+  useLoading('russianProducts', [updateLoading, createLoading])
 
   const update = !!product
 

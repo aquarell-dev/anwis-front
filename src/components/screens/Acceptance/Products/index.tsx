@@ -1,5 +1,6 @@
 import { FC } from 'react'
 
+import useLoading from '../../../../context/GridLoadingContext/hooks/useLoading'
 import useCategories from '../../../common/hooks/useCategories'
 import useMutateRussianProduct from '../../China/Products/hooks/useMutateRussianProduct'
 import useMutateRussianCategories from './hooks/useMutateRussianCategories'
@@ -16,6 +17,7 @@ import ProductsGrid from './components/ProductsGrid'
 const Products: FC = () => {
   const {
     isLoading,
+    isFetching,
     rows,
     search,
     setSearch,
@@ -36,7 +38,7 @@ const Products: FC = () => {
 
   const russianProduct = useMutateRussianProduct(selectedProduct ?? undefined, categories)
 
-  const { isLoading: mutateLoading } = russianProduct
+  const { russianProducts } = useLoading()
 
   const categoriesProps = useCategories(update, _delete)
 
@@ -56,7 +58,7 @@ const Products: FC = () => {
           {...categoriesProps}
         />
         <ProductsGrid
-          loading={deleteLoading || mutateLoading}
+          loading={russianProducts.fetching}
           rows={rows}
           setSelectedProduct={setSelectedProduct}
           setUpdateOpen={setUpdateOpen}

@@ -1,19 +1,30 @@
-import { useListAcceptancesQuery } from '../../../../../store/api/acceptance.api';
-import { Row } from '../../types';
+import { useListAcceptancesQuery } from '../../../../../store/api/acceptance.api'
+import { Row } from '../../types'
 
 const useAcceptances = () => {
-  const { data, isLoading, error } = useListAcceptancesQuery(null);
+  const { data, isLoading, error } = useListAcceptancesQuery(null)
 
-  const rows: Row[] | undefined = data?.map((acceptance) => ({
+  const rows: Row[] | undefined = data?.map(acceptance => ({
     id: acceptance.id,
     title: acceptance.title,
-    cargo_number: acceptance.cargo_number,
-    cargo_weight: acceptance.cargo_weight,
-    cargo_volume: acceptance.cargo_volume,
-    created_at: acceptance.created_at
-  }));
+    created_at: acceptance.created_at,
+    from_order: acceptance.from_order,
+    categories:
+      [...new Set(acceptance.products.map(s => s.product.category).filter(Boolean))].join(', ') ??
+      '',
+    total:
+      acceptance.products.reduce((prev, current) => ({
+        ...current,
+        cost: prev.cost + current.cost
+      })).cost ?? 0,
+    quantity:
+      acceptance.products.reduce((prev, current) => ({
+        ...current,
+        quantity: prev.quantity + current.quantity
+      })).quantity ?? 0
+  }))
 
-  return { acceptances: data, isLoading, error, rows };
-};
+  return { acceptances: data, isLoading, error, rows }
+}
 
-export default useAcceptances;
+export default useAcceptances

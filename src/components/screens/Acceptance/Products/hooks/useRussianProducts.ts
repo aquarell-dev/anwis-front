@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 
+import useLoading from '../../../../../context/GridLoadingContext/hooks/useLoading'
 import useNotifications from '../../../../../hooks/useNotifications'
 
 import { useListRussianCategoriesQuery } from '../../../../../store/api/acceptance.category.api'
@@ -11,9 +12,16 @@ import { AcceptanceProduct } from '../../../../../types/acceptance.types'
 import { RussianProductRow } from '../../types'
 
 const useRussianProducts = () => {
-  const { data: products, isLoading: productsLoading } = useListRussianProductsQuery(undefined)
-  const { data: categories, isLoading: categoriesLoading } =
-    useListRussianCategoriesQuery(undefined)
+  const {
+    data: products,
+    isLoading: productsLoading,
+    isFetching: productsFetching
+  } = useListRussianProductsQuery(undefined)
+  const {
+    data: categories,
+    isLoading: categoriesLoading,
+    isFetching: categoriesFetching
+  } = useListRussianCategoriesQuery(undefined)
 
   const [selectedProduct, setSelectedProduct] = useState<AcceptanceProduct | null>(null)
   const [updateOpen, setUpdateOpen] = useState(false)
@@ -27,6 +35,12 @@ const useRussianProducts = () => {
   const [delete_, { isLoading }] = useDeleteRussianProductMutation()
 
   const { notifyError, notifySuccess } = useNotifications()
+
+  useLoading('russianProducts', [categoriesFetching, productsFetching])
+
+  // useEffect(() => {
+  //   if ([productsFetching])
+  // }, [categoriesFetching, productsFetching])
 
   useEffect(() => {
     if (!deleteOpen && !updateOpen) setSelectedProduct(null)
@@ -68,6 +82,7 @@ const useRussianProducts = () => {
   return {
     products,
     isLoading: productsLoading || categoriesLoading,
+    isFetching: productsFetching || categoriesFetching,
     rows,
     search,
     setSearch,

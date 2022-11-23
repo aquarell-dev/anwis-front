@@ -3,6 +3,7 @@ import { Outlet } from 'react-router-dom'
 
 import useAuth from '../../hooks/useAuth'
 
+import GridLoadingContextProvider from '../../context/GridLoadingContext'
 import ImagePreviewContextProvider from '../../context/PreviewImageContext'
 import { BigImage } from '../ui/ImagePreview'
 import Navbar from '../ui/Navbar'
@@ -13,10 +14,12 @@ const Layout: FC = () => {
   return (
     <div className='min-h-screen'>
       <Navbar />
-      <ImagePreviewContextProvider>
-        <BigImage />
-        <Outlet />
-      </ImagePreviewContextProvider>
+      <GridLoadingContextProvider>
+        <ImagePreviewContextProvider>
+          <BigImage />
+          <Outlet />
+        </ImagePreviewContextProvider>
+      </GridLoadingContextProvider>
     </div>
   )
 }

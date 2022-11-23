@@ -8,21 +8,22 @@ import {
 } from '../../../types/acceptance.types'
 import { AcceptanceProduct } from './../../../types/acceptance.types'
 
-export type Row = Pick<
-  Acceptance,
-  'id' | 'title' | 'cargo_number' | 'cargo_volume' | 'cargo_weight' | 'created_at'
->
+export type Row = Pick<Acceptance, 'id' | 'title' | 'created_at' | 'from_order'> & {
+  categories: string
+  total: number
+  quantity: number
+}
 
 export type Columns = GridColDef & { field: keyof Row | 'redirect' }
 
 export type AcceptanceProductColumn = GridColDef & {
-  field: keyof AcceptanceProduct | keyof AcceptanceProductSpecification
+  field: keyof AcceptanceProductRow
 }
 
-export type AcceptanceProductRow = Omit<AcceptanceProductSpecification, 'product'> &
+export type AcceptanceProductRow = Omit<AcceptanceProductSpecification, 'product' | 'boxes'> &
   Omit<
     AcceptanceProduct,
-    'photo_id' | 'url' | 'category' | 'color' | 'last_cost' | 'linked_china_product_size'
+    'photo_id' | 'url' | 'category' | 'last_cost' | 'linked_china_product_size'
   >
 
 export type StaffMemberFields = Pick<StaffMember, 'username' | 'password'>

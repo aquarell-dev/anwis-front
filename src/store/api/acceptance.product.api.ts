@@ -21,15 +21,16 @@ const acceptanceProductsApi = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ['RussianProduct']
     }),
-    createRussianProductWithoutRefetching: build.mutation<
-      AcceptanceProduct,
-      CreateAcceptanceProduct
+    createMultipleRussianProducts: build.mutation<
+      { status: 'ok' | 'error' },
+      { products: CreateAcceptanceProduct[] }
     >({
-      query: product => ({
-        url: 'acceptance/products/',
+      query: body => ({
+        url: 'acceptance/create-products/',
         method: 'POST',
-        body: product
-      })
+        body
+      }),
+      invalidatesTags: ['RussianProduct']
     }),
     updateRussianProduct: build.mutation<AcceptanceProduct, UpdateAcceptanceProduct>({
       query: product => ({
@@ -46,6 +47,17 @@ const acceptanceProductsApi = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ['RussianProduct']
     }),
+    deleteMultipleProducts: build.mutation<
+      { status: 'ok' | 'error'; message?: string },
+      { products: number[] }
+    >({
+      query: products => ({
+        url: `acceptance/delete-products/`,
+        method: 'PUT',
+        body: products
+      }),
+      invalidatesTags: ['RussianProduct']
+    }),
     updateColors: build.mutation<{ status: 'ok' }, undefined>({
       query: () => ({
         url: `acceptance/update-colors/`,
@@ -57,7 +69,8 @@ const acceptanceProductsApi = apiSlice.injectEndpoints({
       query: () => ({
         url: 'acceptance/update-leftovers/',
         method: 'PUT'
-      })
+      }),
+      invalidatesTags: ['RussianProduct']
     }),
     updateMultipleCategories: build.mutation<
       { status: 'ok' | 'error' },
@@ -67,7 +80,16 @@ const acceptanceProductsApi = apiSlice.injectEndpoints({
         url: 'acceptance/update-categories/',
         method: 'PUT',
         body
-      })
+      }),
+      invalidatesTags: ['RussianProduct']
+    }),
+    fetchPhotos: build.mutation<{ status: 'ok' | 'error' }, { articles: string[] }>({
+      query: body => ({
+        url: 'acceptance/update-photos/',
+        method: 'PUT',
+        body
+      }),
+      invalidatesTags: ['RussianProduct']
     })
   })
 })
@@ -77,8 +99,10 @@ export const {
   useCreateRussianProductMutation,
   useDeleteRussianProductMutation,
   useUpdateRussianProductMutation,
-  useCreateRussianProductWithoutRefetchingMutation,
+  useCreateMultipleRussianProductsMutation,
   useUpdateColorsMutation,
   useUpdateLefoversMutation,
-  useUpdateMultipleCategoriesMutation
+  useUpdateMultipleCategoriesMutation,
+  useDeleteMultipleProductsMutation,
+  useFetchPhotosMutation
 } = acceptanceProductsApi

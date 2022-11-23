@@ -1,3 +1,4 @@
+import useLoading from '../../../../../context/GridLoadingContext/hooks/useLoading'
 import useNotifications from '../../../../../hooks/useNotifications'
 
 import {
@@ -7,8 +8,10 @@ import {
 import { AcceptanceCategory } from '../../../../../types/acceptance.types'
 
 const useMutateRussianCategories = () => {
-  const [delete_, deleteResult] = useDeleteRussianCategoryMutation()
-  const [update, updareResult] = useUpdateRussianCategoryMutation()
+  const [delete_, { isLoading: deleteLoading }] = useDeleteRussianCategoryMutation()
+  const [update, { isLoading: updateLoading }] = useUpdateRussianCategoryMutation()
+
+  useLoading('russianProducts', [deleteLoading, updateLoading])
 
   const { notifyError, notifySuccess } = useNotifications()
 

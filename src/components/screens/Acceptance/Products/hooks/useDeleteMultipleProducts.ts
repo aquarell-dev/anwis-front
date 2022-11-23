@@ -1,17 +1,15 @@
 import useNotifications from '../../../../../hooks/useNotifications'
 
-import { useDeleteRussianProductMutation } from '../../../../../store/api/acceptance.product.api'
+import { useDeleteMultipleProductsMutation } from '../../../../../store/api/acceptance.product.api'
 
 const useDeleteMultipleProducts = () => {
-  const [delete_, { isLoading }] = useDeleteRussianProductMutation()
+  const [delete_, { isLoading }] = useDeleteMultipleProductsMutation()
 
   const { notifyError, notifySuccess } = useNotifications()
 
   const deleteMultipleProducts = async (ids: number[]) => {
-    const deletion = ids.map(id => delete_({ id }).unwrap())
-
     try {
-      await Promise.all(deletion)
+      await delete_({ products: ids }).unwrap()
       notifySuccess('Товары были удалены')
     } catch (e) {
       notifyError('Товары не были удалены')

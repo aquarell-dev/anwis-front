@@ -1,6 +1,8 @@
 import { FC, useEffect, useState } from 'react'
 
 import useNotifications from '../../../../../../hooks/useNotifications'
+import useUpdatePhotos from '../../../../China/Products/hooks/useUpdatePhotos'
+import useChangeMultipleCategory from '../../hooks/useChangeMultipleCategory'
 import useDeleteMultipleProducts from '../../hooks/useDeleteMultipleProducts'
 
 import { GridSelectionModel, GridToolbarContainer } from '@mui/x-data-grid'
@@ -27,6 +29,8 @@ const Toolbar: FC<{
   const [multipleCategoryChangeOpen, setMultipleCategoryChangeOpen] = useState(false)
 
   const { deleteMultipleProducts, isLoading: deleteLoading } = useDeleteMultipleProducts()
+  const { updateMultipleCategories, updateMultipleLoading } = useChangeMultipleCategory()
+  const { fetchSelectedPhotos, photosLoading } = useUpdatePhotos()
 
   const { notifyError } = useNotifications()
 
@@ -40,6 +44,10 @@ const Toolbar: FC<{
         categories={categories ?? []}
         open={multipleCategoryChangeOpen}
         setOpen={setMultipleCategoryChangeOpen}
+        onUpdate={async (data: { products: number[]; category: number }) =>
+          await updateMultipleCategories(data)
+        }
+        selectedProducts={selection as number[]}
       />
       <LabelsPopup
         open={printOpen}
@@ -65,7 +73,17 @@ const Toolbar: FC<{
         buttonText={['Да', 'Нет']}
         onClose={() => setAlerts({ ...alerts, parsePhotos: false })}
         onDeny={() => setAlerts({ ...alerts, parsePhotos: false })}
-        onAccept={() => setAlerts({ ...alerts, parsePhotos: false })}
+        onAccept={async () => {
+          setAlerts({ ...alerts, parsePhotos: false })
+          await fetchSelectedPhotos(
+            selection
+              .map(id => {
+                const product = products?.find(p => p.id === id)
+                return product ? product.article : ''
+              })
+              .filter(Boolean)
+          )
+        }}
         open={alerts.parsePhotos}
       />
       <GridToolbarContainer className='flex items-center justify-end space-x-4 mx-4 my-1'>
@@ -75,6 +93,7 @@ const Toolbar: FC<{
           text='Перенести категории'
           customWidth='w-60'
           disabled={disabled}
+          loading={updateMultipleLoading}
         />
         <GreenButton
           type='button'
@@ -82,6 +101,7 @@ const Toolbar: FC<{
           text='Спарсить фотографии'
           customWidth='w-60'
           disabled={disabled}
+          loading={photosLoading}
         />
         <RedButton
           type='button'
@@ -98,15 +118,19 @@ const Toolbar: FC<{
               .map(id => products?.find(product => product.id === id))
               .filter(v => !!v) as AcceptanceProduct[]
 
-            const pass = !selectedProducts.some(p => p?.barcode === null)
+            const barcodePass = !selectedProducts.some(p => p?.barcode === null)
 
-            if (!pass) return notifyError('Заполните штрих-код у всех выбранных товаров')
+            const categoryPass = !selectedProducts.some(p => p?.category === null)
+
+            if (!barcodePass) return notifyError('Заполните штрих-код у всех выбранных товаров')
+
+            if (!categoryPass) return notifyError('Заполните категории у всех выбранных товаров')
 
             setValidatedProducts(
               (selectedProducts as ValidatedProduct[]).map(p => {
-                const { id, title, barcode, article, size, color } = p
+                const { id, title, barcode, article, size, color, category } = p
 
-                return { id, title, barcode, article, size, color, quantity: 0 }
+                return { id, title, barcode, article, size, color, quantity: 0, category }
               })
             )
             setPrintOpen(true)

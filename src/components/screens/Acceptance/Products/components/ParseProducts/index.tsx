@@ -14,7 +14,11 @@ const ParseProducts: FC<{
   setOpen: SetState<boolean>
   products: AcceptanceProduct[] | undefined
 }> = ({ open, setOpen, products }) => {
-  const { disabled, setFiles, parseNewProducts, isLoading } = useParseProducts(open, products)
+  const { disabled, setFiles, parseNewProducts, isLoading } = useParseProducts(
+    open,
+    setOpen,
+    products
+  )
 
   return (
     <Popup
@@ -39,7 +43,6 @@ const ParseProducts: FC<{
             type='button'
             handler={() => {
               parseNewProducts()
-              setOpen(false)
             }}
             text={'Новые'}
             disabled={disabled.newProducts}

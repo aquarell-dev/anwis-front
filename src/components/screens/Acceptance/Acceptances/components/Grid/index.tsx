@@ -1,40 +1,31 @@
-import { DataGrid } from '@mui/x-data-grid';
-import { FC } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { IndigoButton } from '../../../../../ui/Button';
-import { Columns, Row } from '../../../types';
-import { columns } from './columns';
+import { FC } from 'react'
+import { useNavigate } from 'react-router-dom'
+
+import { DataGrid } from '@mui/x-data-grid'
+
+import { Row } from '../../../types'
+import { getColumns } from './columns'
 
 const Grid: FC<{
-  rows: Row[] | undefined;
+  rows: Row[] | undefined
 }> = ({ rows }) => {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
-  const actualColumns: Columns[] = [
-    ...columns,
-    {
-      field: 'redirect',
-      headerName: 'Перейти',
-      width: 200,
-      renderCell: (params) => (
-        <IndigoButton
-          type="button"
-          text="Перейти"
-          handler={() => navigate(`${params.row.id}/`)}
-        />
-      )
-    }
-  ];
+  const actualColumns = getColumns(url => navigate(url))
 
   return (
-    <div className="my-5">
+    <div className='my-5'>
       <DataGrid
         columns={actualColumns}
         autoHeight
         rows={rows ?? []}
+        disableSelectionOnClick
+        columnVisibilityModel={{
+          id: false
+        }}
       />
     </div>
-  );
-};
+  )
+}
 
-export default Grid;
+export default Grid

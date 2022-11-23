@@ -12,18 +12,27 @@ export type Acceptance = {
   custom_id: string | null
   created_at: string
   products: AcceptanceProductSpecification[]
+  from_order?: number
 }
 
-type ModifiedOrder = Modify<
+type ModifedAcceptance = Modify<
   Omit<Acceptance, 'created_at'>,
   {
     products: number[]
   }
 >
 
-export type CreateAcceptance = Omit<ModifiedOrder, 'id'>
+export type CreateAcceptance = Omit<ModifedAcceptance, 'id'>
 
-export type UpdateAcceptance = ModifiedOrder
+export type UpdateAcceptance = ModifedAcceptance
+
+export type UpdateDetailedProductsAcceptance = Pick<
+  Modify<
+    ModifedAcceptance,
+    { products: Modify<AcceptanceProductSpecification, { product: number }>[] }
+  >,
+  'id' | 'products'
+>
 
 export type PartialUpdateAcceptance = Partial<UpdateAcceptance>
 
@@ -66,7 +75,13 @@ export type AcceptanceProductSpecification = {
   product: AcceptanceProduct
   cost: number
   quantity: number
+  boxes: Box[]
+  actual_quantity?: number
 }
+
+export type PartialUpdateProductSpecification = Partial<
+  Modify<AcceptanceProductSpecification, { product: number; id: number }>
+>
 
 //*************************
 //-------------------------
@@ -88,6 +103,7 @@ export type Label = {
   article: string
   size: string
   color: string
+  category: string
   quantity: number
 }
 
@@ -95,4 +111,14 @@ export type CreateLabel = Label & {
   individual: string
   composition: string
   address: string
+}
+
+//*************************
+//-------------------------
+//*************************
+
+export type Box = {
+  id: number
+  box: string
+  quantity: number
 }

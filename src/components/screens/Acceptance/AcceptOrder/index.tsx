@@ -1,7 +1,9 @@
 import { FC } from 'react'
 import { useParams } from 'react-router-dom'
 
-import { useGetAcceptanceByIdQuery } from '../../../../store/api/acceptance.api'
+import useUpdateAcceptanceProducts from '../hooks/useUpdateAcceptanceProducts'
+import useProducts from './hooks/useProducts'
+
 import { ContentContainer } from '../../../ui/Container'
 import Loader from '../../../ui/Loader'
 import AcceptanceNavigation from './components/AcceptanceNavigation'
@@ -11,7 +13,23 @@ import Management from './components/Management'
 const AcceptOrder: FC = () => {
   const { id } = useParams()
 
-  const { data: acceptance, isLoading } = useGetAcceptanceByIdQuery(parseInt(id ? id : '0'))
+  const {
+    selection,
+    setSelection,
+    acceptance,
+    isLoading,
+    isFetching,
+    rows,
+    products,
+    setProducts
+  } = useProducts(id)
+
+  const { updateAcceptanceProducts, updateAcceptanceProduct, updateFetching } =
+    useUpdateAcceptanceProducts({
+      acceptance,
+      products,
+      selection
+    })
 
   if (isLoading) return <Loader isLoading />
 
@@ -19,9 +37,20 @@ const AcceptOrder: FC = () => {
 
   return (
     <ContentContainer>
-      <AcceptanceNavigation acceptance={acceptance} />
+      <AcceptanceNavigation
+        acceptance={acceptance}
+        selection={selection}
+      />
       <Management acceptance={acceptance} />
-      <AcceptanceProductGrid acceptance={acceptance} />
+      <AcceptanceProductGrid
+        rows={rows}
+        onUpdate={async () => await updateAcceptanceProducts()}
+        onDetailedUpdate={async id => await updateAcceptanceProduct(id)}
+        setProducts={setProducts}
+        selection={selection}
+        setSelection={setSelection}
+        loading={isFetching || updateFetching}
+      />
     </ContentContainer>
   )
 }
