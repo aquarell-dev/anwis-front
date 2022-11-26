@@ -21,3 +21,11 @@ export type MutateCategory = (
   category: { id: number; category: string },
   onFulfil: () => void
 ) => Promise<void>
+
+export type Task = {
+  id: number
+  task: string
+  datetime: string
+}
+
+export type CreateTask = Omit<Task, 'id'>
