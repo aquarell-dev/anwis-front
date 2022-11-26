@@ -10,15 +10,16 @@ const useAcceptances = () => {
     created_at: acceptance.created_at,
     from_order: acceptance.from_order,
     categories:
-      [...new Set(acceptance.products.map(s => s.product.category).filter(Boolean))].join(', ') ??
-      '',
+      [...new Set(acceptance.specifications.map(s => s.product.category).filter(Boolean))].join(
+        ', '
+      ) ?? '',
     total:
-      acceptance.products.reduce((prev, current) => ({
+      acceptance.specifications.reduce((prev, current) => ({
         ...current,
         cost: prev.cost + current.cost
       })).cost ?? 0,
     quantity:
-      acceptance.products.reduce((prev, current) => ({
+      acceptance.specifications.reduce((prev, current) => ({
         ...current,
         quantity: prev.quantity + current.quantity
       })).quantity ?? 0
