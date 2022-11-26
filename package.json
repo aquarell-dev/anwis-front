@@ -26,6 +26,7 @@
     "react-expand-animated": "^1.0.2",
     "react-hook-form": "^7.38.0",
     "react-icons": "^4.6.0",
+    "react-input-mask": "^3.0.0-alpha.2",
     "react-redux": "^8.0.4",
     "react-router-dom": "^6.4.2",
     "react-scripts": "5.0.1",
@@ -37,6 +38,7 @@
     "react-toastify": "^9.0.8",
     "read-excel-file": "^5.5.3",
     "styled-components": "^5.3.6",
+    "tailwind-scrollbar": "^2.0.1",
     "typescript": "^4.8.4",
     "web-vitals": "^2.1.4"
   },
@@ -67,6 +69,7 @@
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^3.4.0",
     "@types/react-expand-animated": "^1.0.0",
+    "@types/react-input-mask": "^3.0.2",
     "@types/styled-components": "^5.1.26",
     "autoprefixer": "^10.4.13",
     "postcss": "^8.4.18",
