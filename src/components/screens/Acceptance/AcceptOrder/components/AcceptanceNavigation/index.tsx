@@ -1,43 +1,71 @@
-import { FC } from 'react'
+import { FC, useState } from 'react'
 
 import { GridSelectionModel } from '@mui/x-data-grid'
 
-import { Acceptance } from '../../../../../../types/acceptance.types'
+import {
+  Acceptance,
+  AcceptanceProductSpecification
+} from '../../../../../../types/acceptance.types'
 import { GreenButton, IndigoButton } from '../../../../../ui/Button'
+import Labels from '../Labels'
 
 const AcceptanceNavigation: FC<{
   acceptance: Acceptance
   selection: GridSelectionModel
-}> = ({ acceptance, selection }) => {
+  specifications: AcceptanceProductSpecification[]
+}> = ({ acceptance, selection, specifications }) => {
+  const [labelsOpen, setLabelsOpen] = useState(false)
+
   return (
-    <div className='flex flex-col space-y-2 border-b border-slate-600 py-2 px-4'>
-      <div className='flex items-center space-x-4'>
-        <h1 className='text-2xl font-medium'>{acceptance.title}</h1>
-        <p>
-          Дата Создания: <span className='font-medium'>{acceptance.created_at}</span>
-        </p>
-        <IndigoButton
-          type='button'
-          text={`Печать этикеток(${selection.length || 'Все'})`}
-          customWidth='w-80'
-          handler={() => {}}
-        />
-        <GreenButton
-          type='button'
-          text='Печать ПДФ'
-          customWidth='w-80'
-          handler={() => {}}
-        />
+    <>
+      <Labels
+        labelsOpen={labelsOpen}
+        specifications={specifications}
+        setLabelsOpen={setLabelsOpen}
+      />
+      <div className='flex flex-col space-y-2 border-b-2 border-slate-600 py-2 px-4'>
+        <div className='flex items-center space-x-4'>
+          <h1 className='text-2xl font-medium'>{acceptance.title}</h1>
+          <p>
+            Дата Создания: <span className='font-medium'>{acceptance.created_at}</span>
+          </p>
+          <IndigoButton
+            type='button'
+            text={`Печать этикеток(${selection.length || 'Все'})`}
+            customWidth='w-80'
+            handler={() => setLabelsOpen(true)}
+          />
+          <GreenButton
+            type='button'
+            text='Печать ПДФ'
+            customWidth='w-80'
+            handler={() => {}}
+          />
+        </div>
+        <div className='flex space-x-4 items-center'>
+          <p>
+            <span className='font-medium'>Категории</span>:{' '}
+            {[
+              ...new Set(
+                acceptance.specifications
+                  .map(specification => specification.product.category)
+                  .filter(Boolean)
+              )
+            ].join(', ')}
+          </p>
+          {acceptance?.project && (
+            <p>
+              <span className='font-medium'>Проект</span>: {acceptance.project}
+            </p>
+          )}
+          {acceptance?.individual && (
+            <p>
+              <span className='font-medium'>ИП</span>: {acceptance.individual}
+            </p>
+          )}
+        </div>
       </div>
-      <p>
-        <span className='font-medium'>Категории</span>:{' '}
-        {[
-          ...new Set(
-            acceptance.products.map(specification => specification.product.category).filter(Boolean)
-          )
-        ].join(', ')}
-      </p>
-    </div>
+    </>
   )
 }
 
