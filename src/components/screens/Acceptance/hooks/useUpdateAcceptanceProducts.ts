@@ -2,10 +2,12 @@ import useNotifications from '../../../../hooks/useNotifications'
 
 import { GridSelectionModel } from '@mui/x-data-grid'
 
+import { useUpdateDetailedProductsAcceptanceMutation } from '../../../../store/api/acceptance.api'
 import {
-  useUpdateDetailedProductsAcceptanceMutation,
+  useDeleteMultipleSpecificationsMutation,
+  useUpdateMultipleSpecificationsMutation,
   useUpdatePartialSpecificationsMutation
-} from '../../../../store/api/acceptance.api'
+} from '../../../../store/api/acceptance.specification.api'
 import {
   Acceptance,
   AcceptanceProductSpecification,
@@ -14,17 +16,20 @@ import {
 
 type UseUpdateAcceptanceProducts = {
   acceptance: Acceptance | undefined
-  products: AcceptanceProductSpecification[]
+  specifications: AcceptanceProductSpecification[]
   selection: GridSelectionModel
 }
 
 const useUpdateAcceptanceProducts = (data: UseUpdateAcceptanceProducts) => {
-  const { acceptance, products, selection } = data
+  const { acceptance, specifications, selection } = data
 
   const [updateSpecifications, { isLoading: speicficationsLoading }] =
     useUpdateDetailedProductsAcceptanceMutation()
   const [updateSpecification, { isLoading: speicficationLoading }] =
     useUpdatePartialSpecificationsMutation()
+  const [updateMultipleSpecifications, { isLoading: speicficationMultipleLoading }] =
+    useUpdateMultipleSpecificationsMutation()
+  const [delete_, { isLoading: deleteLoading }] = useDeleteMultipleSpecificationsMutation()
 
   const { notifyError, notifySuccess } = useNotifications()
 
@@ -35,19 +40,19 @@ const useUpdateAcceptanceProducts = (data: UseUpdateAcceptanceProducts) => {
 
     const { id } = acceptance
 
-    let updatableProducts = products
+    let updatableSpecifications = specifications
     let rest: AcceptanceProductSpecification[] = []
 
     if (selection.length > 0) {
-      updatableProducts = products.filter(p => selection.includes(p.product.id))
-      rest = products.filter(p => !selection.includes(p.product.id))
+      updatableSpecifications = specifications.filter(s => selection.includes(s.product.id))
+      rest = specifications.filter(s => !selection.includes(s.product.id))
     }
 
     return {
       id,
-      products: [
-        ...updatableProducts.map(s => ({ ...s, product: s.product.id })),
-        ...rest.map(s => ({ ...s, product: s.product.id }))
+      specifications: [
+        ...updatableSpecifications.map(s => ({ ...s, boxes: undefined, product: s.product.id })),
+        ...rest.map(s => ({ ...s, boxes: undefined, product: s.product.id }))
       ]
     }
   }
@@ -61,16 +66,19 @@ const useUpdateAcceptanceProducts = (data: UseUpdateAcceptanceProducts) => {
     }
   }
 
-  const updateAcceptanceProduct = async (id: number) => {
+  const updateAcceptanceProduct = async (productId: number) => {
     try {
-      const specification = products.find(specification => specification.product.id === id)
+      const specification = specifications.find(
+        specification => specification.product.id === productId
+      )
 
       if (!specification) return notifyError('Товар не найден')
 
       await updateSpecification({
         id: specification.id,
         product: specification.product.id,
-        actual_quantity: specification.actual_quantity
+        actual_quantity: specification.actual_quantity,
+        boxes: specification.boxes
       }).unwrap()
 
       notifySuccess('Приемка была обновлена')
@@ -79,10 +87,39 @@ const useUpdateAcceptanceProducts = (data: UseUpdateAcceptanceProducts) => {
     }
   }
 
+  const updateAllSpecifications = async (specifications: AcceptanceProductSpecification[]) => {
+    try {
+      await updateMultipleSpecifications({
+        specifications: specifications.map(s => ({
+          id: s.id,
+          actual_quantity: s.actual_quantity,
+          boxes: s.boxes
+        }))
+      })
+      notifySuccess('Приемка была обновлена')
+    } catch {
+      notifyError('Приемка не была обновлена')
+    }
+  }
+
+  const deleteSpecifications = async (ids: number[]) => {
+    try {
+      await delete_({
+        specifications: ids
+      })
+      notifySuccess('Приемка была обновлена')
+    } catch {
+      notifyError('Приемка не была обновлена')
+    }
+  }
+
   return {
     updateAcceptanceProducts,
     updateAcceptanceProduct,
-    updateFetching: speicficationsLoading || speicficationLoading
+    updateAllSpecifications,
+    deleteSpecifications,
+    updateFetching:
+      speicficationsLoading || speicficationLoading || speicficationMultipleLoading || deleteLoading
   }
 }
 

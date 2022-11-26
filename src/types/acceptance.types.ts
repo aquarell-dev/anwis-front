@@ -1,4 +1,4 @@
-import { CommonProduct } from '../components/common/common.types'
+import { CommonProduct, Task } from '../components/common/common.types'
 import { Modify } from '../utils/types'
 
 export type Acceptance = {
@@ -11,30 +11,40 @@ export type Acceptance = {
   shipped_from_china: string
   custom_id: string | null
   created_at: string
-  products: AcceptanceProductSpecification[]
+  specifications: AcceptanceProductSpecification[]
   from_order?: number
+  individual?: string
+  project?: string
+  tasks: Task[]
 }
 
-type ModifedAcceptance = Modify<
+type ModifiedAcceptance = Modify<
   Omit<Acceptance, 'created_at'>,
   {
-    products: number[]
+    specifications: number[]
   }
 >
 
-export type CreateAcceptance = Omit<ModifedAcceptance, 'id'>
+export type CreateAcceptance = Omit<ModifiedAcceptance, 'id'>
 
-export type UpdateAcceptance = ModifedAcceptance
+export type UpdateAcceptance = ModifiedAcceptance
 
 export type UpdateDetailedProductsAcceptance = Pick<
   Modify<
-    ModifedAcceptance,
-    { products: Modify<AcceptanceProductSpecification, { product: number }>[] }
+    ModifiedAcceptance,
+    {
+      specifications: Modify<
+        AcceptanceProductSpecification,
+        { product: number; boxes: undefined }
+      >[]
+    }
   >,
-  'id' | 'products'
+  'id' | 'specifications'
 >
 
-export type PartialUpdateAcceptance = Partial<UpdateAcceptance>
+export type PartialUpdateAcceptance = Partial<
+  Omit<Modify<UpdateAcceptance, { tasks: Modify<Task, { id?: number }>[] }>, 'id'>
+> & { id: number }
 
 //*************************
 //-------------------------
@@ -79,14 +89,9 @@ export type AcceptanceProductSpecification = {
   actual_quantity?: number
 }
 
-export type AcceptanceProductSpecificationWithDetailedBoxes = Modify<
-  AcceptanceProductSpecification,
-  { boxes: Modify<Box, { id?: number }>[] }
->
-
 export type PartialUpdateProductSpecification = Partial<
-  Modify<AcceptanceProductSpecification, { product: number; id: number }>
->
+  Modify<Omit<AcceptanceProductSpecification, 'id'>, { product: number }>
+> & { id: number }
 
 //*************************
 //-------------------------

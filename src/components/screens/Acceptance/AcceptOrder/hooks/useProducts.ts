@@ -13,19 +13,18 @@ const useProducts = (id: string | undefined) => {
     isFetching
   } = useGetAcceptanceByIdQuery(parseInt(id ? id : '0'))
 
-  const [products, setProducts] = useState<AcceptanceProductSpecification[]>([])
-  const [boxesCount, setBoxesCount] = useState(1)
+  const [specifications, setSpecifications] = useState<AcceptanceProductSpecification[]>([])
   const [rows, setRows] = useState<AcceptanceProductRow[]>([])
   const [selection, setSelection] = useState<GridSelectionModel>([])
 
   useEffect(() => {
-    if (acceptance) setProducts(acceptance.products)
+    if (acceptance) setSpecifications(acceptance.specifications)
   }, [acceptance])
 
   useEffect(() => {
-    if (products)
+    if (specifications)
       setRows(
-        products.map(specification => ({
+        specifications.map(specification => ({
           id: specification.product.id,
           title: specification.product.title,
           article: specification.product.article,
@@ -40,7 +39,7 @@ const useProducts = (id: string | undefined) => {
           difference: specification.cost === specification?.actual_quantity
         }))
       )
-  }, [products])
+  }, [specifications])
 
   return {
     selection,
@@ -49,10 +48,8 @@ const useProducts = (id: string | undefined) => {
     isFetching,
     acceptance,
     rows,
-    products,
-    setProducts,
-    boxesCount,
-    setBoxesCount
+    specifications,
+    setSpecifications
   }
 }
 
