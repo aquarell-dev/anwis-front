@@ -1,23 +1,23 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ["./src/**/*.{html,js,ts,tsx,jsx}"],
+  content: ['./src/**/*.{html,js,ts,tsx,jsx}'],
   theme: {
     screens: {
-      'h': '1px',
-      
-      'sm': '640px',
+      h: '1px',
 
-      'md': '768px',
+      sm: '640px',
 
-      'lg': '1024px',
+      md: '768px',
 
-      'xl': '1280px',
+      lg: '1024px',
+
+      xl: '1280px',
 
       '2xl': '1536px',
 
       '3xl': '1900px'
     },
-    extend: {},
+    extend: {}
   },
-  plugins: [],
-};
+  plugins: [require('tailwind-scrollbar')]
+}
