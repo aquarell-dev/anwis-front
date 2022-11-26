@@ -48,13 +48,14 @@ const useCreateAcceptance = (order: IOrder | undefined) => {
 
     create({
       title: `Приемка ${getFourDigitId(order.id)}`,
-      products: (products as ModifiedProducts[]).map((p) => p.id),
+      specifications: (products as ModifiedProducts[]).map(p => p.id),
       cargo_number: order.cargo_number,
       cargo_volume: order.cargo_volume,
       cargo_weight: order.cargo_weight,
       custom_id: null,
       arrived_in_moscow: order.real_in_moscow_date,
-      shipped_from_china: order.shipping_from_china_date
+      shipped_from_china: order.shipping_from_china_date,
+      tasks: []
     })
       .unwrap()
       .then(() => {

@@ -5,10 +5,18 @@ import { useOutside } from '../../../hooks/useOutside'
 import { cn } from '../../../utils'
 import { IPopup } from './types'
 
-const Popup: FC<IPopup<boolean>> = ({ children, state, setState, width, height, bgColor }) => {
+const Popup: FC<IPopup<boolean>> = ({
+  children,
+  state,
+  setState,
+  width,
+  height,
+  bgColor,
+  outside = true
+}) => {
   const ref = useRef(null)
 
-  useOutside(ref, () => setState(false))
+  useOutside(ref, () => outside && setState(false))
 
   return (
     <>
