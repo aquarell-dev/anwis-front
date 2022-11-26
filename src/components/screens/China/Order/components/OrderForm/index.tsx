@@ -14,9 +14,9 @@ import AdditionalExpenses from '../AdditionalExpenses'
 import BottomControls from '../BottomControls'
 import ButtonGroup from '../ButtonGroup/ButtonGroup'
 import CargoShipInfo from '../CargoShipInfo'
+import ChinaNotification from '../ChinaNotification'
 import FormControls from '../FormControls'
 import Header from '../Header'
-import Notification from '../Notification'
 import Products from '../Products'
 import ReadyOrderDate from '../ReadyOrderDate'
 
@@ -110,7 +110,7 @@ const OrderForm: FC<{ order?: IOrder }> = ({ order }) => {
               order={order}
               setValue={setValue}
             />
-            <Notification order={order} />
+            <ChinaNotification order={order} />
           </form>
           <ButtonGroup
             selectedStatus={selectedStatus}

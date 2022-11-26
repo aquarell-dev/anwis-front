@@ -1,7 +1,6 @@
 import { Dispatch, SetStateAction } from 'react'
 
 import { MutationTrigger } from '@reduxjs/toolkit/dist/query/react/buildHooks'
-
 import {
   BaseQueryFn,
   FetchArgs,
@@ -28,3 +27,5 @@ export type Mutation<T> = MutationTrigger<
 export type Modify<T, R> = Omit<T, keyof R> & R
 
 export type SelectValue = { label: string; value: number }
+
+export type CError = { status: number; data: AnyObject }

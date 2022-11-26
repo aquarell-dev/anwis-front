@@ -14,6 +14,7 @@ interface IButton {
   children?: ReactNode
   loading?: boolean
   disabled?: boolean
+  tabindex?: number
 }
 
 export const Button: FC<IButton> = ({
@@ -25,7 +26,8 @@ export const Button: FC<IButton> = ({
   customColors,
   icon,
   loading,
-  disabled
+  disabled,
+  tabindex
 }) => {
   return (
     <div
@@ -34,6 +36,7 @@ export const Button: FC<IButton> = ({
         customWidth ?? 'w-40',
         disabled ? 'bg-slate-500' : customColors ?? 'bg-gray-600 hover:bg-gray-700'
       )}
+      tabIndex={tabindex}
     >
       {loading ? (
         <SpinnerComponent
@@ -43,6 +46,7 @@ export const Button: FC<IButton> = ({
       ) : (
         <>
           <button
+            tabIndex={tabindex}
             onClick={handler}
             disabled={disabled}
             type={type ?? 'submit'}
