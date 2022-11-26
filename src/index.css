@@ -19,12 +19,11 @@ body {
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
-.img-wrapper{
-  overflow:hidden;
+.img-wrapper {
+  overflow: hidden;
   transition-duration: 1s;
   position: relative;
 }
@@ -32,4 +31,8 @@ code {
 img.hover-zoom:hover {
   transform: scale(1.25);
   width: 100%;
+}
+
+.children__no_shrink > * {
+  flex: 0 0 auto;
 }
