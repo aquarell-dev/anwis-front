@@ -6,8 +6,8 @@ import Staff from '../Staff'
 
 const Management: FC<{ acceptance: Acceptance }> = ({ acceptance }) => {
   return (
-    <div className='grid grid-cols-2 gap-x-4 my-4'>
-      <AcceptanceInfo acceptance={acceptance} />
+    <div className='w-full flex space-x-4 border-t py-4 h-[320px] border-slate-800 items-center'>
+      {acceptance?.from_order && <AcceptanceInfo acceptance={acceptance} />}
       <Staff />
     </div>
   )
