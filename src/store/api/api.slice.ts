@@ -60,7 +60,10 @@ export const apiSlice = createApi({
     'Members',
     'Packages',
     'AcceptanceCategory',
-    'RussianProduct'
+    'RussianProduct',
+    'RussianSpecification',
+    'Box',
+    'Reason'
   ],
   endpoints: build => ({})
 })
