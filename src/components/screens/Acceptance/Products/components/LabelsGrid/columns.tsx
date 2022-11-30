@@ -11,7 +11,7 @@ export const columns: GridColDef[] = [
     headerName: 'Картинка',
     renderCell: params => (
       <ImagePreview
-        src={params.value}
+        src={params.row.photo}
         alt={''}
       />
     )
