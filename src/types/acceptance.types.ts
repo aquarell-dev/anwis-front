@@ -1,9 +1,10 @@
 import { CommonProduct, Task } from '../components/common/common.types'
+import { TDocument } from '../features/documents/document.types'
 import { Modify } from '../utils/types'
 
 export type Acceptance = {
   id: number
-  title: string
+  title?: string
   cargo_number: string
   cargo_volume: string
   cargo_weight: string
@@ -16,18 +17,26 @@ export type Acceptance = {
   individual?: string
   project?: string
   tasks: Task[]
+  comment?: string
+  documents: TDocument[]
+  status: AcceptanceStatus
 }
 
 type ModifiedAcceptance = Modify<
   Omit<Acceptance, 'created_at'>,
   {
     specifications: number[]
+    documents: number[]
+    status?: number
   }
 >
 
-export type CreateAcceptance = Omit<ModifiedAcceptance, 'id'>
-
-export type UpdateAcceptance = ModifiedAcceptance
+export type CreateAcceptance = Modify<
+  Omit<ModifiedAcceptance, 'id'>,
+  {
+    specifications: Modify<AcceptanceProductSpecification, { product: number; id: undefined }>[]
+  }
+>
 
 export type UpdateDetailedProductsAcceptance = Pick<
   Modify<
@@ -43,8 +52,29 @@ export type UpdateDetailedProductsAcceptance = Pick<
 >
 
 export type PartialUpdateAcceptance = Partial<
-  Omit<Modify<UpdateAcceptance, { tasks: Modify<Task, { id?: number }>[] }>, 'id'>
+  Omit<
+    Modify<
+      ModifiedAcceptance,
+      {
+        tasks: Modify<Task, { id?: number }>[]
+        specifications: Modify<AcceptanceProductSpecification, { id?: number; product: number }>[]
+      }
+    >,
+    'id'
+  >
 > & { id: number }
+
+//*************************
+//-------------------------
+//*************************
+
+export type AcceptanceStatuses = 'Новая Приемка' | 'Упаковывается' | 'Упаковано' | 'Завершена'
+
+export type AcceptanceStatus = {
+  id: number
+  status: AcceptanceStatuses
+  color: string
+}
 
 //*************************
 //-------------------------
@@ -86,8 +116,14 @@ export type AcceptanceProductSpecification = {
   cost: number
   quantity: number
   boxes: Box[]
+  reasons: Reason[]
   actual_quantity?: number
 }
+
+export type CreateProductSpecification = Modify<
+  AcceptanceProductSpecification,
+  { product: number; id: undefined }
+>
 
 export type PartialUpdateProductSpecification = Partial<
   Modify<Omit<AcceptanceProductSpecification, 'id'>, { product: number }>
@@ -115,6 +151,7 @@ export type Label = {
   color: string
   category: string
   quantity: number
+  photo: string
 }
 
 export type CreateLabel = Label & {
@@ -130,5 +167,11 @@ export type CreateLabel = Label & {
 export type Box = {
   id: number
   box: string
+  quantity: number
+}
+
+export type Reason = {
+  id: number
+  reason: string
   quantity: number
 }
