@@ -3,7 +3,7 @@ import { SpinnerComponent } from 'react-element-spinner'
 import { useNavigate } from 'react-router-dom'
 import 'react-toastify/dist/ReactToastify.css'
 
-import useCreateAcceptance from '../../hooks/useCreateAcceptance'
+import useCreateAcceptanceFromOrder from '../../hooks/useCreateAcceptanceFromOrder'
 
 import { GreenButton, IndigoButton } from '../../../../../ui/Button'
 import { IFormControls } from '../../../types'
@@ -26,7 +26,7 @@ const FormControls: FC<IFormControls> = ({
   const [orderForProjectValue, setOrderForProjectValue] = useState('')
   const [chinaDistributorValue, setChinaDistributorValue] = useState('')
 
-  const { createAcceptanceFromOrder, isLoading } = useCreateAcceptance(order)
+  const { createAcceptanceFromOrder, isLoading } = useCreateAcceptanceFromOrder(order)
   const navigate = useNavigate()
 
   return (
