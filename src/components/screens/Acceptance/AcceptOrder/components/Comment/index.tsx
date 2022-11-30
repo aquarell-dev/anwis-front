@@ -1,12 +1,19 @@
 import { FC } from 'react'
 
-const Comment: FC = () => {
+import { SetState } from '../../../../../../utils/types'
+
+const Comment: FC<{ comment: string; setComment: SetState<string> }> = ({
+  comment,
+  setComment
+}) => {
   return (
-    <div className='w-full my-6 border-t-2 border-slate-600 py-6 flex space-x-8 items-start'>
-      <div className='p-4 h-auto shadow-xl w-1/2 rounded-md border'>
+    <div className='w-full flex space-x-8 items-start'>
+      <div className='px-4 py-2 h-auto shadow-xl w-full rounded-md border'>
         <textarea
           className='w-full outline-none min-h-[62px] h-full'
           placeholder='Комментарий...'
+          value={comment}
+          onChange={e => setComment(e.target.value)}
         />
       </div>
     </div>
