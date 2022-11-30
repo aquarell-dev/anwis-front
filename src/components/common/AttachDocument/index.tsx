@@ -1,11 +1,23 @@
-import { FC } from 'react'
+import { FC, useEffect } from 'react'
+
+import { useTypedSelector } from '../../../hooks/useTypedSelector'
 
 import { TDocument } from '../../../features/documents/document.types'
+import { SetState } from '../../../utils/types'
 import FileDragAndDrop from '../../ui/FileDragNDrop'
 
-const AttachDocument: FC<{ documents?: TDocument[] }> = ({ documents }) => {
+const AttachDocument: FC<{ documents?: TDocument[]; setDocuments?: SetState<number[]> }> = ({
+  documents,
+  setDocuments
+}) => {
+  const { lastUpdatedDocument } = useTypedSelector(state => state.document)
+
+  useEffect(() => {
+    if (lastUpdatedDocument && setDocuments) setDocuments(prev => [...prev, lastUpdatedDocument.id])
+  }, [lastUpdatedDocument])
+
   return (
-    <div className='flex flex-col space-y-4 w-1/2'>
+    <div className='flex flex-col space-y-4 w-full'>
       <div className='w-full flex flex-col space-y-2'>
         <p>Прикрепление документов</p>
         <FileDragAndDrop
@@ -24,7 +36,7 @@ const AttachDocument: FC<{ documents?: TDocument[] }> = ({ documents }) => {
               <a
                 href={document.path}
                 download
-                className='text-slate-800 underline hover:text-slate-600 transition duration-300 ease-in-out'
+                className='text-slate-800 underline hover:text-slate-600 transition duration-300 ease-in-out text-ellipsis whitespace-nowrap overflow-x-hidden'
                 target='_blank'
                 rel='noreferrer'
               >
