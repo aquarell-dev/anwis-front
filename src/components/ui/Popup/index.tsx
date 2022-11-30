@@ -29,6 +29,7 @@ const Popup: FC<IPopup<boolean>> = ({
             bgColor ?? 'bg-slate-100'
           )}
           ref={ref}
+          onKeyDown={e => console.log(e.key)}
         >
           {children}
           <div

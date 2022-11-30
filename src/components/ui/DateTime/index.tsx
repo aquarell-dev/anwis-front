@@ -15,7 +15,7 @@ type TDateValue = moment.Moment
 type DatePickerProps = {
   label: string
   value: TDateValue
-  setValue: SetState<TDateValue>
+  setValue?: SetState<TDateValue>
   customOnChange?: (value: TDateValue | null, keyboardInputValue?: string | undefined) => void
   customStyling?: string
 }
@@ -40,7 +40,9 @@ export const CustomDatePicker: FC<DatePickerProps> = ({
         inputFormat={'DD/MM/YYYY'}
         className={customStyling}
         onChange={
-          customOnChange ? value => customOnChange(value) : value => value && setValue(value)
+          customOnChange
+            ? value => customOnChange(value)
+            : value => value && setValue && setValue(value)
         }
         renderInput={params => <TextField {...params} />}
       />
@@ -67,7 +69,9 @@ export const CustomDateTimePicker: FC<DatePickerProps> = ({
         value={value}
         openTo='day'
         onChange={
-          customOnChange ? value => customOnChange(value) : value => value && setValue(value)
+          customOnChange
+            ? value => customOnChange(value)
+            : value => value && setValue && setValue(value)
         }
         inputFormat={'HH:mm DD/MM/yyyy'}
       />
