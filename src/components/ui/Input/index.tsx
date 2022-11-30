@@ -27,7 +27,6 @@ export const Input: FC<IInput> = ({
 
 export const FancyInput: FC<IInput> = ({
   customWidth,
-  type,
   placeholder,
   handler,
   value,
@@ -35,8 +34,9 @@ export const FancyInput: FC<IInput> = ({
   disabled,
   showLabel,
   defaultValue,
-  restProps,
-  searchIcon
+  searchIcon,
+  type = 'text',
+  ...rest
 }) => {
   return (
     <div className='flex flex-col space-y-1'>
@@ -72,10 +72,10 @@ export const FancyInput: FC<IInput> = ({
           disabled={disabled}
           step={'0.01'}
           min={'0'}
-          max={'999999999'}
+          max={'99999'}
           onChange={handler}
           value={value ?? ''}
-          {...restProps}
+          {...rest}
         />
       </div>
     </div>

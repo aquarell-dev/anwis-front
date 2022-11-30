@@ -1,21 +1,18 @@
-import React from 'react'
+import React, { HTMLProps } from 'react'
 import { FieldError, FieldErrorsImpl, Merge, UseFormRegister } from 'react-hook-form'
 
 import { IOrder } from '../../../features/order/order.types'
 
-export interface IInput {
-  type?: React.HTMLInputTypeAttribute
+export interface IInput extends HTMLProps<HTMLInputElement> {
   value: string | number | undefined
   handler: React.ChangeEventHandler<HTMLInputElement>
-  placeholder: string
-  error?: boolean
+  type?: React.HTMLInputTypeAttribute
+  placeholder?: string | undefined
   additionalStyles?: string
-  disabled?: boolean
   customWidth?: string
   showLabel?: boolean
-  defaultValue?: string | number
-  restProps?: any[]
   searchIcon?: boolean
+  error?: boolean
 }
 
 interface IRHF {
