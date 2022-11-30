@@ -1,36 +1,51 @@
+import { useState } from 'react'
+
 import useNotifications from '../../../../../hooks/useNotifications'
 
-import { useLazyGetBoxByBoxNumberQuery } from '../../../../../store/api/acceptance.box.api'
-import { AcceptanceProductSpecification } from '../../../../../types/acceptance.types'
+import {
+  useGetSpecificationByBarcodeMutation,
+  useGetSpecificationByBoxMutation
+} from '../../../../../store/api/acceptance.specification.api'
+import { Method } from '../../types'
 
-const useSearchProduct = (specifications: AcceptanceProductSpecification[]) => {
+const useSearchProduct = (acceptanceId: number) => {
+  const [searchByBox, { data: specificationByBox, isLoading: specificationByBoxLoading }] =
+    useGetSpecificationByBoxMutation()
+
   const [
-    searchByBox,
-    {
-      data: specificationByBox,
-      isLoading: specificationByBoxLoading,
-      isFetching: specificationByBoxFetching
-    }
-  ] = useLazyGetBoxByBoxNumberQuery()
+    searchByBarcode,
+    { data: specificationByBarcode, isLoading: specificationByBarcodeLoading }
+  ] = useGetSpecificationByBarcodeMutation()
+
+  const [method, setMethod] = useState<Method>('box')
 
   const { notifyError, notifySuccess } = useNotifications()
 
   const searchProductByBox = async (box: string) => {
     try {
-      await searchByBox(box).unwrap()
+      await searchByBox({ box_number: box, acceptance: acceptanceId }).unwrap()
     } catch (e) {
       notifyError('Коробка не была найдена')
     }
   }
 
-  const getSpecification = () =>
-    specificationByBox &&
-    specifications.find(specification => specification.id === specificationByBox?.specification)
+  const searchProductByBarcode = async (barcode: string) => {
+    try {
+      await searchByBarcode({ barcode, acceptance: acceptanceId }).unwrap()
+    } catch (e) {
+      notifyError('Коробка не была найдена')
+    }
+  }
 
   return {
     searchProductByBox,
-    getSpecification,
-    specificationByBoxLoading: specificationByBoxLoading || specificationByBoxFetching
+    specificationByBox,
+    specificationByBoxLoading,
+    searchProductByBarcode,
+    specificationByBarcode,
+    specificationByBarcodeLoading,
+    method,
+    setMethod
   }
 }
 
