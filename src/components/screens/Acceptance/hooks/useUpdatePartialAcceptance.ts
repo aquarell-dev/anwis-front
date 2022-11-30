@@ -11,7 +11,7 @@ const useUpdatePartialAcceptance = () => {
     try {
       await update(acceptance)
       notifySuccess('Приемка была обновлена')
-    } catch {
+    } catch (e) {
       notifyError('Приемка не была обновлена')
     }
   }

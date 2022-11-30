@@ -1,31 +1,31 @@
 import useNotifications from '../../../../hooks/useNotifications'
 
-import { GridSelectionModel } from '@mui/x-data-grid'
-
-import { useUpdateDetailedProductsAcceptanceMutation } from '../../../../store/api/acceptance.api'
 import {
   useDeleteMultipleSpecificationsMutation,
   useUpdateMultipleSpecificationsMutation,
   useUpdatePartialSpecificationsMutation
 } from '../../../../store/api/acceptance.specification.api'
 import {
-  Acceptance,
   AcceptanceProductSpecification,
-  UpdateDetailedProductsAcceptance
+  PartialUpdateAcceptance
 } from '../../../../types/acceptance.types'
 
-type UseUpdateAcceptanceProducts = {
-  acceptance: Acceptance | undefined
-  specifications: AcceptanceProductSpecification[]
-  selection: GridSelectionModel
-}
+type ModifySpecification = (
+  specification: AcceptanceProductSpecification
+) => PartialUpdateAcceptance
 
-const useUpdateAcceptanceProducts = (data: UseUpdateAcceptanceProducts) => {
-  const { acceptance, specifications, selection } = data
+export type UpdateSpecification = (
+  specification: AcceptanceProductSpecification,
+  modify?: ModifySpecification
+) => Promise<void>
 
-  const [updateSpecifications, { isLoading: speicficationsLoading }] =
-    useUpdateDetailedProductsAcceptanceMutation()
-  const [updateSpecification, { isLoading: speicficationLoading }] =
+export type UpdateSpecifications = (
+  specifications: AcceptanceProductSpecification[],
+  modify?: ModifySpecification
+) => Promise<void>
+
+const useUpdateAcceptanceProducts = () => {
+  const [updateSingleSpecification, { isLoading: speicficationLoading }] =
     useUpdatePartialSpecificationsMutation()
   const [updateMultipleSpecifications, { isLoading: speicficationMultipleLoading }] =
     useUpdateMultipleSpecificationsMutation()
@@ -33,93 +33,62 @@ const useUpdateAcceptanceProducts = (data: UseUpdateAcceptanceProducts) => {
 
   const { notifyError, notifySuccess } = useNotifications()
 
-  const transformAcceptance = (
-    acceptance: Acceptance | undefined
-  ): UpdateDetailedProductsAcceptance => {
-    if (!acceptance) return {} as UpdateDetailedProductsAcceptance
-
-    const { id } = acceptance
-
-    let updatableSpecifications = specifications
-    let rest: AcceptanceProductSpecification[] = []
-
-    if (selection.length > 0) {
-      updatableSpecifications = specifications.filter(s => selection.includes(s.product.id))
-      rest = specifications.filter(s => !selection.includes(s.product.id))
-    }
-
-    return {
-      id,
-      specifications: [
-        ...updatableSpecifications.map(s => ({ ...s, boxes: undefined, product: s.product.id })),
-        ...rest.map(s => ({ ...s, boxes: undefined, product: s.product.id }))
-      ]
-    }
-  }
-
-  const updateAcceptanceProducts = async () => {
+  const mutateAcceptance = async (update: () => Promise<void>) => {
     try {
-      await updateSpecifications(transformAcceptance(acceptance)).unwrap()
+      await update()
       notifySuccess('Приемка была обновлена')
     } catch (e) {
       notifyError('Приемка не была обновлена')
     }
   }
 
-  const updateAcceptanceProduct = async (productId: number) => {
-    try {
-      const specification = specifications.find(
-        specification => specification.product.id === productId
-      )
-
-      if (!specification) return notifyError('Товар не найден')
-
-      await updateSpecification({
-        id: specification.id,
-        product: specification.product.id,
-        actual_quantity: specification.actual_quantity,
-        boxes: specification.boxes
-      }).unwrap()
-
-      notifySuccess('Приемка была обновлена')
-    } catch (e) {
-      notifyError('Приемка не была обновлена')
-    }
+  const updateSpecification: UpdateSpecification = async (
+    specification: AcceptanceProductSpecification,
+    modify?: ModifySpecification
+  ) => {
+    mutateAcceptance(async () => {
+      await updateSingleSpecification(
+        modify
+          ? modify(specification)
+          : {
+              ...specification,
+              product: specification.product.id
+            }
+      ).unwrap()
+    })
   }
 
-  const updateAllSpecifications = async (specifications: AcceptanceProductSpecification[]) => {
-    try {
+  const updateSpecifications: UpdateSpecifications = async (
+    specifications: AcceptanceProductSpecification[],
+    modify?: ModifySpecification
+  ) => {
+    mutateAcceptance(async () => {
       await updateMultipleSpecifications({
-        specifications: specifications.map(s => ({
-          id: s.id,
-          actual_quantity: s.actual_quantity,
-          boxes: s.boxes
-        }))
-      })
-      notifySuccess('Приемка была обновлена')
-    } catch {
-      notifyError('Приемка не была обновлена')
-    }
+        specifications: specifications.map(specification =>
+          modify
+            ? modify(specification)
+            : {
+                ...specification,
+                product: specification.product.id
+              }
+        )
+      }).unwrap()
+    })
   }
 
   const deleteSpecifications = async (ids: number[]) => {
-    try {
+    mutateAcceptance(async () => {
       await delete_({
         specifications: ids
       })
-      notifySuccess('Приемка была обновлена')
-    } catch {
-      notifyError('Приемка не была обновлена')
-    }
+    })
   }
 
   return {
-    updateAcceptanceProducts,
-    updateAcceptanceProduct,
-    updateAllSpecifications,
+    updateSpecification: updateSpecification,
+    updateSpecifications,
     deleteSpecifications,
-    updateFetching:
-      speicficationsLoading || speicficationLoading || speicficationMultipleLoading || deleteLoading
+    updateFetching: speicficationLoading || speicficationMultipleLoading || deleteLoading
   }
 }
 
