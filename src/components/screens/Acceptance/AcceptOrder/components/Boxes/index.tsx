@@ -17,7 +17,7 @@ type BoxesProps = {
   specifications: AcceptanceProductSpecification[]
   setSpecifications: SetState<AcceptanceProductSpecification[]>
   loading: boolean
-  onDetailedUpdate: (id: number) => Promise<void>
+  onDetailedUpdate: (specification: AcceptanceProductSpecification) => Promise<void>
   onUpdateAll: (specifications: AcceptanceProductSpecification[]) => Promise<void>
 }
 
