@@ -6,6 +6,7 @@ import {
   Acceptance,
   AcceptanceProductSpecification
 } from '../../../../../../types/acceptance.types'
+import { getFourDigitId } from '../../../../../../utils'
 import { GreenButton, IndigoButton } from '../../../../../ui/Button'
 import Labels from '../Labels'
 
@@ -19,13 +20,16 @@ const AcceptanceNavigation: FC<{
   return (
     <>
       <Labels
+        acceptance={acceptance}
         labelsOpen={labelsOpen}
         specifications={specifications}
         setLabelsOpen={setLabelsOpen}
       />
-      <div className='flex flex-col space-y-2 border-b-2 border-slate-600 py-2 px-4'>
+      <div className='flex flex-col space-y-2 py-2 px-4'>
         <div className='flex items-center space-x-4'>
-          <h1 className='text-2xl font-medium'>{acceptance.title}</h1>
+          <h1 className='text-2xl font-medium'>
+            {acceptance.title || `Приемка ${getFourDigitId(acceptance.id)}`}
+          </h1>
           <p>
             Дата Создания: <span className='font-medium'>{acceptance.created_at}</span>
           </p>
