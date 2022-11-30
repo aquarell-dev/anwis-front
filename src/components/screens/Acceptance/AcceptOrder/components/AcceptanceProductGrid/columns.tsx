@@ -22,8 +22,8 @@ export const fields: AcceptanceProductColumn[] = [
   { field: 'brand', width: 90, headerName: 'Бренд' },
   { field: 'size', width: 80, headerName: 'Размер' },
   { field: 'color', width: 80, headerName: 'Цвет' },
-  { field: 'cost', width: 100, headerName: 'Себестоимость' },
-  { field: 'quantity', width: 120, headerName: 'Отправл. Кол-Во' },
+  { field: 'cost', width: 100, headerName: 'Себестоимость', editable: true },
+  { field: 'quantity', width: 120, headerName: 'Отправл. Кол-Во', editable: true },
   { field: 'actual_quantity', width: 105, headerName: 'Факт. Кол-во', editable: true },
   { field: 'id', width: 100, headerName: 'ID' }
 ]
@@ -57,7 +57,7 @@ const generateBoxesField = (specifications: AcceptanceProductSpecification[]): G
 }
 
 export const getColumns = (
-  onUpdate: (id: number) => Promise<void>,
+  onUpdate: (specification: AcceptanceProductSpecification) => Promise<void>,
   onQuantityMismatch: (value: string) => void,
   specifications: AcceptanceProductSpecification[]
 ): GridColDef[] => [
@@ -83,7 +83,7 @@ export const getColumns = (
           if (!specification.actual_quantity)
             return onQuantityMismatch('Не указано фактическое количество')
 
-          await onUpdate(Number(params.row.id))
+          await onUpdate(specification)
         }}
         text='Сохранить'
       />

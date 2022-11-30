@@ -1,5 +1,6 @@
 import { FC, useState } from 'react'
 
+import { UpdateSpecification } from '../../../hooks/useUpdateAcceptanceProducts'
 import useEditActualQuantity from '../../hooks/useEditActualQuantity'
 
 import { DataGrid, GridSelectionModel, ruRU } from '@mui/x-data-grid'
@@ -20,10 +21,9 @@ const AcceptanceProductGrid: FC<{
   loading: boolean
   specifications: AcceptanceProductSpecification[]
   setSpecifications: SetState<AcceptanceProductSpecification[]>
-  updateAcceptanceProducts: () => Promise<void>
-  updateAcceptanceProduct: (id: number) => Promise<void>
+  updateSpecification: UpdateSpecification
   deleteSpecifications: (ids: number[]) => Promise<void>
-  updateAllSpecifications: (specifications: AcceptanceProductSpecification[]) => Promise<void>
+  updateSpecifications: (specifications: AcceptanceProductSpecification[]) => Promise<void>
 }> = ({
   rows,
   selection,
@@ -31,16 +31,20 @@ const AcceptanceProductGrid: FC<{
   loading,
   specifications,
   setSpecifications,
-  updateAcceptanceProduct,
-  updateAcceptanceProducts,
-  updateAllSpecifications,
+  updateSpecification,
+  updateSpecifications,
   deleteSpecifications
 }) => {
   const [invalidValue, setInvalidValue] = useState('')
   const [open, setOpen] = useState(false)
 
   const columns = getColumns(
-    id => updateAcceptanceProduct(id),
+    specification =>
+      updateSpecification(specification, specification => ({
+        ...specification,
+        product: specification.product.id,
+        reasons: undefined
+      })),
     (value: string) => {
       setInvalidValue(value)
       setOpen(true)
@@ -52,7 +56,7 @@ const AcceptanceProductGrid: FC<{
 
   const [pageSize, setPageSize] = useState(5)
 
-  const { editCellCommit } = useEditActualQuantity(setSpecifications, setOpen, setInvalidValue)
+  const { editCellCommit } = useEditActualQuantity(setSpecifications)
 
   return (
     <>
@@ -66,8 +70,8 @@ const AcceptanceProductGrid: FC<{
         open={open}
       />
       <Boxes
-        onUpdateAll={updateAllSpecifications}
-        onDetailedUpdate={updateAcceptanceProduct}
+        onUpdateAll={updateSpecifications}
+        onDetailedUpdate={updateSpecification}
         open={boxOpen}
         setOpen={setBoxOpen}
         specifications={specifications}
@@ -102,7 +106,12 @@ const AcceptanceProductGrid: FC<{
         componentsProps={{
           toolbar: {
             selection,
-            updateAcceptanceProducts,
+            onUpdate: async () =>
+              await updateSpecifications(
+                selection.length > 0
+                  ? specifications.filter(s => (selection as number[]).includes(s.product.id))
+                  : specifications
+              ),
             addBoxes: () => setBoxOpen(true),
             deleteSpecifications
           },
