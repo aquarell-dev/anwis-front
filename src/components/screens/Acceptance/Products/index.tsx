@@ -3,16 +3,16 @@ import { FC } from 'react'
 import useLoading from '../../../../context/GridLoadingContext/hooks/useLoading'
 import useCategories from '../../../common/hooks/useCategories'
 import useMutateRussianProduct from '../../China/Products/hooks/useMutateRussianProduct'
+import useRussianProducts from '../hooks/useRussianProducts'
 import useMutateRussianCategories from './hooks/useMutateRussianCategories'
-import useRussianProducts from './hooks/useRussianProducts'
 
 import Categories from '../../../common/Categories'
 import ConfirmationPopup from '../../../ui/ConfirmationPopup'
 import { ContentContainer } from '../../../ui/Container'
 import Loader from '../../../ui/Loader'
+import ProductsGrid from '../components/ProductsGrid'
 import MutateRussianProduct from './components/MutateRussianProduct'
 import Navigation from './components/Navigation'
-import ProductsGrid from './components/ProductsGrid'
 
 const Products: FC = () => {
   const {
@@ -63,8 +63,7 @@ const Products: FC = () => {
           setSelectedProduct={setSelectedProduct}
           setUpdateOpen={setUpdateOpen}
           setDeleteOpen={setDeleteOpen}
-          products={products}
-          categories={categories}
+          {...rest}
         />
       </div>
       <MutateRussianProduct

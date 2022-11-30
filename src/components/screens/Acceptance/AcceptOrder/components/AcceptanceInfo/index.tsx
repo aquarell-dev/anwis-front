@@ -4,7 +4,7 @@ import { Acceptance } from '../../../../../../types/acceptance.types'
 
 const AcceptanceInfo: FC<{ acceptance: Acceptance }> = ({ acceptance }) => {
   return (
-    <div className='w-full rounded-md shadow-xl p-4 border'>
+    <div className='w-1/2 h-full rounded-md shadow-xl p-4 border'>
       <h1 className='text-xl mb-4 border-b w-fit px-2 border-slate-600'>Информация о Карго</h1>
       <div className='grid grid-cols-1 gap-x-4 gap-y-2'>
         <p className='border-b borde-slate-700'>
