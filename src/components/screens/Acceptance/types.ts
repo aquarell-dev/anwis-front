@@ -3,6 +3,8 @@ import { GridColDef } from '@mui/x-data-grid'
 import {
   Acceptance,
   AcceptanceProductSpecification,
+  Box,
+  CreateAcceptance,
   Label,
   StaffMember
 } from '../../../types/acceptance.types'
@@ -20,7 +22,10 @@ export type AcceptanceProductColumn = GridColDef & {
   field: keyof AcceptanceProductRow
 }
 
-export type AcceptanceProductRow = Omit<AcceptanceProductSpecification, 'product' | 'boxes'> &
+export type AcceptanceProductRow = Omit<
+  AcceptanceProductSpecification,
+  'product' | 'boxes' | 'reasons'
+> &
   Omit<
     AcceptanceProduct,
     'photo_id' | 'url' | 'category' | 'last_cost' | 'linked_china_product_size'
@@ -46,3 +51,12 @@ export type LabelResponse =
       url: string
     }
   | undefined
+
+export type SearchSpecificationByBox = Box & { specification: AcceptanceProductSpecification }
+
+export type Method = 'barcode' | 'box'
+
+export type AcceptanceFields = Pick<
+  CreateAcceptance,
+  'cargo_number' | 'cargo_volume' | 'cargo_weight' | 'arrived_in_moscow' | 'shipped_from_china'
+>

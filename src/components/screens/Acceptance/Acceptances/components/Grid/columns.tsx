@@ -1,14 +1,9 @@
-import { GridValueGetterParams } from '@mui/x-data-grid'
-
 import { IndigoButton } from '../../../../../ui/Button'
 import { Columns } from '../../../types'
 
-export const getAcceptanceTitle = (params: GridValueGetterParams<any, any>) =>
-  params.row.title.toString().replace(' ', ' №')
-
 export const columns: Columns[] = [
   { field: 'id', headerName: 'ID', width: 80 },
-  { field: 'title', headerName: 'Название', width: 140, valueGetter: getAcceptanceTitle },
+  { field: 'title', headerName: 'Название', width: 140 },
   {
     field: 'categories',
     headerName: 'Категории',
