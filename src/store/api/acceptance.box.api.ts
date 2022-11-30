@@ -1,4 +1,5 @@
-import { AcceptanceProductSpecification, Box } from '../../types/acceptance.types'
+import { SearchSpecificationByBox } from '../../components/screens/Acceptance/types'
+import { AcceptanceProductSpecification } from '../../types/acceptance.types'
 import { apiSlice } from './api.slice'
 
 export const boxSlice = apiSlice.injectEndpoints({
@@ -18,7 +19,7 @@ export const boxSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ['Acceptance']
     }),
-    getBoxByBoxNumber: build.query<Box & { specification: number }, string>({
+    getBoxByBoxNumber: build.query<SearchSpecificationByBox, string>({
       query: box => ({
         url: `acceptance/boxes/${box}/`
       })

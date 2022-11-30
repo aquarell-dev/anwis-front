@@ -1,9 +1,4 @@
-import {
-  Acceptance,
-  CreateAcceptance,
-  PartialUpdateAcceptance,
-  UpdateDetailedProductsAcceptance
-} from '../../types/acceptance.types'
+import { Acceptance, CreateAcceptance, PartialUpdateAcceptance } from '../../types/acceptance.types'
 import { apiSlice } from './api.slice'
 
 export const acceptanceSlice = apiSlice.injectEndpoints({
@@ -54,14 +49,6 @@ export const acceptanceSlice = apiSlice.injectEndpoints({
         body: body
       }),
       invalidatesTags: ['Acceptance']
-    }),
-    updateDetailedProductsAcceptance: build.mutation<Acceptance, UpdateDetailedProductsAcceptance>({
-      query: body => ({
-        url: `acceptance/detailed-products-update/${body.id}/`,
-        method: 'PUT',
-        body: body
-      }),
-      invalidatesTags: ['Acceptance']
     })
   })
 })
@@ -72,6 +59,5 @@ export const {
   useCreateAcceptanceMutation,
   useCreateAcceptanceFromOrderMutation,
   useUpdateAcceptanceFromOrderMutation,
-  useUpdateDetailedProductsAcceptanceMutation,
   useUpdatePartialAcceptanceMutation
 } = acceptanceSlice

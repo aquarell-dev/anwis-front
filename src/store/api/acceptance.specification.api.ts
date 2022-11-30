@@ -1,4 +1,7 @@
-import { PartialUpdateProductSpecification } from '../../types/acceptance.types'
+import {
+  AcceptanceProductSpecification,
+  PartialUpdateProductSpecification
+} from '../../types/acceptance.types'
 import { apiSlice } from './api.slice'
 
 export const acceptanceSpecificationSlice = apiSlice.injectEndpoints({
@@ -10,7 +13,7 @@ export const acceptanceSpecificationSlice = apiSlice.injectEndpoints({
       query: body => ({
         url: `acceptance/specification/${body.id}/`,
         method: 'PUT',
-        body: body
+        body
       }),
       invalidatesTags: ['Acceptance']
     }),
@@ -25,6 +28,17 @@ export const acceptanceSpecificationSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ['Acceptance']
     }),
+    createMultipleSpecifications: build.mutation<
+      AcceptanceProductSpecification[],
+      { id: number; products: number[] }
+    >({
+      query: body => ({
+        url: `acceptance/specification/create-multiple/`,
+        method: 'POST',
+        body: body
+      }),
+      invalidatesTags: ['Acceptance']
+    }),
     deleteMultipleSpecifications: build.mutation<
       { status: 'ok' | 'error' },
       { specifications: number[] }
@@ -35,6 +49,36 @@ export const acceptanceSpecificationSlice = apiSlice.injectEndpoints({
         body: body
       }),
       invalidatesTags: ['Acceptance']
+    }),
+    getSpecificationByBox: build.mutation<
+      AcceptanceProductSpecification,
+      { box_number: string; acceptance: number }
+    >({
+      query: body => ({
+        url: 'acceptance/specification/by-box/',
+        method: 'POST',
+        body: body
+      }),
+      invalidatesTags: ['Acceptance']
+    }),
+    getSpecificationByBarcode: build.mutation<
+      AcceptanceProductSpecification,
+      { barcode: string; acceptance: number }
+    >({
+      query: body => ({
+        url: 'acceptance/specification/by-barcode/',
+        method: 'POST',
+        body: body
+      }),
+      invalidatesTags: ['Acceptance']
+    }),
+    addReason: build.mutation<AcceptanceProductSpecification, { id: number }>({
+      query: body => ({
+        url: `acceptance/specification/${body.id}/add-reason/`,
+        method: 'PUT',
+        body
+      }),
+      invalidatesTags: ['Acceptance']
     })
   })
 })
@@ -42,5 +86,9 @@ export const acceptanceSpecificationSlice = apiSlice.injectEndpoints({
 export const {
   useUpdatePartialSpecificationsMutation,
   useUpdateMultipleSpecificationsMutation,
-  useDeleteMultipleSpecificationsMutation
+  useDeleteMultipleSpecificationsMutation,
+  useGetSpecificationByBoxMutation,
+  useGetSpecificationByBarcodeMutation,
+  useAddReasonMutation,
+  useCreateMultipleSpecificationsMutation
 } = acceptanceSpecificationSlice
