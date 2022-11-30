@@ -2,6 +2,7 @@ import { FC } from 'react'
 import { useParams } from 'react-router-dom'
 
 import useUpdateAcceptanceProducts from '../hooks/useUpdateAcceptanceProducts'
+import useAcceptance from './hooks/useAcceptance'
 import useProducts from './hooks/useProducts'
 
 import AttachDocument from '../../../common/AttachDocument'
@@ -11,22 +12,25 @@ import AcceptanceNavigation from './components/AcceptanceNavigation'
 import AcceptanceProductGrid from './components/AcceptanceProductGrid'
 import AcceptanceTasks from './components/AcceptanceTasks'
 import Comment from './components/Comment'
+import ContorlPanel from './components/ControlPanel'
 import Management from './components/Management'
+import Reasons from './components/Reasons'
+import SpecificationManagement from './components/SpecificationManagment'
+import Status from './components/Status'
 
 const AcceptOrder: FC = () => {
   const { id } = useParams()
 
   const { selection, acceptance, isLoading, isFetching, ...rest } = useProducts(id)
 
-  const { specifications } = rest
+  const { specifications, setSpecifications } = rest
 
-  const { updateFetching, ...mutations } = useUpdateAcceptanceProducts({
-    acceptance,
-    specifications,
-    selection
-  })
+  const { updateFetching, ...mutations } = useUpdateAcceptanceProducts()
 
-  if (isLoading) return <Loader isLoading />
+  const { comment, setComment, setDocuments, updateAcceptance, updateLoading, ...statuses } =
+    useAcceptance(acceptance, specifications)
+
+  if (isLoading || updateLoading) return <Loader isLoading />
 
   if (!acceptance) return <p>error</p>
 
@@ -37,17 +41,39 @@ const AcceptOrder: FC = () => {
         selection={selection}
         specifications={specifications}
       />
+      <Status {...statuses} />
+      <ContorlPanel updateAcceptance={updateAcceptance} />
       <Management acceptance={acceptance} />
-      <div className='w-full h-6 border-t-2 border-slate-600' />
+      <SpecificationManagement
+        specifications={specifications}
+        acceptanceId={acceptance.id}
+      />
       <AcceptanceProductGrid
         selection={selection}
         loading={isFetching || updateFetching}
         {...mutations}
         {...rest}
       />
-      <Comment />
-      <AttachDocument documents={[]} />
+      <div className='flex w-full h-[500px] space-x-4 my-6 border-t-2 border-slate-600'>
+        <div className='flex flex-col h-full space-y-4 w-1/3 py-6'>
+          <Comment
+            comment={comment}
+            setComment={setComment}
+          />
+          <AttachDocument
+            documents={acceptance.documents}
+            setDocuments={setDocuments}
+          />
+        </div>
+        <Reasons
+          specifications={specifications}
+          setSpecifications={setSpecifications}
+          {...mutations}
+          loading={isFetching}
+        />
+      </div>
       <AcceptanceTasks acceptance={acceptance} />
+      <ContorlPanel updateAcceptance={updateAcceptance} />
     </ContentContainer>
   )
 }
