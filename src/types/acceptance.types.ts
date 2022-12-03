@@ -176,6 +176,8 @@ export type Box = {
   id: number
   box: string
   quantity: number
+  worker?: StaffMember
+  product?: AcceptanceProduct
 }
 
 export type Reason = {
