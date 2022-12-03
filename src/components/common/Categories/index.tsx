@@ -1,12 +1,14 @@
-import { FC } from 'react'
+import { FC, Fragment, MouseEvent, ReactNode } from 'react'
+import { RiMoneyDollarCircleFill } from 'react-icons/ri'
 
+import { AcceptanceCategory } from '../../../types/acceptance.types'
 import { cn } from '../../../utils'
 import { SetState } from '../../../utils/types'
 import { GreenButton } from '../../ui/Button'
 import ConfirmationPopup from '../../ui/ConfirmationPopup'
 import MutatePopup from '../../ui/MutatePopup'
 
-interface CategoriesProps {
+export interface CategoriesProps {
   categories: { id: number; category: string }[] | undefined
   selectedCategory: string
   setSelectedCategory: SetState<string>
@@ -20,6 +22,12 @@ interface CategoriesProps {
   setDeleteOpen: SetState<boolean>
   deleteCategory: () => void
   updateCategory: () => void
+  additionalIcons?: {
+    icon: ReactNode
+    handler: (e: MouseEvent, category: AcceptanceCategory) => void
+  }[]
+  additionalPopups?: ReactNode[]
+  headerInfo?: ReactNode
 }
 
 const Categories: FC<CategoriesProps> = ({
@@ -35,10 +43,14 @@ const Categories: FC<CategoriesProps> = ({
   changeOpen,
   setChangeOpen,
   deleteOpen,
-  setDeleteOpen
+  setDeleteOpen,
+  additionalIcons,
+  additionalPopups,
+  headerInfo
 }) => {
   return (
-    <div className='ml-2 mr-8 flex flex-col space-y-1'>
+    <div className='ml-2 mt-10 mr-8 flex flex-col space-y-1 w-[450px]'>
+      {headerInfo}
       {categories &&
         categories.map(category => (
           <div
@@ -52,6 +64,15 @@ const Categories: FC<CategoriesProps> = ({
             )}
           >
             <p>{category.category}</p>
+            {additionalIcons?.map((icon, idx) => (
+              <div
+                key={idx}
+                className='w-fit h-fit'
+                onClick={e => icon.handler(e, category)}
+              >
+                {icon.icon}
+              </div>
+            ))}
             <svg
               xmlns='http://www.w3.org/2000/svg'
               fill='none'
@@ -59,7 +80,8 @@ const Categories: FC<CategoriesProps> = ({
               strokeWidth={1.5}
               stroke='currentColor'
               className='w-6 h-6 cursor-pointer hover:text-slate-700 duration-300 ease-in-out transition'
-              onClick={() => {
+              onClick={e => {
+                e.stopPropagation()
                 setCurrentCategory(category)
                 setChangeCategoryValue(category.category)
                 setChangeOpen(true)
@@ -78,9 +100,10 @@ const Categories: FC<CategoriesProps> = ({
               strokeWidth={1.5}
               stroke='currentColor'
               className='w-6 h-6 cursor-pointer hover:text-slate-700 duration-300 ease-in-out transition'
-              onClick={() => {
-                setDeleteOpen(true)
+              onClick={e => {
+                e.stopPropagation()
                 setCurrentCategory(category)
+                setDeleteOpen(true)
               }}
             >
               <path
@@ -108,6 +131,9 @@ const Categories: FC<CategoriesProps> = ({
         setValue={setChangeCategoryValue}
         placeholder='Категория'
       />
+      {additionalPopups?.map((popup, idx) => (
+        <Fragment key={idx}>{popup}</Fragment>
+      ))}
       <ConfirmationPopup
         open={deleteOpen}
         setOpen={setDeleteOpen}
