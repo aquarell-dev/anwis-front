@@ -26,6 +26,6 @@ export type Mutation<T> = MutationTrigger<
 
 export type Modify<T, R> = Omit<T, keyof R> & R
 
-export type SelectValue = { label: string; value: number }
+export type SelectValue<T = number> = { label: string; value: T }
 
 export type CError = { status: number; data: AnyObject }
