@@ -1,18 +1,20 @@
-import { FC } from 'react';
-import { useListMembersQuery } from '../../../../store/api/staff.api';
-import { ContentContainer } from '../../../ui/Container';
-import Loader from '../../../ui/Loader';
-import MembersGrid from './components/MembersGrid';
-import Navigation from './components/Navigation';
-import StaffMemberPopup from './components/StaffMemberPopup';
-import useMutateStaff from './hooks/useMutateStaff';
+import { FC } from 'react'
+
+import useMutateStaff from './hooks/useMutateStaff'
+
+import { useListMembersQuery } from '../../../../store/api/staff.api'
+import { ContentContainer } from '../../../ui/Container'
+import Loader from '../../../ui/Loader'
+import StaffMemberPopup from '../components/StaffMemberPopup'
+import MembersGrid from './components/MembersGrid'
+import Navigation from './components/Navigation'
 
 const Staff: FC = () => {
-  const { mutate, setMemberOpen, memberOpen, setSelectedMember, selectedMember } = useMutateStaff();
+  const { mutate, setMemberOpen, memberOpen, setSelectedMember, selectedMember } = useMutateStaff()
 
-  const { data: members, isLoading, error } = useListMembersQuery(undefined);
+  const { data: members, isLoading, error } = useListMembersQuery(undefined)
 
-  if (isLoading) return <Loader isLoading />;
+  if (isLoading) return <Loader isLoading />
 
   return (
     <>
@@ -29,10 +31,10 @@ const Staff: FC = () => {
         setOpen={setMemberOpen}
         staffMember={selectedMember}
         setStaffMember={setSelectedMember}
-        onSubmit={mutate}
+        onSubmit={undefined as any}
       />
     </>
-  );
-};
+  )
+}
 
-export default Staff;
+export default Staff
