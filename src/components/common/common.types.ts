@@ -17,6 +17,11 @@ export type CreateCommonProduct = Modify<
   { category?: number; photo?: number }
 >
 
+export type CommonCategory = {
+  id: number
+  category: string
+}
+
 export type MutateCategory = (
   category: { id: number; category: string },
   onFulfil: () => void
