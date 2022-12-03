@@ -13,6 +13,7 @@ export interface IInput extends HTMLProps<HTMLInputElement> {
   showLabel?: boolean
   searchIcon?: boolean
   error?: boolean
+  loading?: boolean
 }
 
 interface IRHF {

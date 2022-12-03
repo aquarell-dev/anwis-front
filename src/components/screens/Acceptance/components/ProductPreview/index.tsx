@@ -1,10 +1,10 @@
 import { FC, Fragment, ReactNode } from 'react'
 import { SpinnerComponent } from 'react-element-spinner'
 
-import { AcceptanceProductSpecification } from '../../../../../../types/acceptance.types'
-import { getFourDigitId } from '../../../../../../utils'
-import { AbsoluteCenteredContainer } from '../../../../../ui/Container'
-import { Method } from '../../../types'
+import { AcceptanceProductSpecification } from '../../../../../types/acceptance.types'
+import { getFourDigitId } from '../../../../../utils'
+import { AbsoluteCenteredContainer } from '../../../../ui/Container'
+import { Method } from '../../types'
 
 type ProductPreviewProps = {
   loading: boolean

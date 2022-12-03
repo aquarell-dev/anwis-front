@@ -1,4 +1,5 @@
 import React, { FC } from 'react'
+import { SpinnerComponent } from 'react-element-spinner'
 
 import { cn } from '../../../utils'
 import { IInput, IRHFInput, IRHFSelect } from './types'
@@ -31,11 +32,11 @@ export const FancyInput: FC<IInput> = ({
   handler,
   value,
   additionalStyles,
-  disabled,
   showLabel,
   defaultValue,
   searchIcon,
   type = 'text',
+  loading,
   ...rest
 }) => {
   return (
@@ -43,9 +44,10 @@ export const FancyInput: FC<IInput> = ({
       {showLabel && <p className='text-sm'>{placeholder}</p>}
       <div
         className={cn(
-          'flex space-x-2 py-1 px-2 border bg-white border-gray-300 rounded-sm items-center',
+          'flex space-x-2 py-1 px-2 border border-gray-300 rounded-sm items-center',
           additionalStyles ?? '',
-          customWidth ?? 'w-64 xl:w-96'
+          customWidth ?? 'w-64 xl:w-96',
+          rest?.disabled ? 'bg-gray-100' : 'bg-white'
         )}
       >
         {searchIcon && (
@@ -65,11 +67,9 @@ export const FancyInput: FC<IInput> = ({
           </svg>
         )}
         <input
-          className={cn('outline-none w-full')}
+          className={cn('outline-none w-full', rest?.disabled ? 'bg-gray-100' : 'bg-white')}
           defaultValue={defaultValue}
           type={type}
-          placeholder={placeholder}
-          disabled={disabled}
           step={'0.01'}
           min={'0'}
           max={'99999'}
@@ -77,6 +77,12 @@ export const FancyInput: FC<IInput> = ({
           value={value ?? ''}
           {...rest}
         />
+        {loading && (
+          <SpinnerComponent
+            loading={true}
+            position='inline'
+          />
+        )}
       </div>
     </div>
   )

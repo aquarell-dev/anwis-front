@@ -11,16 +11,12 @@ export const Layout: FC = () => {
       link: '/acceptance/acceptances'
     },
     {
-      title: 'Новая Приемка',
-      link: '/acceptance/new-acceptance'
-    },
-    {
       title: 'Товары',
       link: '/acceptance/products'
     },
     {
-      title: 'Упаковки',
-      link: '/acceptance/packages'
+      title: 'Упаковка',
+      link: '/acceptance/packaging'
     },
     {
       title: 'Сотрудники',
