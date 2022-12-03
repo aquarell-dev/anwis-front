@@ -1,4 +1,5 @@
 import { FC } from 'react'
+import { RiMoneyDollarCircleFill } from 'react-icons/ri'
 
 import useLoading from '../../../../context/GridLoadingContext/hooks/useLoading'
 import useCategories from '../../../common/hooks/useCategories'
@@ -6,13 +7,16 @@ import useMutateRussianProduct from '../../China/Products/hooks/useMutateRussian
 import useRussianProducts from '../hooks/useRussianProducts'
 import useMutateRussianCategories from './hooks/useMutateRussianCategories'
 
+import { AcceptanceCategory } from '../../../../types/acceptance.types'
 import Categories from '../../../common/Categories'
 import ConfirmationPopup from '../../../ui/ConfirmationPopup'
 import { ContentContainer } from '../../../ui/Container'
 import Loader from '../../../ui/Loader'
 import ProductsGrid from '../components/ProductsGrid'
+import CategoryPaymentPopup from './components/CategoryPaymentPopup'
 import MutateRussianProduct from './components/MutateRussianProduct'
 import Navigation from './components/Navigation'
+import RussianCategories from './components/RussianCategories'
 
 const Products: FC = () => {
   const {
@@ -29,6 +33,8 @@ const Products: FC = () => {
     setDeleteOpen,
     deleteProduct,
     deleteLoading,
+    paymentOpen,
+    setPaymentOpen,
     ...rest
   } = useRussianProducts()
 
@@ -40,7 +46,7 @@ const Products: FC = () => {
 
   const { russianProducts } = useLoading()
 
-  const categoriesProps = useCategories(update, _delete)
+  const categoriesProps = useCategories<AcceptanceCategory>(update, _delete)
 
   if (isLoading) return <Loader isLoading />
 
@@ -53,9 +59,12 @@ const Products: FC = () => {
         setCreateOpen={setUpdateOpen}
       />
       <div className='flex items-start'>
-        <Categories
+        <RussianCategories
           {...rest}
           {...categoriesProps}
+          paymentOpen={paymentOpen}
+          setPaymentOpen={setPaymentOpen}
+          update={update}
         />
         <ProductsGrid
           loading={russianProducts.fetching}
