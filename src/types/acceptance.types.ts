@@ -1,4 +1,4 @@
-import { CommonProduct, Task } from '../components/common/common.types'
+import { CommonCategory, CommonProduct, Task } from '../components/common/common.types'
 import { TDocument } from '../features/documents/document.types'
 import { Modify } from '../utils/types'
 
@@ -86,9 +86,14 @@ export type StaffMember = {
   password: string
   temporary: boolean
   inactive: boolean
+  unique_number: string
 }
 
-export type CreateStaffMember = Omit<StaffMember, 'id'>
+type MutateStaffMember = Modify<StaffMember, { unique_number?: string }>
+
+export type CreateStaffMember = Omit<MutateStaffMember, 'id'>
+
+export type UpdateStaffMember = MutateStaffMember
 
 //*************************
 //-------------------------
@@ -133,9 +138,12 @@ export type PartialUpdateProductSpecification = Partial<
 //-------------------------
 //*************************
 
-export type AcceptanceCategory = {
-  id: number
-  category: string
+export type PaymentOptions = 'hourly' | 'apiece'
+
+export type AcceptanceCategory = CommonCategory & {
+  payment?: PaymentOptions
+  per_hour?: number
+  per_piece?: number
 }
 
 //*************************
