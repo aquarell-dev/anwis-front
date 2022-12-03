@@ -1,11 +1,12 @@
 import { useState } from 'react'
 
-import { MutateCategory } from '../common.types'
+import { CommonCategory, MutateCategory } from '../common.types'
 
-const useCategories = (update: MutateCategory, _delete: MutateCategory) => {
-  const [currentCategory, setCurrentCategory] = useState<{ id: number; category: string } | null>(
-    null
-  )
+const useCategories = <T extends CommonCategory = CommonCategory>(
+  update: MutateCategory,
+  _delete: MutateCategory
+) => {
+  const [currentCategory, setCurrentCategory] = useState<T | null>(null)
   const [changeOpen, setChangeOpen] = useState(false)
   const [deleteOpen, setDeleteOpen] = useState(false)
 
