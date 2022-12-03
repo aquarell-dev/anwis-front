@@ -8,6 +8,7 @@ import Acceptance from './components/screens/Acceptance'
 import AcceptOrder from './components/screens/Acceptance/AcceptOrder'
 import Acceptances from './components/screens/Acceptance/Acceptances'
 import CreateAcceptance from './components/screens/Acceptance/CreateAcceptance'
+import Packaging from './components/screens/Acceptance/Packaging'
 import Products from './components/screens/Acceptance/Products'
 import Staff from './components/screens/Acceptance/Staff'
 import China from './components/screens/China'
@@ -107,8 +108,8 @@ function App() {
                 element={<Products />}
               />
               <Route
-                path='/acceptance/new-acceptance'
-                element={<CreateAcceptance />}
+                path='/acceptance/packaging'
+                element={<Packaging />}
               />
             </Route>
           </Route>
