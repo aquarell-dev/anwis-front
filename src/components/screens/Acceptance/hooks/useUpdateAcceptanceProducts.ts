@@ -25,9 +25,9 @@ export type UpdateSpecifications = (
 ) => Promise<void>
 
 const useUpdateAcceptanceProducts = () => {
-  const [updateSingleSpecification, { isLoading: speicficationLoading }] =
+  const [updateSingleSpecification, { isLoading: specificationLoading }] =
     useUpdatePartialSpecificationsMutation()
-  const [updateMultipleSpecifications, { isLoading: speicficationMultipleLoading }] =
+  const [updateMultipleSpecifications, { isLoading: specificationMultipleLoading }] =
     useUpdateMultipleSpecificationsMutation()
   const [delete_, { isLoading: deleteLoading }] = useDeleteMultipleSpecificationsMutation()
 
@@ -46,7 +46,7 @@ const useUpdateAcceptanceProducts = () => {
     specification: AcceptanceProductSpecification,
     modify?: ModifySpecification
   ) => {
-    mutateAcceptance(async () => {
+    await mutateAcceptance(async () => {
       await updateSingleSpecification(
         modify
           ? modify(specification)
@@ -62,7 +62,7 @@ const useUpdateAcceptanceProducts = () => {
     specifications: AcceptanceProductSpecification[],
     modify?: ModifySpecification
   ) => {
-    mutateAcceptance(async () => {
+    await mutateAcceptance(async () => {
       await updateMultipleSpecifications({
         specifications: specifications.map(specification =>
           modify
@@ -88,7 +88,7 @@ const useUpdateAcceptanceProducts = () => {
     updateSpecification: updateSpecification,
     updateSpecifications,
     deleteSpecifications,
-    updateFetching: speicficationLoading || speicficationMultipleLoading || deleteLoading
+    updateFetching: specificationLoading || specificationMultipleLoading || deleteLoading
   }
 }
 

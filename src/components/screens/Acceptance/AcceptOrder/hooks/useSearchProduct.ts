@@ -8,7 +8,7 @@ import {
 } from '../../../../../store/api/acceptance.specification.api'
 import { Method } from '../../types'
 
-const useSearchProduct = (acceptanceId: number) => {
+const useSearchProduct = () => {
   const [searchByBox, { data: specificationByBox, isLoading: specificationByBoxLoading }] =
     useGetSpecificationByBoxMutation()
 
@@ -23,7 +23,7 @@ const useSearchProduct = (acceptanceId: number) => {
 
   const searchProductByBox = async (box: string) => {
     try {
-      await searchByBox({ box_number: box, acceptance: acceptanceId }).unwrap()
+      await searchByBox({ box_number: box }).unwrap()
     } catch (e) {
       notifyError('Коробка не была найдена')
     }
@@ -31,7 +31,7 @@ const useSearchProduct = (acceptanceId: number) => {
 
   const searchProductByBarcode = async (barcode: string) => {
     try {
-      await searchByBarcode({ barcode, acceptance: acceptanceId }).unwrap()
+      await searchByBarcode({ barcode }).unwrap()
     } catch (e) {
       notifyError('Коробка не была найдена')
     }
