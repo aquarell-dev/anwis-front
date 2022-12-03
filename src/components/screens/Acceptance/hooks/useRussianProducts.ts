@@ -28,6 +28,7 @@ const useRussianProducts = () => {
   const [selectedProduct, setSelectedProduct] = useState<AcceptanceProduct | null>(null)
   const [updateOpen, setUpdateOpen] = useState(false)
   const [deleteOpen, setDeleteOpen] = useState(false)
+  const [paymentOpen, setPaymentOpen] = useState(false)
 
   const [selection, setSelection] = useState<GridSelectionModel>([])
 
@@ -47,9 +48,9 @@ const useRussianProducts = () => {
   }, [deleteOpen, updateOpen])
 
   useEffect(() => {
-    if (search.length > 0)
-      setRows(prev =>
-        prev.filter(product =>
+    if (search.length > 0 && products)
+      setRows(
+        products.filter(product =>
           Object.values(product).some(value =>
             value?.toString().toLowerCase().includes(search.toLowerCase())
           )
@@ -62,8 +63,9 @@ const useRussianProducts = () => {
   }, [search])
 
   useEffect(() => {
-    if (!selectedCategory) return products && setRows(products)
-    setRows(prev => prev.filter(product => product?.category === selectedCategory))
+    if (!products) return
+    if (!selectedCategory) return setRows(products)
+    setRows(products.filter(product => product?.category === selectedCategory))
   }, [selectedCategory])
 
   useEffect(() => {
@@ -98,7 +100,9 @@ const useRussianProducts = () => {
     deleteProduct,
     deleteLoading: isLoading,
     selection,
-    setSelection
+    setSelection,
+    paymentOpen,
+    setPaymentOpen
   }
 }
 
