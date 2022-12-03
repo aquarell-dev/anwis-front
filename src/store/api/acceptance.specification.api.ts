@@ -50,10 +50,7 @@ export const acceptanceSpecificationSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ['Acceptance']
     }),
-    getSpecificationByBox: build.mutation<
-      AcceptanceProductSpecification,
-      { box_number: string; acceptance: number }
-    >({
+    getSpecificationByBox: build.mutation<AcceptanceProductSpecification, { box_number: string }>({
       query: body => ({
         url: 'acceptance/specification/by-box/',
         method: 'POST',
@@ -61,10 +58,7 @@ export const acceptanceSpecificationSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ['Acceptance']
     }),
-    getSpecificationByBarcode: build.mutation<
-      AcceptanceProductSpecification,
-      { barcode: string; acceptance: number }
-    >({
+    getSpecificationByBarcode: build.mutation<AcceptanceProductSpecification, { barcode: string }>({
       query: body => ({
         url: 'acceptance/specification/by-barcode/',
         method: 'POST',

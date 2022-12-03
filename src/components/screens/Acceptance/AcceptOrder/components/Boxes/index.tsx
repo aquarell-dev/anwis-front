@@ -57,10 +57,10 @@ const Boxes: FC<BoxesProps> = props => {
         state={open}
         setState={setOpen}
         width='w-[90%]'
-        height='h-[80%]'
+        height='h-[900px]'
         outside={!alertOpen}
       >
-        <div className='flex flex-col space-y-2 m-8 overflow-x-scroll scrollbar-thin'>
+        <div className='flex flex-col h-[90%] space-y-2 m-8 overflow-auto scrollbar-thin'>
           <SpinnerComponent
             loading={boxesLoading || loading}
             position='centered'

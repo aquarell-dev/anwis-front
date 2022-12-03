@@ -7,7 +7,7 @@ import {
   AcceptanceProductSpecification
 } from '../../../../../../types/acceptance.types'
 import LabelsGrid from '../../../components/LabelsGrid'
-import ProductPreview from '../ProductPreview'
+import ProductPreview from '../../../components/ProductPreview'
 import SearchFields from '../SearchFields'
 
 type SearchProductProps = {
@@ -25,7 +25,7 @@ const SearchProduct: FC<SearchProductProps> = ({ specifications, acceptance }) =
     searchProductByBarcode,
     method,
     setMethod
-  } = useSearchProduct(acceptance.id)
+  } = useSearchProduct()
 
   return (
     <div className='flex space-x-4 w-full h-full'>
