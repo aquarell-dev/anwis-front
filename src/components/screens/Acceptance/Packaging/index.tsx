@@ -5,8 +5,8 @@ import useMembers from '../hooks/useMembers'
 import { ContentContainer } from '../../../ui/Container'
 import Loader from '../../../ui/Loader'
 import PackagingSlider from './components/PackagingSlider'
+import Search from './components/Search'
 import Staff from './components/Staff/Staff'
-import StaffSearch from './components/StaffSearch'
 
 const Packaging: FC = () => {
   const { members, isLoading, isFetching } = useMembers()
@@ -15,7 +15,7 @@ const Packaging: FC = () => {
 
   return (
     <ContentContainer>
-      <StaffSearch />
+      <Search />
       <Staff
         members={members}
         loading={isFetching}
