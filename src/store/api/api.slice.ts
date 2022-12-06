@@ -6,7 +6,7 @@ import { logOut, setCredentials } from '../../features/auth/auth.slice'
 // https://anwis-sklad.onrender.com/api/
 // http://localhost:8000/api/
 
-export const API_LINK = 'http://localhost:8000/api/'
+export const API_LINK = 'https://anwis-sklad.onrender.com/api/'
 
 const baseQuery = fetchBaseQuery({
   baseUrl: API_LINK,
