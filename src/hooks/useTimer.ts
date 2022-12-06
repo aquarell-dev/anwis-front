@@ -13,7 +13,9 @@ const useTimer = (startingTime?: string) => {
     const interval = setInterval(() => {
       const calculatedTime = new Date(Date.now() - initialTime.getTime())
       setTimer(
-        `${formatDigit(calculatedTime.getMinutes())}:${formatDigit(calculatedTime.getSeconds())}`
+        `${formatDigit(60 * calculatedTime.getHours() + calculatedTime.getMinutes())}:${formatDigit(
+          calculatedTime.getSeconds()
+        )}`
       )
     }, 1000)
 
