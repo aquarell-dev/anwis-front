@@ -90,6 +90,12 @@ const acceptanceProductsApi = apiSlice.injectEndpoints({
         body
       }),
       invalidatesTags: ['RussianProduct']
+    }),
+    getRussianProductByBarcode: build.query<AcceptanceProduct, string>({
+      query: barcode => ({
+        url: `acceptance/products/by-barcode/${barcode}/`
+      }),
+      providesTags: ['RussianProduct']
     })
   })
 })
@@ -104,5 +110,6 @@ export const {
   useUpdateLefoversMutation,
   useUpdateMultipleCategoriesMutation,
   useDeleteMultipleProductsMutation,
-  useFetchPhotosMutation
+  useFetchPhotosMutation,
+  useLazyGetRussianProductByBarcodeQuery
 } = acceptanceProductsApi
