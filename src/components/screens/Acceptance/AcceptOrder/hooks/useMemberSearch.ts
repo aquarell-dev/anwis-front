@@ -9,7 +9,7 @@ import {
 } from '../../../../../store/api/acceptance.specification.api'
 import { Method } from '../../types'
 
-const useSearch = () => {
+const useMemberSearch = () => {
   const [searchByBox, { data: specificationByBox, isLoading: specificationByBoxLoading }] =
     useGetSpecificationByBoxMutation()
 
@@ -65,4 +65,4 @@ const useSearch = () => {
   }
 }
 
-export default useSearch
+export default useMemberSearch

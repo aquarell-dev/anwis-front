@@ -1,20 +1,19 @@
-import React, { useEffect, useState } from 'react'
+import { useState } from 'react'
 
-import useMutate from '../../../../../hooks/useMutate'
-import useNotifications from '../../../../../hooks/useNotifications'
+import useMutate from '../../../../hooks/useMutate'
+import useNotifications from '../../../../hooks/useNotifications'
 
 import {
   useCreateMemberMutation,
   useLazyGetMemberQuery,
   usePartialUpdateMemberMutation,
   useUpdateMemberMutation
-} from '../../../../../store/api/staff.api'
+} from '../../../../store/api/staff.api'
 import {
   CreateStaffMember,
-  PartialUpdateStaffMember,
   StaffMember,
   UpdateStaffMember
-} from '../../../../../types/acceptance.types'
+} from '../../../../types/acceptance.types'
 
 export type GetMemberByUniqueId = (uniqueNumber: string) => Promise<StaffMember | null>
 
