@@ -52,7 +52,7 @@ const AcceptanceNavigation: FC<{
             {[
               ...new Set(
                 acceptance.specifications
-                  .map(specification => specification.product.category)
+                  .map(specification => specification.product.category.category)
                   .filter(Boolean)
               )
             ].join(', ')}

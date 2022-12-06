@@ -32,7 +32,7 @@ const useMutateRussianProduct = (product?: AcceptanceProduct, categories?: ICate
     setCurrentProduct({
       ...product,
       photo: undefined,
-      category: categories?.find(category => category.category === product.category)?.id
+      category: categories?.find(category => category.category === product.category.category)?.id
     })
   }, [product])
 
@@ -65,7 +65,7 @@ const useMutateRussianProduct = (product?: AcceptanceProduct, categories?: ICate
     currentProduct,
     setCurrentProduct,
     defaultPhoto: product?.photo,
-    categoryLabel: product?.category,
+    categoryLabel: product?.category.category,
     isLoading: updateLoading || createLoading,
     initialState
   }

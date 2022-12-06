@@ -16,7 +16,7 @@ const Popup: FC<IPopup<boolean>> = ({
 }) => {
   const ref = useRef(null)
 
-  useOutside(ref, () => outside && setState(false))
+  useOutside(ref, () => outside && setState(false), 'popupException')
 
   return (
     <>

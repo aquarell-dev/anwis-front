@@ -1,6 +1,6 @@
 import { FC } from 'react'
 
-import useSearchProduct from '../../hooks/useSearchProduct'
+import useSearch from '../../hooks/useSearch'
 
 import {
   Acceptance,
@@ -25,7 +25,7 @@ const SearchProduct: FC<SearchProductProps> = ({ specifications, acceptance }) =
     searchProductByBarcode,
     method,
     setMethod
-  } = useSearchProduct()
+  } = useSearch()
 
   return (
     <div className='flex space-x-4 w-full h-full'>

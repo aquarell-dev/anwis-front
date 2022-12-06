@@ -17,7 +17,7 @@ const ProductItem: FC<AcceptanceProductSpecification> = props => {
       <img
         tabIndex={-1}
         src={specification.product.photo}
-        alt={specification.product.title}
+        alt={'-'}
         className='w-10 border-r border-slate-800 pr-2'
       />
       <p

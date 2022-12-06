@@ -34,12 +34,14 @@ const PackagingSlider: FC<{ members: StaffMember[] }> = ({ members }) => {
         {...settings}
         ref={slider}
       >
-        {members.map(member => (
-          <PackagingMember
-            member={member}
-            key={member.id}
-          />
-        ))}
+        {members
+          .filter(member => member.box)
+          .map(member => (
+            <PackagingMember
+              member={member}
+              key={member.id}
+            />
+          ))}
       </Slider>
     </div>
   )

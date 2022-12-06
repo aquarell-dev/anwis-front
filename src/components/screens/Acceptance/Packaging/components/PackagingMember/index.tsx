@@ -1,14 +1,18 @@
 import React, { FC } from 'react'
 
+import useTimer from '../../../../../../hooks/useTimer'
+
 import { StaffMember } from '../../../../../../types/acceptance.types'
 import SliderItem from '../PackagingSlider/components/SliderItem'
 
 const PackagingMember: FC<{ member: StaffMember }> = ({ member }) => {
+  const timer = useTimer(member.session?.start)
+
   return (
     <SliderItem>
       <div className='flex flex-col justify-center items-center space-y-2 py-4'>
         <h1 className='text-6xl'>
-          {member.username}({member.unique_number})
+          {member.username}({member.unique_number}) - {timer}
         </h1>
         <p className='text-4xl'>Упаковано: 47 ШТ | Текущая выплата (только за упаковку) – 235 ₽</p>
         <p className='text-3xl'>Количество Коробок: 1</p>

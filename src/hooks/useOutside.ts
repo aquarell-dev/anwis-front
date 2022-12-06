@@ -12,7 +12,9 @@ export const useOutside = <T extends HTMLElement = HTMLElement, U = void>(
 
         const cn = (event?.target as HTMLElement)?.className
 
-        if (typeof cn === 'string') if (!cn.includes(exception)) callback()
+        console.log(cn, !cn.includes(exception), typeof cn === 'string' && !cn.includes(exception))
+
+        if (typeof cn === 'string' && !cn.includes(exception)) callback()
       }
     }
 

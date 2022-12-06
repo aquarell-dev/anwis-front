@@ -24,7 +24,7 @@ export type Mutation<T> = MutationTrigger<
   >
 >
 
-export type Modify<T, R> = Omit<T, keyof R> & R
+export type Modify<T extends AnyObject, R extends AnyObject> = Omit<T, keyof R> & R
 
 export type SelectValue<T = number> = { label: string; value: T }
 

@@ -1,34 +1,35 @@
 import React, { useEffect, useState } from 'react'
 
+import useMutate from '../../../../../hooks/useMutate'
 import useNotifications from '../../../../../hooks/useNotifications'
 
 import {
   useCreateMemberMutation,
   useLazyGetMemberQuery,
+  usePartialUpdateMemberMutation,
   useUpdateMemberMutation
 } from '../../../../../store/api/staff.api'
 import {
   CreateStaffMember,
+  PartialUpdateStaffMember,
   StaffMember,
   UpdateStaffMember
 } from '../../../../../types/acceptance.types'
 
 export type GetMemberByUniqueId = (uniqueNumber: string) => Promise<StaffMember | null>
 
-const useMember = (member?: StaffMember) => {
+const useMember = () => {
   const [open, setOpen] = useState(false)
-  const [currentMember, setCurrentMember] = useState(member ?? ({} as StaffMember))
 
   const [getMember, { data: fetchedMember, isLoading, isFetching: getMemberFetching }] =
     useLazyGetMemberQuery()
   const [create, { isLoading: createLoading }] = useCreateMemberMutation()
   const [update, { isLoading: updateLoading }] = useUpdateMemberMutation()
+  const [partialUpdate, { isLoading: partialUpdateLoading }] = usePartialUpdateMemberMutation()
 
   const { notifyError, notifySuccess } = useNotifications()
 
-  useEffect(() => {
-    setCurrentMember(member ?? ({} as StaffMember))
-  }, [member])
+  const mutate = useMutate()
 
   const getMemberByUniqueNumber: GetMemberByUniqueId = async uniqueNumber => {
     try {
@@ -58,18 +59,49 @@ const useMember = (member?: StaffMember) => {
     }
   }
 
+  const boundBoxAndMember = async (
+    memberId: number,
+    boxId: number,
+    onSuccess?: () => Promise<void>
+  ) => {
+    try {
+      await partialUpdate({ id: memberId, box: boxId, session: { quantity: 20 } })
+      if (onSuccess) await onSuccess()
+      notifySuccess('Коробка привязана')
+    } catch (e) {
+      notifyError('Коробка не привязана')
+    }
+  }
+
+  const unBoundBoxAndMember = async (
+    memberId: number,
+    boxId: number,
+    onSuccess?: () => Promise<void>
+  ) => {
+    await mutate(
+      async () => {
+        await partialUpdate({ id: memberId, box: null })
+      },
+      {
+        errorMessage: 'Коробка не отвязана',
+        successMessage: 'Коробка отвязана',
+        onSuccess
+      }
+    )
+  }
+
   return {
     open,
     setOpen,
     fetchedMember,
     getMemberByUniqueNumber,
     memberLoading: isLoading,
-    memberFetching: createLoading || updateLoading,
+    memberFetching: createLoading || updateLoading || partialUpdateLoading,
     getMemberFetching,
-    currentMember,
-    setCurrentMember,
     updateMember,
-    createMember
+    createMember,
+    boundBoxAndMember,
+    unBoundBoxAndMember
   }
 }
 

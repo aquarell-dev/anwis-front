@@ -2,13 +2,14 @@ import { useState } from 'react'
 
 import useNotifications from '../../../../../hooks/useNotifications'
 
+import { useLazyGetBoxByBoxNumberQuery } from '../../../../../store/api/acceptance.box.api'
 import {
   useGetSpecificationByBarcodeMutation,
   useGetSpecificationByBoxMutation
 } from '../../../../../store/api/acceptance.specification.api'
 import { Method } from '../../types'
 
-const useSearchProduct = () => {
+const useSearch = () => {
   const [searchByBox, { data: specificationByBox, isLoading: specificationByBoxLoading }] =
     useGetSpecificationByBoxMutation()
 
@@ -16,6 +17,9 @@ const useSearchProduct = () => {
     searchByBarcode,
     { data: specificationByBarcode, isLoading: specificationByBarcodeLoading }
   ] = useGetSpecificationByBarcodeMutation()
+
+  const [getBoxByNumber, { data: boxByNumber, isLoading: boxByNumberLoading }] =
+    useLazyGetBoxByBoxNumberQuery()
 
   const [method, setMethod] = useState<Method>('box')
 
@@ -37,6 +41,15 @@ const useSearchProduct = () => {
     }
   }
 
+  const searchBoxByNumber = async (box: string) => {
+    try {
+      const result = await getBoxByNumber(box)
+      return result.data
+    } catch (e) {
+      notifyError('Коробка не была найдена')
+    }
+  }
+
   return {
     searchProductByBox,
     specificationByBox,
@@ -44,9 +57,12 @@ const useSearchProduct = () => {
     searchProductByBarcode,
     specificationByBarcode,
     specificationByBarcodeLoading,
+    searchBoxByNumber,
+    boxByNumber,
+    boxByNumberLoading,
     method,
     setMethod
   }
 }
 
-export default useSearchProduct
+export default useSearch

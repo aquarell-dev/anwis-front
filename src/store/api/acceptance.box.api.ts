@@ -21,7 +21,7 @@ export const boxSlice = apiSlice.injectEndpoints({
     }),
     getBoxByBoxNumber: build.query<SearchSpecificationByBox, string>({
       query: box => ({
-        url: `acceptance/boxes/${box}/`
+        url: `acceptance/box/detailed/${box}/`
       })
     })
   })

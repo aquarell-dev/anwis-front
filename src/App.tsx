@@ -115,7 +115,11 @@ function App() {
           </Route>
         </Routes>
       </Router>
-      <ToastContainer />
+      <ToastContainer
+        bodyClassName='popupException'
+        className='popupException'
+        toastClassName='popupException'
+      />
     </>
   )
 }

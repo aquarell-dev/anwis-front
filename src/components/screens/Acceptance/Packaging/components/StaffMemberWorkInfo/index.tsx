@@ -1,13 +1,14 @@
 import React, { FC, useState } from 'react'
+import { SpinnerComponent } from 'react-element-spinner'
 
-import useSearchProduct from '../../../AcceptOrder/hooks/useSearchProduct'
+import useSearch from '../../../AcceptOrder/hooks/useSearch'
+import useMember from '../../hooks/useMember'
 
 import { StaffMember } from '../../../../../../types/acceptance.types'
 import { SetState } from '../../../../../../utils/types'
 import { AbsoluteCenteredContainer } from '../../../../../ui/Container'
 import { FancyInput } from '../../../../../ui/Input'
 import Popup from '../../../../../ui/Popup'
-import ProductPreview from '../../../components/ProductPreview'
 import BoxPreview from '../BoxPreview'
 
 const StaffMemberWorkInfo: FC<{
@@ -16,7 +17,8 @@ const StaffMemberWorkInfo: FC<{
   staffMember: StaffMember | undefined
 }> = ({ open, setOpen, staffMember }) => {
   const [code, setCode] = useState('')
-  const { searchProductByBox, specificationByBox, specificationByBoxLoading } = useSearchProduct()
+  const { searchBoxByNumber, boxByNumber, boxByNumberLoading } = useSearch()
+  const { boundBoxAndMember, unBoundBoxAndMember, memberFetching } = useMember()
 
   return (
     <Popup
@@ -25,6 +27,11 @@ const StaffMemberWorkInfo: FC<{
       width='w-[1800px]'
       height='h-[800px]'
     >
+      <SpinnerComponent
+        loading={memberFetching}
+        position='centered'
+        backgroundColor='grey'
+      />
       {staffMember ? (
         <div className='m-8 w-full h-full overflow-y-auto scrollbar-thin'>
           <div className='flex items-end space-x-12'>
@@ -32,17 +39,25 @@ const StaffMemberWorkInfo: FC<{
             <FancyInput
               value={code}
               handler={e => setCode(e.target.value)}
-              placeholder='Коробка или QR-код'
+              placeholder='Поиск'
               showLabel
               onKeyDown={async e => {
                 if (e.key !== 'Enter') return
 
-                await searchProductByBox(code)
+                const box = await searchBoxByNumber(code)
+
+                if (!box) return
+
+                if (staffMember?.box?.box !== box.box)
+                  await boundBoxAndMember(staffMember.id, box.id)
+                else await unBoundBoxAndMember(staffMember.id, box.id)
               }}
-              loading={specificationByBoxLoading}
+              loading={boxByNumberLoading}
             />
+            <p>Текущая коробка: {staffMember.box?.box}</p>
+            <p>Оплата: {staffMember?.box?.specification?.product.category.payment}</p>
           </div>
-          <BoxPreview specification={specificationByBox} />
+          <BoxPreview box={staffMember.box ?? boxByNumber} />
         </div>
       ) : (
         <AbsoluteCenteredContainer>

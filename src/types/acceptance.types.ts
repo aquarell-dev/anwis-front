@@ -68,6 +68,16 @@ export type PartialUpdateAcceptance = Partial<
 //-------------------------
 //*************************
 
+export type Session = {
+  start: string
+  end?: string
+  quantity: number
+}
+
+//*************************
+//-------------------------
+//*************************
+
 export type AcceptanceStatuses = 'Новая Приемка' | 'Упаковывается' | 'Упаковано' | 'Завершена'
 
 export type AcceptanceStatus = {
@@ -87,13 +97,20 @@ export type StaffMember = {
   temporary: boolean
   inactive: boolean
   unique_number: string
+  box?: Box
+  session?: Session
 }
 
-type MutateStaffMember = Modify<StaffMember, { unique_number?: string }>
+type MutateStaffMember = Modify<StaffMember, { unique_number?: string; box?: number | null }>
 
 export type CreateStaffMember = Omit<MutateStaffMember, 'id'>
 
 export type UpdateStaffMember = MutateStaffMember
+
+export type PartialUpdateStaffMember = Modify<
+  Partial<CreateStaffMember>,
+  { id: number; session?: Modify<Session, { start?: string }> }
+>
 
 //*************************
 //-------------------------
@@ -106,7 +123,7 @@ export type AcceptanceProduct = {
   total_left?: number
   linked_china_product_article?: string
   linked_china_product_size?: string
-} & CommonProduct
+} & Modify<CommonProduct, { category: AcceptanceCategory }>
 
 export type CreateAcceptanceProduct = Modify<
   Omit<AcceptanceProduct, 'linked_china_product_size' | 'photo_id' | 'id'>,
@@ -157,7 +174,7 @@ export type Label = {
   article: string
   size: string
   color: string
-  category: string
+  category: AcceptanceCategory
   quantity: number
   photo: string
 }
@@ -176,8 +193,8 @@ export type Box = {
   id: number
   box: string
   quantity: number
-  worker?: StaffMember
-  product?: AcceptanceProduct
+  specification?: AcceptanceProductSpecification
+  archive: boolean
 }
 
 export type Reason = {

@@ -1,4 +1,9 @@
-import { CreateStaffMember, StaffMember, UpdateStaffMember } from '../../types/acceptance.types'
+import {
+  CreateStaffMember,
+  PartialUpdateStaffMember,
+  StaffMember,
+  UpdateStaffMember
+} from '../../types/acceptance.types'
 import { apiSlice } from './api.slice'
 
 const staffApi = apiSlice.injectEndpoints({
@@ -30,7 +35,7 @@ const staffApi = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ['Members']
     }),
-    partialUpdateMember: build.mutation<StaffMember, StaffMember>({
+    partialUpdateMember: build.mutation<StaffMember, PartialUpdateStaffMember>({
       query: member => ({
         url: `acceptance/members/${member.id}/`,
         method: 'PATCH',

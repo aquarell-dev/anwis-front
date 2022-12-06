@@ -28,9 +28,9 @@ const StaffSearch: FC = () => {
           onKeyDown={async e => {
             if (e.key !== 'Enter') return
 
-            const member = await getMemberByUniqueNumber(uniqueNumber)
+            await getMemberByUniqueNumber(uniqueNumber)
 
-            if (member) setOpen(true)
+            setOpen(true)
           }}
         />
       </div>
