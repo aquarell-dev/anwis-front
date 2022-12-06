@@ -123,7 +123,7 @@ export type AcceptanceProduct = {
   total_left?: number
   linked_china_product_article?: string
   linked_china_product_size?: string
-} & Modify<CommonProduct, { category: AcceptanceCategory }>
+} & Modify<CommonProduct, { category?: AcceptanceCategory }>
 
 export type CreateAcceptanceProduct = Modify<
   Omit<AcceptanceProduct, 'linked_china_product_size' | 'photo_id' | 'id'>,

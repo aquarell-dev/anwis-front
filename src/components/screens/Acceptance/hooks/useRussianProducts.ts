@@ -65,7 +65,7 @@ const useRussianProducts = () => {
   useEffect(() => {
     if (!products) return
     if (!selectedCategory) return setRows(products)
-    setRows(products.filter(product => product?.category.category === selectedCategory))
+    setRows(products.filter(product => product?.category?.category === selectedCategory))
   }, [selectedCategory])
 
   useEffect(() => {
