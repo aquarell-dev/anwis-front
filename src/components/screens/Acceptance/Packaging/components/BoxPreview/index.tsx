@@ -1,79 +1,23 @@
 import { FC } from 'react'
 
 import { Box } from '../../../../../../types/acceptance.types'
-import BoxPreviewProperty from '../BoxPreviewProperty'
+import { AbsoluteCenteredContainer } from '../../../../../ui/Container'
+import BoxProperties from '../BoxProperties'
+import PreviewPopup, { PreviewPopupProps } from '../PreviewPopup'
 
-type BoxPreview = {
-  box: Box | undefined
-  spacing?: string
-}
-
-const getBoxProperties = (
-  box: Box
-): { value: string | undefined; label: string; addLineBreak?: boolean }[] => [
-  {
-    label: 'Текущая Коробка',
-    value: box.box
-  },
-  {
-    label: 'Оплата',
-    value: box.specification?.product.category.payment === 'apiece' ? 'Поштучная' : 'Почасовая'
-  },
-  {
-    label: 'Номера Коробок',
-    value: box?.specification?.boxes.map(box => box.box).join(', '),
-    addLineBreak: true
-  },
-  {
-    label: 'Товар',
-    value: box?.specification?.product.title,
-    addLineBreak: true
-  },
-  {
-    label: 'Штрихкод',
-    value: box?.specification?.product.barcode
-  },
-  {
-    label: 'Размер',
-    value: box?.specification?.product.size
-  },
-  {
-    label: 'Артикул',
-    value: box?.specification?.product.article
-  },
-  {
-    label: 'Цвет',
-    value: box?.specification?.product.color
-  },
-  {
-    label: 'Бренд',
-    value: box?.specification?.product.brand
-  }
-]
-
-const BoxPreview: FC<BoxPreview> = ({ box, spacing }) => {
+const BoxPreview: FC<PreviewPopupProps & { box: Box | undefined }> = ({ box, ...popup }) => {
   return (
-    <div className='min-h-[250px] min-w-[120px] max-w-[350px] mt-4 flex flex-col space-y-2'>
-      {box ? (
-        <>
-          <div className='h-[250px] overflow-y-auto scrollbar-thin'>
-            {getBoxProperties(box).map((property, idx) => (
-              <BoxPreviewProperty
-                {...property}
-                key={idx}
-              />
-            ))}
-          </div>
-          <img
-            className='w-[300px]'
-            src={box.specification?.product.photo}
-            alt={box.specification?.product.photo ?? '-'}
-          />
-        </>
-      ) : (
-        <div className='min-h-[320px] min-w-[120px]' />
-      )}
-    </div>
+    <PreviewPopup {...popup}>
+      <AbsoluteCenteredContainer>
+        <BoxProperties
+          box={box}
+          wrapperClassName='flex space-x-8 items-center'
+          propertiesClassName='space-y-2 h-max-[500px] max-w-[450px] overflow-auto scrollbar-thin'
+          propertiesFont='text-2xl'
+          imageClassName='h-[500px]'
+        />
+      </AbsoluteCenteredContainer>
+    </PreviewPopup>
   )
 }
 
