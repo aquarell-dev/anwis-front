@@ -1,5 +1,6 @@
 import {
   CreateStaffMember,
+  PartialDetailedBoxUpdateStaffMember,
   PartialUpdateStaffMember,
   StaffMember,
   UpdateStaffMember
@@ -17,7 +18,8 @@ const staffApi = apiSlice.injectEndpoints({
     getMember: build.query<StaffMember, string>({
       query: uniqueNumber => ({
         url: `acceptance/members/${uniqueNumber}/`
-      })
+      }),
+      providesTags: ['Members']
     }),
     createMember: build.mutation<StaffMember, CreateStaffMember>({
       query: member => ({
@@ -42,6 +44,17 @@ const staffApi = apiSlice.injectEndpoints({
         body: member
       }),
       invalidatesTags: ['Members']
+    }),
+    partialUpdateDetailedBoxMember: build.mutation<
+      StaffMember,
+      PartialDetailedBoxUpdateStaffMember
+    >({
+      query: member => ({
+        url: `acceptance/members/${member.id}/`,
+        method: 'PATCH',
+        body: member
+      }),
+      invalidatesTags: ['Members']
     })
   })
 })
@@ -51,5 +64,6 @@ export const {
   useCreateMemberMutation,
   useUpdateMemberMutation,
   useLazyGetMemberQuery,
-  usePartialUpdateMemberMutation
+  usePartialUpdateMemberMutation,
+  usePartialUpdateDetailedBoxMemberMutation
 } = staffApi

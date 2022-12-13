@@ -71,7 +71,7 @@ const Boxes: FC<BoxesProps> = props => {
               handler={async () => {
                 const pass = !specifications
                   .map(specification => validateBeforeSave(specification))
-                  .some(s => s === false)
+                  .some(s => !s)
 
                 if (pass) await onUpdateAll(specifications)
               }}
@@ -79,18 +79,20 @@ const Boxes: FC<BoxesProps> = props => {
               text='Сохранить Все'
             />
           </div>
-          <BoxesHeader />
-          {specifications.map(specification => (
-            <BoxItem
-              formatBoxes={formatBoxes}
-              validateBeforeSave={validateBeforeSave}
-              addBox={addBox}
-              onDetailedUpdate={onDetailedUpdate}
-              {...specification}
-              setSpecifications={setSpecifications}
-              key={specification.id}
-            />
-          ))}
+          <div className='overflow-auto scrollbar-thin'>
+            <BoxesHeader />
+            {specifications.map(specification => (
+              <BoxItem
+                formatBoxes={formatBoxes}
+                validateBeforeSave={validateBeforeSave}
+                addBox={addBox}
+                onDetailedUpdate={onDetailedUpdate}
+                {...specification}
+                setSpecifications={setSpecifications}
+                key={specification.id}
+              />
+            ))}
+          </div>
         </div>
       </Popup>
     </>

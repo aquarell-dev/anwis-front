@@ -8,11 +8,13 @@ const PreviewProperty: FC<{
   addLineBreak?: boolean
   notExistsChar?: string
   customFont?: string
-}> = ({ label, value, addLineBreak, notExistsChar = '-', customFont }) => (
+  mainProp?: boolean
+  mainPropFont?: string
+}> = ({ label, value, addLineBreak, notExistsChar = '-', customFont, mainProp, mainPropFont }) => (
   <p
     className={cn(
       'text-black text-ellipsis overflow-x-hidden whitespace-nowrap',
-      customFont ?? 'text-lg'
+      mainProp ? (mainPropFont ? mainPropFont : 'text-2xl') : customFont ? customFont : 'text-lg'
     )}
   >
     {label}: {addLineBreak && <br />}

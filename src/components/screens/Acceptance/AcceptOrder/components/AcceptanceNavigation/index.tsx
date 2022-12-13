@@ -17,6 +17,18 @@ const AcceptanceNavigation: FC<{
 }> = ({ acceptance, selection, specifications }) => {
   const [labelsOpen, setLabelsOpen] = useState(false)
 
+  let packed = 0
+  let total = 0
+
+  acceptance.specifications.forEach(s =>
+    s.boxes.forEach(box => {
+      if (box.finished) {
+        packed += box.quantity
+      }
+      total += box.quantity
+    })
+  )
+
   return (
     <>
       <Labels
@@ -47,24 +59,32 @@ const AcceptanceNavigation: FC<{
           />
         </div>
         <div className='flex space-x-4 items-center'>
-          <p>
-            <span className='font-medium'>Категории</span>:{' '}
-            {[
-              ...new Set(
-                acceptance.specifications
-                  .map(specification => specification.product.category?.category)
-                  .filter(Boolean)
-              )
-            ].join(', ')}
-          </p>
+          {acceptance.specifications.length > 0 && (
+            <p>
+              <span className='font-medium'>Категории</span>:{' '}
+              {[
+                ...new Set(
+                  acceptance.specifications
+                    .map(specification => specification.product.category?.category)
+                    .filter(Boolean)
+                )
+              ].join(', ')}
+            </p>
+          )}
           {acceptance?.project && (
             <p>
-              <span className='font-medium'>Проект</span>: {acceptance.project}
+              <span className='font-medium'>Проект</span>: {acceptance.project.project}
             </p>
           )}
           {acceptance?.individual && (
             <p>
-              <span className='font-medium'>ИП</span>: {acceptance.individual}
+              <span className='font-medium'>ИП</span>:{' '}
+              {acceptance.individual.individual_entrepreneur}
+            </p>
+          )}
+          {acceptance.status.status === 'Упаковывается' && (
+            <p>
+              Упаковано: {packed}/{total} шт
             </p>
           )}
         </div>

@@ -1,20 +1,21 @@
 import useNotifications from './useNotifications'
 
-type MutateOptions = {
+export type MutateOptions<T = void, V = void> = {
   successMessage?: string
   errorMessage?: string
-  onFail?: () => Promise<void>
-  onSuccess?: () => Promise<void>
+  onFail?: () => T
+  onSuccess?: () => V
 }
 
-const useMutate = <T = void>() => {
+const useMutate = <SuccessReturn = void, FailReturn = void>() => {
   const { notifyError, notifySuccess } = useNotifications()
 
-  return async (mutate: () => Promise<T>, options?: MutateOptions) => {
+  return async <T>(mutate: () => T, options?: MutateOptions<SuccessReturn, FailReturn>) => {
     try {
-      await mutate()
+      const result = await mutate()
       if (options?.successMessage) notifySuccess(options?.successMessage)
       if (options?.onSuccess) await options?.onSuccess()
+      return result
     } catch (e) {
       if (options?.errorMessage) notifyError(options?.errorMessage)
       if (options?.onFail) await options?.onFail()

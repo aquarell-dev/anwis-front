@@ -8,7 +8,8 @@ import { getColumns } from './columns'
 
 const Grid: FC<{
   rows: Row[] | undefined
-}> = ({ rows }) => {
+  loading: boolean
+}> = ({ rows, loading }) => {
   const navigate = useNavigate()
 
   const actualColumns = getColumns(url => navigate(url))
@@ -23,6 +24,7 @@ const Grid: FC<{
         columnVisibilityModel={{
           id: false
         }}
+        loading={loading}
       />
     </div>
   )

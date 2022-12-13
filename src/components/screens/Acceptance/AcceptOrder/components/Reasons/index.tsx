@@ -47,47 +47,49 @@ const Reasons: FC<{
           customWidth='w-full'
         />
         <div className='h-2 w-full' />
-        <ProductHeaders>
-          <p className='pr-4 border-r border-slate-800 w-24 text-ellipsis whitespace-nowrap overflow-x-hidden'>
-            Расхождение
-          </p>
-          <p>Причины</p>
-        </ProductHeaders>
-        {differentSpecifications.map(specification => (
-          <ProductItem
-            {...specification}
-            key={specification.id}
-          >
-            <p className='pr-4 border-r border-slate-800 w-24'>
-              {specification.actual_quantity &&
-                specification.quantity - specification.actual_quantity}
+        <div className='overflow-auto scrollbar-thin'>
+          <ProductHeaders>
+            <p className='pr-4 border-r border-slate-800 w-24 text-ellipsis whitespace-nowrap overflow-x-hidden'>
+              Расхождение
             </p>
-            {specification.reasons.map(reason => (
-              <ReasonEdit
-                reason={reason}
-                specification={specification}
-                setSpecifications={setSpecifications}
-                deleteReason={deleteReason}
+            <p>Причины</p>
+          </ProductHeaders>
+          {differentSpecifications.map(specification => (
+            <ProductItem
+              {...specification}
+              key={specification.id}
+            >
+              <p className='pr-4 border-r border-slate-800 w-24'>
+                {specification.actual_quantity &&
+                  specification.quantity - specification.actual_quantity}
+              </p>
+              {specification.reasons.map(reason => (
+                <ReasonEdit
+                  reason={reason}
+                  specification={specification}
+                  setSpecifications={setSpecifications}
+                  deleteReason={deleteReason}
+                />
+              ))}
+              <IndigoButton
+                type='button'
+                handler={async () => await addReason(specification.id)}
+                text='Добавить Причну'
               />
-            ))}
-            <IndigoButton
-              type='button'
-              handler={async () => await addReason(specification.id)}
-              text='Добавить Причну'
-            />
-            <IndigoButton
-              type='button'
-              handler={async () =>
-                await updateSpecification(specification, specification => ({
-                  ...specification,
-                  boxes: undefined,
-                  product: specification.product.id
-                }))
-              }
-              text='Сохранить'
-            />
-          </ProductItem>
-        ))}
+              <IndigoButton
+                type='button'
+                handler={async () =>
+                  await updateSpecification(specification, specification => ({
+                    ...specification,
+                    boxes: undefined,
+                    product: specification.product.id
+                  }))
+                }
+                text='Сохранить'
+              />
+            </ProductItem>
+          ))}
+        </div>
       </div>
     </>
   )

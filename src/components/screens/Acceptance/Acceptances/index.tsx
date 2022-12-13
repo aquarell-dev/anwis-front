@@ -1,5 +1,6 @@
 import { FC } from 'react'
 
+import useCreateAcceptance from '../CreateAcceptance/hooks/useCreateAcceptance'
 import useAcceptances from './hooks/useAcceptances'
 
 import { IndigoButton } from '../../../ui/Button'
@@ -8,7 +9,8 @@ import Loader from '../../../ui/Loader'
 import Grid from './components/Grid'
 
 const Acceptances: FC = () => {
-  const { isLoading, rows } = useAcceptances()
+  const { isLoading, rows, isFetching } = useAcceptances()
+  const { createAcceptance, isLoading: createLoading } = useCreateAcceptance()
 
   if (isLoading) return <Loader isLoading />
 
@@ -17,12 +19,23 @@ const Acceptances: FC = () => {
       <div className='flex items-center space-x-4'>
         <h1 className='text-3xl font-medium'>Приемки</h1>
         <IndigoButton
-          type={undefined}
+          type='button'
           text={'Создать'}
-          handler={() => {}}
+          loading={createLoading}
+          handler={async () =>
+            await createAcceptance({
+              tasks: [],
+              documents: [],
+              custom_id: null,
+              specifications: []
+            })
+          }
         />
       </div>
-      <Grid rows={rows} />
+      <Grid
+        rows={rows}
+        loading={isFetching}
+      />
     </ContentContainer>
   )
 }

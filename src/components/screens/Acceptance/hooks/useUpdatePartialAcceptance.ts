@@ -9,7 +9,7 @@ const useUpdatePartialAcceptance = () => {
 
   const updatePartialAcceptance = async (acceptance: PartialUpdateAcceptance) => {
     try {
-      await update(acceptance)
+      await update(acceptance).unwrap()
       notifySuccess('Приемка была обновлена')
     } catch (e) {
       notifyError('Приемка не была обновлена')

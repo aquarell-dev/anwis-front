@@ -1,8 +1,8 @@
 import { FC, useState } from 'react'
 
-import { SetState } from '../../../../../../utils/types'
-import ConfirmationPopup from '../../../../../ui/ConfirmationPopup'
-import MutatePopup from '../../../../../ui/MutatePopup'
+import { SetState } from '../../../../../utils/types'
+import ConfirmationPopup from '../../../../ui/ConfirmationPopup'
+import MutatePopup from '../../../../ui/MutatePopup'
 
 const CRUDContent: FC<{
   content: string

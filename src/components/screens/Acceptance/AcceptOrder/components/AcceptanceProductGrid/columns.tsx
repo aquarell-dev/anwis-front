@@ -36,7 +36,7 @@ const generateBoxesField = (specifications: AcceptanceProductSpecification[]): G
   for (let i = 0; i < boxes; i++) {
     fields.push({
       field: `box_${i + 1}`,
-      width: 120,
+      width: 130,
       headerName: `Коробка ${i + 1}`,
       editable: false,
       valueGetter: params => {
@@ -48,7 +48,7 @@ const generateBoxesField = (specifications: AcceptanceProductSpecification[]): G
 
         if (!box) return ''
 
-        return `${box.box} / ${box.quantity} шт`
+        return `${box.box} / ${box.quantity} шт ${box.finished ? '(У)' : ''}`
       }
     })
   }

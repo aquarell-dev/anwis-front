@@ -1,6 +1,8 @@
 import { FC, useEffect, useState } from 'react'
 import { RiMoneyDollarCircleFill } from 'react-icons/ri'
 
+import useSelectedCategory from '../../hooks/useSelectedCategory'
+
 import { AcceptanceCategory } from '../../../../../../types/acceptance.types'
 import { SetState } from '../../../../../../utils/types'
 import Categories, { CategoriesProps } from '../../../../../common/Categories'
@@ -25,12 +27,7 @@ const RussianCategories: FC<
     update
   } = props
 
-  const [category, setCategory] = useState<AcceptanceCategory | null>(null)
-
-  useEffect(() => {
-    if (!!selectedCategory)
-      setCategory(categories?.find(category => category.category === selectedCategory) ?? null)
-  }, [selectedCategory])
+  const category = useSelectedCategory(selectedCategory, categories)
 
   return (
     <Categories

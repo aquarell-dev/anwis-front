@@ -1,5 +1,4 @@
 import { FC, useMemo } from 'react'
-import { SpinnerComponent } from 'react-element-spinner'
 
 import { StaffMember } from '../../../../../types/acceptance.types'
 import { SetState } from '../../../../../utils/types'
@@ -28,11 +27,6 @@ const StaffMemberPopup: FC<{
       height='h-96'
       width='w-[440px]'
     >
-      <SpinnerComponent
-        loading={loading ?? false}
-        position='centered'
-        backgroundColor='gray'
-      />
       <AbsoluteCenteredContainer>
         <div className='flex flex-col space-y-4 items-center'>
           {staffMember.id ? <h3>Сотрудник {memorized.username}</h3> : <h3>Новый сотрудник</h3>}
@@ -73,6 +67,7 @@ const StaffMemberPopup: FC<{
               handler={async () => await onSubmit()}
               text='Продолжить'
               customWidth='w-36'
+              loading={loading}
             />
             <RedButton
               type='button'

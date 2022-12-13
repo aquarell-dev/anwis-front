@@ -1,21 +1,22 @@
 import { CommonCategory, CommonProduct, Task } from '../components/common/common.types'
 import { TDocument } from '../features/documents/document.types'
+import { IIndividual, IProject } from '../features/order/order.types'
 import { Modify } from '../utils/types'
 
 export type Acceptance = {
   id: number
   title?: string
-  cargo_number: string
-  cargo_volume: string
-  cargo_weight: string
-  arrived_in_moscow: string
-  shipped_from_china: string
+  cargo_number?: string
+  cargo_volume?: string
+  cargo_weight?: string
+  arrived_in_moscow?: string
+  shipped_from_china?: string
   custom_id: string | null
   created_at: string
   specifications: AcceptanceProductSpecification[]
   from_order?: number
-  individual?: string
-  project?: string
+  individual?: IIndividual
+  project?: IProject
   tasks: Task[]
   comment?: string
   documents: TDocument[]
@@ -27,7 +28,10 @@ type ModifiedAcceptance = Modify<
   {
     specifications: number[]
     documents: number[]
-    status?: number
+    status?: AcceptanceStatuses
+    project?: number
+    individual?: number
+    created_at?: string
   }
 >
 
@@ -36,19 +40,6 @@ export type CreateAcceptance = Modify<
   {
     specifications: Modify<AcceptanceProductSpecification, { product: number; id: undefined }>[]
   }
->
-
-export type UpdateDetailedProductsAcceptance = Pick<
-  Modify<
-    ModifiedAcceptance,
-    {
-      specifications: Modify<
-        AcceptanceProductSpecification,
-        { product: number; boxes: undefined }
-      >[]
-    }
-  >,
-  'id' | 'specifications'
 >
 
 export type PartialUpdateAcceptance = Partial<
@@ -68,10 +59,28 @@ export type PartialUpdateAcceptance = Partial<
 //-------------------------
 //*************************
 
-export type Session = {
+type Session = {
+  id: number
   start: string
   end?: string
-  quantity: number
+}
+
+export type WorkSession = Session & {
+  box: number
+  legit: boolean
+}
+
+export type MinimalisticWorkSession = Session & {
+  box: Pick<Box, 'id' | 'box' | 'quantity' | 'finished'>
+  legit: boolean
+  staff: Pick<StaffMember, 'id' | 'username' | 'unique_number'>
+}
+
+export type WorkSessionDetailed = Modify<WorkSession, { box: Box }>
+
+export type TimeSession = Session & {
+  break_start: string
+  break_end?: string
 }
 
 //*************************
@@ -98,18 +107,42 @@ export type StaffMember = {
   inactive: boolean
   unique_number: string
   box?: Box
-  session?: Session
+  work_session?: WorkSessionDetailed
+  time_session?: TimeSession
+  work_sessions: WorkSessionDetailed[]
+  time_sessions: TimeSession[]
+  done?: boolean
 }
 
-type MutateStaffMember = Modify<StaffMember, { unique_number?: string; box?: number | null }>
+type MutateStaffMember = Modify<
+  StaffMember,
+  {
+    unique_number?: string
+    box?: number | null
+    work_sessions?: WorkSession[]
+    time_sessions?: number[]
+  }
+>
 
-export type CreateStaffMember = Omit<MutateStaffMember, 'id'>
+export type CreateStaffMember = Omit<
+  MutateStaffMember,
+  'id' | 'box' | 'work_session' | 'time_session'
+>
 
 export type UpdateStaffMember = MutateStaffMember
 
 export type PartialUpdateStaffMember = Modify<
-  Partial<CreateStaffMember>,
-  { id: number; session?: Modify<Session, { start?: string }> }
+  Partial<MutateStaffMember>,
+  {
+    id: number
+    work_session?: Modify<WorkSession, { start?: string; id?: number }> | null
+    time_session?: Modify<TimeSession, { start?: string; break_start?: string; id?: number }> | null
+  }
+>
+
+export type PartialDetailedBoxUpdateStaffMember = Modify<
+  PartialUpdateStaffMember,
+  { box: Partial<Omit<Box, 'id'>> & { id: number } }
 >
 
 //*************************
@@ -189,13 +222,30 @@ export type CreateLabel = Label & {
 //-------------------------
 //*************************
 
+export type Payment = {
+  id: number
+  hour_cost: number
+  paid_break: number
+}
+
+//*************************
+//-------------------------
+//*************************
+
 export type Box = {
   id: number
   box: string
   quantity: number
   specification?: AcceptanceProductSpecification
   archive: boolean
+  finished: boolean
 }
+
+export type PartialUpdateBox = Modify<Partial<Box>, { id: number }>
+
+//*************************
+//-------------------------
+//*************************
 
 export type Reason = {
   id: number

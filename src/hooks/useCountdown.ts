@@ -1,11 +1,14 @@
 import { useEffect } from 'react'
 
-const useCountdown = <T = void>(callbackfn: () => T, timeout: number) => {
+const useCountdown = <T = void>(callbackfn: () => T, timeout: number, reset?: boolean) => {
   useEffect(() => {
-    setTimeout(() => {
+    const t = setTimeout(() => {
       callbackfn()
     }, timeout)
-  }, [])
+    if (reset) {
+      clearTimeout(t)
+    }
+  }, [reset])
 
   return {}
 }

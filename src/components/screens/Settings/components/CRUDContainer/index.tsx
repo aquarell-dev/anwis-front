@@ -1,7 +1,7 @@
 import { FC, ReactNode, useState } from 'react'
 
-import { SetState } from '../../../../../../utils/types'
-import MutatePopup from '../../../../../ui/MutatePopup'
+import { SetState } from '../../../../../utils/types'
+import MutatePopup from '../../../../ui/MutatePopup'
 
 type CRUDProps = {
   title: string

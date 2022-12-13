@@ -1,5 +1,7 @@
 import { CSSProperties, FC, useState } from 'react'
 
+import useSelectedCategory from '../../Products/hooks/useSelectedCategory'
+
 import { DataGrid, GridSelectionModel, ruRU } from '@mui/x-data-grid'
 
 import { AcceptanceCategory, AcceptanceProduct } from '../../../../../types/acceptance.types'
@@ -18,6 +20,7 @@ const ProductsGrid: FC<{
   setSelectedProduct: SetState<AcceptanceProduct | null>
   products: AcceptanceProduct[] | undefined
   categories: AcceptanceCategory[] | undefined
+  selectedCategory: string
   deleteCols?: (keyof AcceptanceProduct | 'update' | 'delete')[]
   customPaginationInitial?: number
   styles?: CSSProperties
@@ -31,6 +34,7 @@ const ProductsGrid: FC<{
   products,
   loading,
   categories,
+  selectedCategory,
   deleteCols,
   customPaginationInitial,
   styles
@@ -44,8 +48,24 @@ const ProductsGrid: FC<{
 
   const [pageSize, setPageSize] = useState(customPaginationInitial ?? 20)
 
+  const category = useSelectedCategory(selectedCategory, categories)
+
   return (
-    <div className='my-5 w-full'>
+    <div className='mt-10 w-full flex flex-col space-y-2'>
+      <div className='min-h-[15px] flex space-x-4 text-xl'>
+        {!!category && (
+          <>
+            <p>Категория: {category?.category}</p>
+            <p>Тип Оплаты: {category?.payment === 'hourly' ? 'Почасовая' : 'Поштучная' ?? '-'}</p>
+            <p>
+              Оплата:{' '}
+              {category?.payment === 'hourly'
+                ? `${category.per_hour}р/час`
+                : `${category?.per_piece}р/шт` ?? '-'}
+            </p>
+          </>
+        )}
+      </div>
       <DataGrid
         style={styles}
         rows={rows}

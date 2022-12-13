@@ -1,5 +1,6 @@
 import { FC } from 'react'
 
+import useMember from '../hooks/useMember'
 import useMutateStaff from './hooks/useMutateStaff'
 
 import { useListMembersQuery } from '../../../../store/api/staff.api'
@@ -10,9 +11,10 @@ import MembersGrid from './components/MembersGrid'
 import Navigation from './components/Navigation'
 
 const Staff: FC = () => {
-  const { mutate, setMemberOpen, memberOpen, setSelectedMember, selectedMember } = useMutateStaff()
+  const { setMemberOpen, memberOpen, setSelectedMember, selectedMember } = useMutateStaff()
+  const { createMember, partialUpdateMember, memberLoading } = useMember()
 
-  const { data: members, isLoading, error } = useListMembersQuery(undefined)
+  const { data: members, isLoading } = useListMembersQuery(undefined)
 
   if (isLoading) return <Loader isLoading />
 
@@ -31,7 +33,22 @@ const Staff: FC = () => {
         setOpen={setMemberOpen}
         staffMember={selectedMember}
         setStaffMember={setSelectedMember}
-        onSubmit={undefined as any}
+        loading={memberLoading}
+        onSubmit={async () => {
+          const { work_session, time_session, box, work_sessions, time_sessions, ...updatable } =
+            selectedMember
+
+          if (selectedMember.id) {
+            await partialUpdateMember(updatable)
+            setMemberOpen(false)
+            return
+          }
+
+          await createMember({
+            ...updatable
+          })
+          setMemberOpen(false)
+        }}
       />
     </>
   )

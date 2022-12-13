@@ -1,5 +1,5 @@
 import { SearchSpecificationByBox } from '../../components/screens/Acceptance/types'
-import { AcceptanceProductSpecification } from '../../types/acceptance.types'
+import { AcceptanceProductSpecification, PartialUpdateBox } from '../../types/acceptance.types'
 import { apiSlice } from './api.slice'
 
 export const boxSlice = apiSlice.injectEndpoints({
@@ -19,6 +19,13 @@ export const boxSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ['Acceptance']
     }),
+    partialUpdateBox: build.mutation<AcceptanceProductSpecification, PartialUpdateBox>({
+      query: body => ({
+        url: `acceptance/box/${body.id}/`,
+        method: 'PATCH',
+        body
+      })
+    }),
     getBoxByBoxNumber: build.query<SearchSpecificationByBox, string>({
       query: box => ({
         url: `acceptance/box/detailed/${box}/`
@@ -27,4 +34,9 @@ export const boxSlice = apiSlice.injectEndpoints({
   })
 })
 
-export const { useAddBoxMutation, useDeleteBoxMutation, useLazyGetBoxByBoxNumberQuery } = boxSlice
+export const {
+  useAddBoxMutation,
+  useDeleteBoxMutation,
+  useLazyGetBoxByBoxNumberQuery,
+  usePartialUpdateBoxMutation
+} = boxSlice

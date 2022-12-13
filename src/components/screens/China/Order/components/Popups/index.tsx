@@ -61,7 +61,7 @@ const Popups: FC<IPopupsProps> = ({
         loading={orderForProjectLoading}
         placeholder='Заказ'
         onMutate={() => {
-          createOrderForProject({ order_for_project: orderForProjectValue })
+          createOrderForProject({ project: orderForProjectValue })
             .unwrap()
             .then(() => notifySuccess(`Успешно создан ${orderForProjectValue}`))
             .catch(() => notifyError(`Ошибка при создании ${orderForProjectValue}`))

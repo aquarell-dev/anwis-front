@@ -8,6 +8,7 @@ import useProducts from './hooks/useProducts'
 import AttachDocument from '../../../common/AttachDocument'
 import { ContentContainer } from '../../../ui/Container'
 import Loader from '../../../ui/Loader'
+import AcceptanceDropdowns from './components/AcceptanceDropdowns'
 import AcceptanceNavigation from './components/AcceptanceNavigation'
 import AcceptanceProductGrid from './components/AcceptanceProductGrid'
 import AcceptanceTasks from './components/AcceptanceTasks'
@@ -16,7 +17,6 @@ import ContorlPanel from './components/ControlPanel'
 import Management from './components/Management'
 import Reasons from './components/Reasons'
 import SpecificationManagement from './components/SpecificationManagment'
-import Status from './components/Status'
 
 const AcceptOrder: FC = () => {
   const { id } = useParams()
@@ -27,7 +27,7 @@ const AcceptOrder: FC = () => {
 
   const { updateFetching, ...mutations } = useUpdateAcceptanceProducts()
 
-  const { comment, setComment, setDocuments, updateAcceptance, updateLoading, ...statuses } =
+  const { comment, setComment, setDocuments, updateAcceptance, updateLoading, ...acceptanceInfo } =
     useAcceptance(acceptance, specifications)
 
   if (isLoading || updateLoading) return <Loader isLoading />
@@ -41,7 +41,7 @@ const AcceptOrder: FC = () => {
         selection={selection}
         specifications={specifications}
       />
-      <Status {...statuses} />
+      <AcceptanceDropdowns {...acceptanceInfo} />
       <ContorlPanel updateAcceptance={updateAcceptance} />
       <Management acceptance={acceptance} />
       <SpecificationManagement

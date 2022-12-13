@@ -7,7 +7,10 @@ const ProductItem: FC<AcceptanceProductSpecification> = props => {
   const { ...specification } = props
 
   return (
-    <div className='flex items-center space-x-2 py-2 px-4 border-b border-slate-800 children__no_shrink'>
+    <div
+      className='flex items-center space-x-2 py-2 px-4 border-b border-slate-800 children__no_shrink'
+      style={{ width: '100%' }}
+    >
       <p
         tabIndex={-1}
         className='border-r border-slate-800 pr-2 w-52 text-ellipsis whitespace-nowrap overflow-x-hidden'

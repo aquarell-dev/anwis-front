@@ -1,17 +1,17 @@
-import { apiSlice } from './api.slice';
-import { ICreateOrderForProject, IOrderForProject } from '../../features/order/order.types';
+import { ICreateProject, IProject } from '../../features/order/order.types'
+import { apiSlice } from './api.slice'
 
 export const projectSlice = apiSlice.injectEndpoints({
   endpoints: build => ({
-    listOrderForProjects: build.query<IOrderForProject[], any>({
+    listOrderForProjects: build.query<IProject[], any>({
       query: (p: any) => ({
-        url: 'order-for-projects/'
+        url: 'projects/'
       }),
       providesTags: ['OrderForProject']
     }),
-    createOrderForProject: build.mutation<void, ICreateOrderForProject>({
+    createOrderForProject: build.mutation<void, ICreateProject>({
       query: orderForProject => ({
-        url: 'order-for-projects/',
+        url: 'projects/',
         method: 'POST',
         body: orderForProject
       }),
@@ -19,25 +19,25 @@ export const projectSlice = apiSlice.injectEndpoints({
     }),
     deleteOrderForProject: build.mutation<void, { id: number }>({
       query: project => ({
-        url: `order-for-projects/${project.id}/`,
-        method: 'DELETE',
+        url: `projects/${project.id}/`,
+        method: 'DELETE'
       }),
       invalidatesTags: ['OrderForProject']
     }),
-    updateOrderForProject: build.mutation<void, IOrderForProject>({
+    updateOrderForProject: build.mutation<void, IProject>({
       query: project => ({
-        url: `order-for-projects/${project.id}/`,
+        url: `projects/${project.id}/`,
         method: 'PUT',
         body: project
       }),
       invalidatesTags: ['OrderForProject']
-    }),
+    })
   })
-});
+})
 
 export const {
   useCreateOrderForProjectMutation,
   useListOrderForProjectsQuery,
   useDeleteOrderForProjectMutation,
   useUpdateOrderForProjectMutation
-} = projectSlice;
+} = projectSlice

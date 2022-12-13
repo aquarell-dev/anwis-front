@@ -50,7 +50,6 @@ const Categories: FC<CategoriesProps> = ({
 }) => {
   return (
     <div className='ml-2 mt-10 mr-8 flex flex-col space-y-1 w-[450px]'>
-      {headerInfo}
       {categories &&
         categories.map(category => (
           <div

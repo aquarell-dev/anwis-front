@@ -23,7 +23,7 @@ const useMemberSearch = () => {
 
   const [method, setMethod] = useState<Method>('box')
 
-  const { notifyError, notifySuccess } = useNotifications()
+  const { notifyError } = useNotifications()
 
   const searchProductByBox = async (box: string) => {
     try {

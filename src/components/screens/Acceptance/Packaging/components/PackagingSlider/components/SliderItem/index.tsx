@@ -3,7 +3,7 @@ import React, { FC, HTMLProps } from 'react'
 const SliderItem: FC<Pick<HTMLProps<HTMLElement>, 'className'>> = ({ children, className }) => {
   return (
     <div
-      className={className ?? 'block w-full h-80 flex flex-col justify-center items-center'}
+      className={className ?? 'block w-full h-[500px] flex flex-col justify-center items-center'}
       style={{
         background: 'linear-gradient(180deg, rgb(245, 145, 212) 0%, rgb(194, 170, 189))',
         boxShadow: '2px 4px 6px rgba(194, 192, 192, 0.25)'

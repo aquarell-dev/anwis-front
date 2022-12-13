@@ -3,7 +3,7 @@ import { getFourDigitId } from '../../../../../utils'
 import { Row } from '../../types'
 
 const useAcceptances = () => {
-  const { data, isLoading, error } = useListAcceptancesQuery(null)
+  const { data, isLoading, isFetching, error } = useListAcceptancesQuery(null)
 
   const rows: Row[] | undefined = data?.map(acceptance => ({
     id: acceptance.id,
@@ -11,9 +11,9 @@ const useAcceptances = () => {
     created_at: acceptance.created_at,
     from_order: acceptance.from_order,
     categories:
-      [...new Set(acceptance.specifications.map(s => s.product.category).filter(Boolean))].join(
-        ', '
-      ) ?? '',
+      [
+        ...new Set(acceptance.specifications.map(s => s.product.category?.category).filter(Boolean))
+      ].join(', ') ?? '',
     total:
       acceptance.specifications.reduce(
         (prev, current) => ({
@@ -32,7 +32,7 @@ const useAcceptances = () => {
       ).quantity ?? 0
   }))
 
-  return { acceptances: data, isLoading, error, rows }
+  return { acceptances: data, isLoading, isFetching, error, rows }
 }
 
 export default useAcceptances

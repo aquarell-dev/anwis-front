@@ -5,8 +5,7 @@ import useMember from '../../hooks/useMember'
 import useProduct from '../../hooks/useProduct'
 
 const usePreview = () => {
-  const { open, setOpen, getMemberFetching, fetchedMember, getMemberByUniqueNumber, ...rest } =
-    useMember()
+  const { open, setOpen, memberFetching, fetchedMember, getMemberByUniqueNumber } = useMember()
 
   const product = useProduct()
 
@@ -21,7 +20,7 @@ const usePreview = () => {
       fetchedMember,
       staffOpen: open,
       setStaffOpen: setOpen,
-      staffFetching: getMemberFetching
+      staffFetching: memberFetching
     },
     product: {
       ...product,

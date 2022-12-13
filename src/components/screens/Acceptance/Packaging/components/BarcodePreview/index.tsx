@@ -1,7 +1,10 @@
 import React, { FC } from 'react'
 
+import useCountdown from '../../../../../../hooks/useCountdown'
+
 import { AcceptanceProduct } from '../../../../../../types/acceptance.types'
 import { AbsoluteCenteredContainer } from '../../../../../ui/Container'
+import ExitInput from '../ExitInput'
 import PreviewPopup, { PreviewPopupProps } from '../PreviewPopup'
 import PreviewProperty from '../PreviewProperty'
 
@@ -10,6 +13,8 @@ type BarcodePreviewProps = PreviewPopupProps & {
 }
 
 const BarcodePreview: FC<BarcodePreviewProps> = ({ product, ...popup }) => {
+  useCountdown(() => popup.setOpen(false), 7000)
+
   const getProperties = (product: AcceptanceProduct) => [
     {
       label: 'Название',
@@ -47,15 +52,16 @@ const BarcodePreview: FC<BarcodePreviewProps> = ({ product, ...popup }) => {
 
   return (
     <PreviewPopup {...popup}>
+      <ExitInput setOpen={popup.setOpen} />
       <AbsoluteCenteredContainer>
         {product ? (
           <div className='flex space-x-8 items-center'>
-            <div className='text-2xl flex flex-col space-y-3 max-w-[450px] scrollbar-thin overflow-auto max-h-[500px]'>
+            <div className='text-2xl flex flex-col space-y-3 max-w-[600px] scrollbar-thin overflow-auto max-h-[500px]'>
               {getProperties(product).map((prop, idx) => (
                 <PreviewProperty
                   key={idx}
                   {...prop}
-                  customFont='text-2xl'
+                  customFont='text-3xl'
                 />
               ))}
             </div>

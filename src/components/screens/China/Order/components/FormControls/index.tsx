@@ -50,7 +50,7 @@ const FormControls: FC<IFormControls> = ({
               control={control}
               name={'order_for_project'}
               options={orderForProjects.map(orderForProject => ({
-                label: orderForProject.order_for_project,
+                label: orderForProject.project,
                 value: orderForProject.id.toString()
               }))}
               placeholder={'Проект'}

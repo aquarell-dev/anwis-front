@@ -33,7 +33,7 @@ const useCreateAcceptance = () => {
         navigationAfter.navigateToAcceptance
           ? navigate(`../acceptances/${data?.id.toString()}` ?? '')
           : navigate(navigationAfter.customUrl ?? '')
-    } catch {
+    } catch (e) {
       notifyError('Приемка не создана')
     }
   }

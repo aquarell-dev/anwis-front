@@ -2,12 +2,12 @@ import { CommonProduct, CreateCommonProduct } from '../../components/common/comm
 import { Modify } from '../../utils/types'
 import { TDocument } from '../documents/document.types'
 
-export interface IIndividualEntrepreneur {
+export interface IIndividual {
   id: number
   individual_entrepreneur: string
 }
 
-export interface ICreateIndividualEntrepreneur extends Omit<IIndividualEntrepreneur, 'id'> {}
+export interface ICreateIndividual extends Omit<IIndividual, 'id'> {}
 
 export interface IChinaDistributor {
   id: number
@@ -16,12 +16,12 @@ export interface IChinaDistributor {
 
 export interface ICreateChinaDistributor extends Omit<IChinaDistributor, 'id'> {}
 
-export interface IOrderForProject {
+export interface IProject {
   id: number
-  order_for_project: string
+  project: string
 }
 
-export interface ICreateOrderForProject extends Omit<IOrderForProject, 'id'> {}
+export interface ICreateProject extends Omit<IProject, 'id'> {}
 
 export type TStatuses =
   | 'Заказ в Москве'
@@ -42,9 +42,9 @@ export interface IStatus {
 export interface IOrder {
   id: number
   custom_id: string
-  individual_entrepreneur: IIndividualEntrepreneur
+  individual_entrepreneur: IIndividual
   china_distributor: IChinaDistributor
-  order_for_project: IOrderForProject
+  order_for_project: IProject
   status: IStatus
   draft: boolean
   commentary: string

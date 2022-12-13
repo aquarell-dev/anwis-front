@@ -40,6 +40,7 @@ const CategoryPaymentPopup: FC<{
           { ...categoryPayment, id: category.id, category: category.category },
           () => {}
         )
+        setOpen(false)
       }}
       width='w-[500px]'
       height='h-[250px]'
