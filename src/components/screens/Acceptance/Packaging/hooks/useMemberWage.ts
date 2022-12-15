@@ -72,7 +72,7 @@ const useMemberWage = (workSessions: WorkSessionDetailed[], timeSessions: TimeSe
       }
     }
 
-    return [box, time]
+    return [Math.ceil(box), Math.ceil(time)]
   }
 
   const calculateTimeSessions = (hourCost: number) => {
