@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react'
 
+import useLoading from '../../../../../context/GridLoadingContext/hooks/useLoading'
+
 import { GridSelectionModel } from '@mui/x-data-grid'
 
 import { useGetAcceptanceByIdQuery } from '../../../../../store/api/acceptance.api'
@@ -16,6 +18,8 @@ const useProducts = (id: string | undefined) => {
   const [specifications, setSpecifications] = useState<AcceptanceProductSpecification[]>([])
   const [rows, setRows] = useState<AcceptanceProductRow[]>([])
   const [selection, setSelection] = useState<GridSelectionModel>([])
+
+  useLoading('labels', [isLoading, isFetching])
 
   useEffect(() => {
     if (acceptance) setSpecifications(acceptance.specifications)
