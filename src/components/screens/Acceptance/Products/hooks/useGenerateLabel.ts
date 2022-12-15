@@ -11,18 +11,20 @@ const useGenerateLabel = () => {
 
   const { currentSelectedIndividual } = useTypedSelector(state => state.individual)
 
-  const generateLabel = (validatedLabel: ValidatedLabel) => {
-    const label: CreateLabel = {
-      ...validatedLabel,
+  const generateLabel = async (validatedLabels: ValidatedLabel[]) => {
+    const labels: CreateLabel[] = validatedLabels.map(v => ({
+      ...v,
       individual: currentSelectedIndividual.individual_entrepreneur,
       composition: 'Xлопок',
       address: 'Москва, ул. Пушкина, д. Колотушкина, 47'
-    }
+    }))
 
-    generate(label)
-      .unwrap()
-      .then(() => notifySuccess('Этикета сгенерирована'))
-      .catch(() => notifyError('Этикета не сгенерирвоана'))
+    try {
+      const result = generate({ products: labels }).unwrap()
+      return result
+    } catch (e) {
+      notifyError('Этикета не сгенерирвоана')
+    }
   }
 
   return { generateLabel, data, isLoading }
