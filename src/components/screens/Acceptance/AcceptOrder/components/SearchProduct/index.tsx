@@ -13,9 +13,10 @@ import SearchFields from '../SearchFields'
 type SearchProductProps = {
   specifications: AcceptanceProductSpecification[]
   acceptance: Acceptance
+  open: boolean
 }
 
-const SearchProduct: FC<SearchProductProps> = ({ specifications, acceptance }) => {
+const SearchProduct: FC<SearchProductProps> = ({ specifications, acceptance, open }) => {
   const {
     searchProductByBox,
     specificationByBoxLoading,
@@ -42,12 +43,15 @@ const SearchProduct: FC<SearchProductProps> = ({ specifications, acceptance }) =
           loading={specificationByBoxLoading || specificationByBarcodeLoading}
         />
       </div>
-      <LabelsGrid
-        products={specifications.map(specification => ({
-          printQuantity: specification?.actual_quantity ? specification.actual_quantity * 2 : 0,
-          ...specification.product
-        }))}
-      />
+      <div className='flex h-full w-full my-10'>
+        <LabelsGrid
+          products={specifications.map(specification => ({
+            printQuantity: specification?.actual_quantity ? specification.actual_quantity * 2 : 0,
+            actualQuantity: specification.actual_quantity ?? 0,
+            ...specification.product
+          }))}
+        />
+      </div>
     </div>
   )
 }

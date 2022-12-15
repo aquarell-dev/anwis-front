@@ -1,4 +1,6 @@
-import { FC } from 'react'
+import { FC, useEffect } from 'react'
+
+import { GridSelectionModel } from '@mui/x-data-grid'
 
 import {
   Acceptance,
@@ -24,6 +26,7 @@ const Labels: FC<LabelProps> = ({ labelsOpen, setLabelsOpen, specifications, acc
       height='h-[90%]'
     >
       <SearchProduct
+        open={labelsOpen}
         acceptance={acceptance}
         specifications={specifications}
       />

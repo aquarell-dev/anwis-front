@@ -20,7 +20,7 @@ export const fields: AcceptanceProductColumn[] = [
   },
   { field: 'linked_china_product_article', width: 220, headerName: 'Артикул Поставщика' },
   { field: 'brand', width: 90, headerName: 'Бренд' },
-  { field: 'size', width: 80, headerName: 'Размер' },
+  { field: 'size', width: 100, headerName: 'Размер' },
   { field: 'color', width: 80, headerName: 'Цвет' },
   { field: 'cost', width: 100, headerName: 'Себестоимость', editable: true },
   { field: 'quantity', width: 120, headerName: 'Отправл. Кол-Во', editable: true },
