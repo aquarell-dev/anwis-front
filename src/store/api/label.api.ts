@@ -1,14 +1,15 @@
-import { CreateLabel } from '../../types/acceptance.types'
+import { AcceptanceProduct, CreateLabel } from '../../types/acceptance.types'
 import { apiSlice } from './api.slice'
 
 export const labelApi = apiSlice.injectEndpoints({
   endpoints: build => ({
-    generateLabel: build.mutation<{ status: string; url: string }, CreateLabel>({
+    generateLabel: build.mutation<AcceptanceProduct[], { products: CreateLabel[] }>({
       query: label => ({
         url: 'acceptance/generate-labels/',
-        method: 'PUT',
+        method: 'POST',
         body: label
-      })
+      }),
+      invalidatesTags: ['Acceptance']
     })
   })
 })
