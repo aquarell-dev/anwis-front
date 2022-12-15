@@ -4,7 +4,6 @@ import useNotifications from '../../../../../hooks/useNotifications'
 
 import moment from 'moment'
 
-import { useUpdateTimeSessionMutation } from '../../../../../store/api/session.api'
 import { usePartialUpdateMemberMutation } from '../../../../../store/api/staff.api'
 import { StaffMember, TimeSession, WorkSession } from '../../../../../types/acceptance.types'
 
@@ -12,7 +11,6 @@ type TimeSessionMutation = (staff: StaffMember) => Promise<void>
 
 const useSession = () => {
   const [partialUpdate, { isLoading: partialUpdateLoading }] = usePartialUpdateMemberMutation()
-  const [updateSession, { isLoading: sessionLoading }] = useUpdateTimeSessionMutation()
 
   const { cacheLastMemberState } = useActions()
 
@@ -32,7 +30,9 @@ const useSession = () => {
         return
       }
 
-      const d = moment(value as string | number)
+      const d = moment(value as string | number, 'HH:mm DD/MM/YYYY')
+
+      console.log(key, d)
 
       // @ts-ignore somehow it still gives an error
       patchedSession[key as keyof WorkSession] = d.isValid() ? d.format('YYYY-MM-DDTHH:mm') : value
@@ -61,7 +61,7 @@ const useSession = () => {
     return patchedSession
   }
 
-  const getCurrentTime = () => moment().format('YYYY-MM-DDTHH:mm')
+  const getCurrentTime = () => moment().format('HH:mm DD/MM/YYYY')
 
   const patchTimeSession = async (
     staff: StaffMember,
@@ -71,13 +71,25 @@ const useSession = () => {
     cacheLastMemberState({ staff })
 
     return await mutate(
-      async () => await partialUpdate({ id: staff.id, time_session: session ?? {} }).unwrap(),
+      async () =>
+        await partialUpdate({
+          id: staff.id,
+          unique_number: staff.unique_number,
+          time_session: session ?? {}
+        }).unwrap(),
       options
     )
   }
 
-  const startTimeSession: TimeSessionMutation = async staff => {
+  const startTimeSession = async (
+    staff: StaffMember,
+    clearSessions: (staff: StaffMember) => Promise<void>
+  ) => {
     if (staff.work_session) return notifyError('У вас есть активная сессия по коробка')
+
+    if (staff.done) {
+      await clearSessions(staff)
+    }
 
     const updatedStaff = await patchTimeSession(staff, {} as TimeSession, {
       successMessage: 'Сессия по времени начата',
@@ -91,6 +103,7 @@ const useSession = () => {
         if (updatedStaff.time_session)
           await partialUpdate({
             id: updatedStaff.id,
+            unique_number: staff.unique_number,
             time_sessions: [
               ...(updatedStaff.time_sessions as unknown as number[]), // todo create valid typing
               updatedStaff.time_session.id
@@ -106,20 +119,28 @@ const useSession = () => {
 
     await patchTimeSession(
       staff,
-      formatTimeSession({
+      {
         ...staff.time_session,
         break_end: staff.time_session.break_end ?? getCurrentTime(),
         end: getCurrentTime()
-      }),
+      },
       {
         successMessage: 'Сессия по времени закончена',
         errorMessage: 'Сессия по времени не закончена'
       }
     )
 
-    await mutate(async () => await partialUpdate({ id: staff.id, time_session: null }), {
-      errorMessage: 'Сессия не закончена'
-    })
+    await mutate(
+      async () =>
+        await partialUpdate({
+          id: staff.id,
+          unique_number: staff.unique_number,
+          time_session: null
+        }),
+      {
+        errorMessage: 'Сессия не закончена'
+      }
+    )
   }
 
   const startTimeBreak: TimeSessionMutation = async staff => {
@@ -127,10 +148,10 @@ const useSession = () => {
 
     await patchTimeSession(
       staff,
-      formatTimeSession({
+      {
         ...staff.time_session,
         break_start: getCurrentTime()
-      }),
+      },
       {
         successMessage: 'Переыв начат',
         errorMessage: 'Ошибка'
@@ -143,10 +164,10 @@ const useSession = () => {
 
     await patchTimeSession(
       staff,
-      formatTimeSession({
+      {
         ...staff.time_session,
         break_end: getCurrentTime()
-      }),
+      },
       {
         successMessage: 'Перерыв закончен',
         errorMessage: 'Ошибка'

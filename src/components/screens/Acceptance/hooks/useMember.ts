@@ -78,6 +78,43 @@ const useMember = () => {
     })
   }
 
+  const clearSessions = async (staff: StaffMember) => {
+    await mutate(
+      async () =>
+        await partialUpdate({
+          id: staff.id,
+          unique_number: staff.unique_number,
+          time_session: null,
+          work_session: null,
+          time_sessions: [],
+          work_sessions: [],
+          done: false
+        }),
+      {
+        errorMessage: 'Сессии не сброшены'
+      }
+    )
+  }
+
+  const endWork = async (staff: StaffMember, onClose: () => void) => {
+    await mutate(
+      async () => {
+        await partialUpdate({
+          id: staff.id,
+          unique_number: staff.unique_number,
+          done: true,
+          time_session: null,
+          work_session: null
+        })
+        onClose()
+      },
+      {
+        successMessage: 'Работа Завершена',
+        errorMessage: 'Работа не завершена'
+      }
+    )
+  }
+
   const boundBox = async (staff: StaffMember, box: Box | undefined, onSuccess?: () => void) => {
     if (!box) {
       notifyError('Коробка не найдена')
@@ -86,19 +123,26 @@ const useMember = () => {
 
     cacheLastMemberState({ staff, box: staff.box })
 
+    if (staff.done) {
+      await clearSessions(staff)
+    }
+
     if (staff.box?.box === box.box) {
       await mutate(
         async () => {
           if (staff.work_session)
-            await updateWorkSession(
-              formatWorkSession({
-                ...staff.work_session,
-                box: staff.work_session.box.id,
-                end: getCurrentTime()
-              })
-            )
+            await updateWorkSession({
+              ...staff.work_session,
+              box: staff.work_session.box.id,
+              end: getCurrentTime()
+            })
           await finishBox({ id: box.id, finished: true })
-          await partialUpdate({ id: staff.id, box: null, work_session: null }).unwrap()
+          await partialUpdate({
+            id: staff.id,
+            unique_number: staff.unique_number,
+            box: null,
+            work_session: null
+          }).unwrap()
         },
         {
           onSuccess,
@@ -122,6 +166,7 @@ const useMember = () => {
       async () =>
         await partialUpdate({
           id: staff.id,
+          unique_number: staff.unique_number,
           box: box.id,
           work_session: { box: box.id, legit: true }
         }).unwrap(),
@@ -138,12 +183,13 @@ const useMember = () => {
         if (updatedStaff.work_session)
           await partialUpdate({
             id: staff.id,
+            unique_number: staff.unique_number,
             work_sessions: [
-              ...updatedStaff.work_sessions.map(s => formatWorkSession({ ...s, box: s.box.id })),
-              formatWorkSession({
+              ...updatedStaff.work_sessions.map(s => ({ ...s, box: s.box.id })),
+              {
                 ...updatedStaff.work_session,
                 box: updatedStaff.work_session.box.id
-              })
+              }
             ]
           }).unwrap()
       },
@@ -167,15 +213,18 @@ const useMember = () => {
     await mutate(
       async () => {
         if (staff.work_session)
-          await updateWorkSession(
-            formatWorkSession({
-              ...staff.work_session,
-              box: staff.work_session.box.id,
-              end: getCurrentTime(),
-              legit: false
-            })
-          )
-        await partialUpdate({ id: staff.id, box: null, work_session: null }).unwrap()
+          await updateWorkSession({
+            ...staff.work_session,
+            box: staff.work_session.box.id,
+            end: getCurrentTime(),
+            legit: false
+          })
+        await partialUpdate({
+          id: staff.id,
+          unique_number: staff.unique_number,
+          box: null,
+          work_session: null
+        }).unwrap()
       },
       {
         errorMessage: 'Коробка не отвязана',
@@ -230,7 +279,7 @@ const useMember = () => {
               })
             : null,
           work_sessions: staff.work_sessions.map(s => formatWorkSession({ ...s, box: s.box.id })),
-          time_session: staff.time_session ? formatTimeSession(staff.time_session) : null,
+          time_session: staff.time_session ?? null,
           time_sessions: staff.time_sessions.map(s => s.id)
         }).unwrap()
 
@@ -262,7 +311,9 @@ const useMember = () => {
 
     unboundBox,
     boundBox,
-    boundAnotherMemberToBox
+    boundAnotherMemberToBox,
+    endWork,
+    clearSessions
   }
 }
 

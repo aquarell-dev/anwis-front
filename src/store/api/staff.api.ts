@@ -31,7 +31,7 @@ const staffApi = apiSlice.injectEndpoints({
     }),
     updateMember: build.mutation<StaffMember, UpdateStaffMember>({
       query: member => ({
-        url: `acceptance/members/${member.id}/`,
+        url: `acceptance/members/${member.unique_number}/`,
         method: 'PUT',
         body: member
       }),
@@ -39,7 +39,7 @@ const staffApi = apiSlice.injectEndpoints({
     }),
     partialUpdateMember: build.mutation<StaffMember, PartialUpdateStaffMember>({
       query: member => ({
-        url: `acceptance/members/${member.id}/`,
+        url: `acceptance/members/${member.unique_number}/`,
         method: 'PATCH',
         body: member
       }),
@@ -50,7 +50,7 @@ const staffApi = apiSlice.injectEndpoints({
       PartialDetailedBoxUpdateStaffMember
     >({
       query: member => ({
-        url: `acceptance/members/${member.id}/`,
+        url: `acceptance/members/${member.unique_number}/`,
         method: 'PATCH',
         body: member
       }),

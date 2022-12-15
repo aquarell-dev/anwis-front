@@ -111,7 +111,7 @@ export type StaffMember = {
   time_session?: TimeSession
   work_sessions: WorkSessionDetailed[]
   time_sessions: TimeSession[]
-  done?: boolean
+  done: boolean
 }
 
 type MutateStaffMember = Modify<
@@ -121,6 +121,7 @@ type MutateStaffMember = Modify<
     box?: number | null
     work_sessions?: WorkSession[]
     time_sessions?: number[]
+    done?: boolean
   }
 >
 
@@ -135,6 +136,7 @@ export type PartialUpdateStaffMember = Modify<
   Partial<MutateStaffMember>,
   {
     id: number
+    unique_number: string
     work_session?: Modify<WorkSession, { start?: string; id?: number }> | null
     time_session?: Modify<TimeSession, { start?: string; break_start?: string; id?: number }> | null
   }
@@ -152,7 +154,7 @@ export type PartialDetailedBoxUpdateStaffMember = Modify<
 export type AcceptanceProduct = {
   last_cost: number
   barcode?: string
-  wb_article?: string
+  pdf?: string
   total_left?: number
   linked_china_product_article?: string
   linked_china_product_size?: string
@@ -204,7 +206,7 @@ export type Label = {
   id: number
   title: string
   barcode: string
-  article: string
+  linked_china_product_article: string
   size: string
   color: string
   category: AcceptanceCategory

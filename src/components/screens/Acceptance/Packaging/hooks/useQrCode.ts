@@ -23,14 +23,14 @@ export type QrCode =
   | 'Закрыть'
 
 const useQrCode = () => {
+  const { memberFetching, memberRollback, endWork, clearSessions } = useMember()
+
   const { startTimeSession, startTimeBreak, endTimeSession, endTimeBreak, sessionLoading } =
     useSession()
 
-  const { memberFetching, memberRollback } = useMember()
-
   const validateQrCodes = async (input: QrCode, staffMember: StaffMember, onClose: () => void) => {
     if (input === 'Начать Работу По Времени') {
-      await startTimeSession(staffMember)
+      await startTimeSession(staffMember, clearSessions)
       return true
     }
 
@@ -50,6 +50,7 @@ const useQrCode = () => {
     }
 
     if (input === 'Завершить Работу') {
+      await endWork(staffMember, onClose)
       return true
     }
 
