@@ -19,7 +19,7 @@ const useTimer = (startingTime?: string, showSeconds?: boolean) => {
       const calculatedTime = new Date(Date.now() - initialTime.getTime())
       setTimer(
         `${formatDigit(calculatedTime.getHours(), -3)}:${formatDigit(calculatedTime.getMinutes())}${
-          showSeconds ? ':' + calculatedTime.getSeconds() : ''
+          showSeconds ? ':' + formatDigit(calculatedTime.getSeconds()) : ''
         }`
       )
     }, 1000)
