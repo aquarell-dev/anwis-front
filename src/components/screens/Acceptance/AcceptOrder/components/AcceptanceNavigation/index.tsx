@@ -1,5 +1,7 @@
 import { FC, useState } from 'react'
 
+import useLabelRows from '../../../hooks/useLabelRows'
+
 import { GridSelectionModel } from '@mui/x-data-grid'
 
 import {
@@ -34,7 +36,11 @@ const AcceptanceNavigation: FC<{
       <Labels
         acceptance={acceptance}
         labelsOpen={labelsOpen}
-        specifications={specifications}
+        specifications={
+          selection.length > 0
+            ? specifications.filter(s => selection.includes(s.product.id))
+            : specifications
+        }
         setLabelsOpen={setLabelsOpen}
       />
       <div className='flex flex-col space-y-2 py-2 px-4'>
@@ -49,7 +55,9 @@ const AcceptanceNavigation: FC<{
             type='button'
             text={`Печать этикеток(${selection.length || 'Все'})`}
             customWidth='w-80'
-            handler={() => setLabelsOpen(true)}
+            handler={() => {
+              setLabelsOpen(true)
+            }}
           />
           <GreenButton
             type='button'

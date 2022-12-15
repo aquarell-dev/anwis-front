@@ -34,14 +34,15 @@ const Navigation: FC<{
   }, [open])
 
   return (
-    <div className='flex items-end space-x-12 w-fit'>
-      <h1 className='text-5xl'>{staffMember.username}</h1>
-      <div className='flex items-center space-x-4'>
+    <div className='flex flex-col lg:flex-row space-y-4 lg:space-y-0 items-end space-x-12 w-fit'>
+      <h1 className='text-2xl lg:text-5xl'>{staffMember.username}</h1>
+      <div className='flex flex-col lg:flex-row space-y-4 lg:space-y-0 space-x-0 items-center lg:space-x-4'>
         <FancyInput
           value={firstSearchField}
           handler={e => setFirstSearchField(e.target.value)}
           placeholder='Поиск'
           showLabel
+          customWidth='w-40 lg:w-96'
           onKeyDown={async e => {
             if (e.key !== 'Enter') return
 
@@ -63,6 +64,7 @@ const Navigation: FC<{
           handler={e => setSecondSearchField(e.target.value)}
           placeholder='Действия'
           showLabel
+          customWidth='w-40 lg:w-96'
           disabled={!!staffMember.time_session}
           onKeyDown={async e => {
             if (e.key !== 'Enter') return

@@ -16,29 +16,29 @@ const LabelsGrid: FC<{ products: ValidatedLabel[]; setProducts: SetState<Validat
 
   const ref = useRef<HTMLAnchorElement | null>(null)
 
-  const columns = getColumns(
-    (label: ValidatedLabel) => generateLabel(label),
-    () => {
-      ref?.current?.click()
-    },
-    products
-  )
+  // const columns = getColumns(
+  //   (label: ValidatedLabel) => generateLabel(label),
+  //   () => {
+  //     ref?.current?.click()
+  //   },
+  //   products
+  // )
 
   return (
     <div className='h-[500px]'>
-      <a
-        href={data ? data.url : ''}
-        ref={ref}
-        download
-        target='_blank'
-        className='invisible h-1 w-1'
-        rel='noreferrer'
-      >
-        Скачать
-      </a>
+      {/*<a*/}
+      {/*  href={data ? data.url : ''}*/}
+      {/*  ref={ref}*/}
+      {/*  download*/}
+      {/*  target='_blank'*/}
+      {/*  className='invisible h-1 w-1'*/}
+      {/*  rel='noreferrer'*/}
+      {/*>*/}
+      {/*  Скачать*/}
+      {/*</a>*/}
       <DataGrid
         className='w-[1000px]'
-        columns={columns}
+        columns={[]}
         rows={products}
         columnVisibilityModel={{
           id: false

@@ -13,7 +13,7 @@ type BarcodePreviewProps = PreviewPopupProps & {
 }
 
 const BarcodePreview: FC<BarcodePreviewProps> = ({ product, ...popup }) => {
-  useCountdown(() => popup.setOpen(false), 7000)
+  // useCountdown(() => popup.setOpen(false), 7000)
 
   const getProperties = (product: AcceptanceProduct) => [
     {
@@ -55,20 +55,20 @@ const BarcodePreview: FC<BarcodePreviewProps> = ({ product, ...popup }) => {
       <ExitInput setOpen={popup.setOpen} />
       <AbsoluteCenteredContainer>
         {product ? (
-          <div className='flex space-x-8 items-center'>
-            <div className='text-2xl flex flex-col space-y-3 max-w-[600px] scrollbar-thin overflow-auto max-h-[500px]'>
+          <div className='flex flex-col-reverse mt-24 ml-6 lg:ml-0 lg:mt-0 space-y-4 lg:space-x-8 lg:flex-row max-h-[400px] lg:max-h-[1200px] overflow-y-auto scrollbar-thin space-x-0 items-center w-[1000px]'>
+            <div className='text-2xl flex flex-col space-y-3 max-w-[300px] lg:max-w-[1400px] max-h-[500px]'>
               {getProperties(product).map((prop, idx) => (
                 <PreviewProperty
                   key={idx}
                   {...prop}
-                  customFont='text-3xl'
+                  customFont='text-lg lg:text-3xl'
                 />
               ))}
             </div>
             <img
               src={product.photo}
               alt={product?.photo ?? '-'}
-              className='h-[500px]'
+              className='h-[300px] lg:h-[500px]'
             />
           </div>
         ) : (

@@ -32,14 +32,14 @@ const PackagingSlider: FC<{ members: StaffMember[] }> = ({ members }) => {
   const { data, isLoading } = useListWorkSessionsByTodayQuery(null)
 
   return (
-    <div className='py-4 px-12 border-t border-slate-800 w-full min-h-[250px]'>
+    <div className='py-4 lg:px-12 border-t border-slate-800 w-full min-h-[250px]'>
       <SpinnerComponent
         loading={isLoading}
         position='centered'
         backgroundColor='grey'
       />
       <Slider
-        className='h-[500px] rounded-md shadow-md border flex justify-center items-center text-black'
+        className='h-[650px] lg:h-[500px] rounded-md shadow-md border flex justify-center items-center text-black'
         {...settings}
         ref={slider}
       >

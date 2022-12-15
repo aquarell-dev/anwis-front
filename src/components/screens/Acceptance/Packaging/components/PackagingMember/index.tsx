@@ -16,25 +16,34 @@ const PackagingMember: FC<{
 
   const memberTotalPacked = member.work_sessions
     .filter(s => s.legit && !s.end)
-    .reduce((prev, curr) => ({
-      ...curr,
-      box: { ...curr.box, quantity: curr.box.quantity + prev.box.quantity }
-    })).box.quantity
+    .reduce(
+      (prev, curr) => ({
+        ...curr,
+        box: { ...curr.box, quantity: curr.box.quantity + prev.box.quantity }
+      }),
+      { box: { quantity: 0 } }
+    ).box.quantity
 
   const session = useMemo(
     () => ({
       left: sessions
         ?.filter(s => !s.end)
-        .reduce((prev, curr) => ({
-          ...curr,
-          box: { ...curr.box, quantity: curr.box.quantity + prev.box.quantity }
-        })).box.quantity,
+        .reduce(
+          (prev, curr) => ({
+            ...curr,
+            box: { ...curr.box, quantity: curr.box.quantity + prev.box.quantity }
+          }),
+          { box: { quantity: 0 } }
+        ).box.quantity,
       already: sessions
         ?.filter(s => s.end)
-        .reduce((prev, curr) => ({
-          ...curr,
-          box: { ...curr.box, quantity: curr.box.quantity + prev.box.quantity }
-        })).box.quantity
+        .reduce(
+          (prev, curr) => ({
+            ...curr,
+            box: { ...curr.box, quantity: curr.box.quantity + prev.box.quantity }
+          }),
+          { box: { quantity: 0 } }
+        ).box.quantity
     }),
     [sessions]
   )
@@ -42,7 +51,7 @@ const PackagingMember: FC<{
   return (
     <SliderItem>
       <div className='flex flex-col justify-center items-center space-y-2 py-4'>
-        <h1 className='text-5xl'>
+        <h1 className='text-xl lg:text-5xl'>
           {member.username}({member.unique_number}) -{' '}
           {member.time_session
             ? 'По Времени - ' + timeTimer
@@ -50,19 +59,29 @@ const PackagingMember: FC<{
             ? 'Упаковка(По Времени) - ' + workTimer
             : 'Упаковка(По Штукам)'}
         </h1>
-        <p className='text-4xl border-b border-slate-800 py-2 px-8'>
-          Предварительня Выплата – {wage.total} ₽
+        <p className='text-lg lg:text-4xl border-b border-slate-800 py-2 px-8'>
+          Предварительня Выплата – {wage.total}&nbsp;₽
         </p>
-        <p className='text-4xl'>Выплата за упаковку по времени – {wage.boxes.time} ₽</p>
-        <p className='text-4xl'>Выплата за упаковку по штукам – {wage.boxes.box} ₽</p>
-        <p className='text-4xl'>Выплата по времени – {wage.time} ₽</p>
-        <p className='text-3xl'>Упаковано Сотрудником Коробок: {member.work_sessions.length}</p>
-        <p className='text-3xl'>Упакованное Кол-во Сотрудником: {memberTotalPacked} шт</p>
+        <p className='text-lg lg:text-4xl'>
+          Выплата за упаковку по времени – {wage.boxes.time}&nbsp;₽
+        </p>
+        <p className='text-lg lg:text-4xl'>
+          Выплата за упаковку по штукам – {wage.boxes.box}&nbsp;₽
+        </p>
+        <p className='text-lg lg:text-4xl'>Выплата по времени – {wage.time}&nbsp;₽</p>
+        <p className='text-lg lg:text-4xl'>
+          Упаковано Сотрудником Коробок: {member.work_sessions.length}
+        </p>
+        <p className='text-lg lg:text-4xl'>
+          Упакованное Кол-во Сотрудником: {memberTotalPacked}&nbsp;шт
+        </p>
         {member.work_session?.box && (
-          <p className='text-xl mb-16'>Номер Коробки: ◈ {member.work_session?.box.box} ◈ </p>
+          <p className='text-lg lg:text-xl mb-16'>
+            Номер Коробки: ◈&nbsp;{member.work_session?.box.box}&nbsp;◈
+          </p>
         )}
-        <p className='border-t border-slate-800 p-4 w-full text-center text-4xl'>
-          Осталось Всего: {session.left} шт ||| Упаковано Уже: {session.already} ШТ
+        <p className='border-t border-slate-800 p-4 w-full text-center text-lg lg:text-4xl'>
+          Осталось Всего: {session.left}&nbsp;шт ||| Упаковано Уже: {session.already}&nbsp;ШТ
         </p>
       </div>
     </SliderItem>

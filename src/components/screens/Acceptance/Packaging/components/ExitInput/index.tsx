@@ -17,6 +17,7 @@ const ExitInput: FC<{ setOpen: SetState<boolean> }> = ({ setOpen }) => {
         handler={e => setValue(e.target.value)}
         placeholder='Закрыть'
         showLabel
+        customWidth='w-full lg:w-80'
         onKeyDown={e => {
           if (e.key !== 'Enter') return
           if (!['Закрыть', 'Отменить Последнее Действие'].includes(value))

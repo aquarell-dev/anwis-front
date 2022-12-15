@@ -68,19 +68,19 @@ const BoxProperties: FC<BoxPreview> = ({ box, propertiesFont }) => {
     <div className={'min-h-[250px] min-w-[120px] w-2/3 flex flex-col space-y-2'}>
       {box ? (
         <>
-          <div className={'h-[250px] overflow-y-auto scrollbar-thin'}>
+          <div className={'min-h-[120px] overflow-y-auto scrollbar-thin'}>
             {getBoxProperties(box)
               .filter(p => p.mainProp)
               .map((property, idx) => (
                 <PreviewProperty
                   {...property}
                   customFont={propertiesFont}
-                  mainPropFont='text-3xl'
+                  mainPropFont='text-xl lg:text-3xl'
                   key={idx}
                 />
               ))}
           </div>
-          <div className='flex items-start space-x-2'>
+          <div className='flex flex-col-reverse lg:flex-row items-start space-x-2'>
             <img
               className={'w-[300px]'}
               src={box.specification?.product.photo}

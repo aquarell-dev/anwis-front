@@ -50,6 +50,7 @@ const Search: FC = () => {
             productByBarcodeLoading ||
             productByBarcodeFetching
           }
+          customWidth='w-40 sm:w-80'
           onKeyDown={async e => (e.key === 'Enter' ? await performSearch() : null)}
         />
       </div>

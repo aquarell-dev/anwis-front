@@ -16,13 +16,13 @@ const BoxPreview: FC<PreviewPopupProps & { box: Box | undefined }> = ({ box, ...
     <PreviewPopup {...popup}>
       <ExitInput setOpen={popup.setOpen} />
       <AbsoluteCenteredContainer>
-        <div className='flex items-start space-x-4'>
+        <div className='flex flex-col lg:flex-row space-y-6 lg:space-y-0 mt-24 overflow-y-auto scrollbar-thin h-[440px] lg:h-full items-start space-x-4'>
           <BoxLog />
           <BoxProperties
             box={box}
             wrapperClassName='flex space-x-8 items-center'
             propertiesClassName='space-y-2 h-max-[500px] min-w-[500px] max-w-[550px] overflow-y-auto scrollbar-thin'
-            propertiesFont='text-2xl'
+            propertiesFont='text-lg lg:text-2xl'
             imageClassName='h-[500px]'
           />
         </div>

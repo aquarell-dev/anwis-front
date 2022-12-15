@@ -130,9 +130,28 @@ const Toolbar: FC<{
 
               setValidatedProducts(
                 (selectedProducts as ValidatedProduct[]).map(p => {
-                  const { id, title, barcode, article, size, color, category, photo } = p
+                  const {
+                    id,
+                    title,
+                    barcode,
+                    linked_china_product_article,
+                    size,
+                    color,
+                    category,
+                    photo
+                  } = p
 
-                  return { id, title, barcode, article, size, color, quantity: 0, category, photo }
+                  return {
+                    id,
+                    title,
+                    barcode,
+                    linked_china_product_article,
+                    size,
+                    color,
+                    quantity: 0,
+                    category,
+                    photo
+                  }
                 })
               )
               setPrintOpen(true)

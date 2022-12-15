@@ -64,10 +64,10 @@ const ProductPreview: FC<ProductPreviewProps> = ({ loading, specification, metho
             <img
               src={specification.product.photo}
               alt={specification.product.title}
-              className='h-[80%]'
+              className='h-[70%]'
               style={{ flex: '0 0 auto' }}
             />
-            <div className='p-4 border-b border-r border-slate-600'>
+            <div className='p-4 border-b border-r border-slate-600 overflow-y-auto scrollbar-thin'>
               <p className='text-2xl font-medium'>{specification.product.title}</p>
               <p className='text-2xl font-medium'>
                 {method === 'box' ? (
@@ -76,12 +76,12 @@ const ProductPreview: FC<ProductPreviewProps> = ({ loading, specification, metho
                   <>Коробки: {specification.boxes.join(', ')}</>
                 )}
               </p>
+              <div className='flex flex-col space-y-1 text-ellipsis whitespace-nowrap'>
+                {getProperties(specification).map((prop, idx) => (
+                  <Fragment key={idx}>{prop}</Fragment>
+                ))}
+              </div>
             </div>
-          </div>
-          <div className='flex flex-col space-y-1 text-ellipsis whitespace-nowrap'>
-            {getProperties(specification).map((prop, idx) => (
-              <Fragment key={idx}>{prop}</Fragment>
-            ))}
           </div>
         </>
       ) : (

@@ -11,14 +11,14 @@ const StaffMemberActionLog: FC<StaffMember> = staff => {
   )
 
   return (
-    <div className='w-1/3 mt-10 max-h-[700px] overflow-y-auto scrollbar-thin'>
-      <div className='flex flex-col space-y-3 w-full border-b border-slate-600 py-2 px-4 text-xl'>
-        <p>Заработано Всего: {wage.total} ₽</p>
-        <p>Заработано За Упаковку По Штукам: {wage.boxes.box} ₽</p>
-        <p>Заработано За Упаковку По Времени: {wage.boxes.time} ₽</p>
-        <p>Заработано По Времени: {wage.time} ₽</p>
+    <div className='w-[290px] sm:w-[400px] md:w-[800px] lg:w-1/3 mt-10 min-h-[150px] max-h-[700px] overflow-y-auto scrollbar-thin'>
+      <div className='flex flex-col space-y-3 w-full border-b border-slate-600 py-0 px-0 sm:py-2 sm:px-4 text-xl'>
+        <p>Заработано&nbsp;Всего: {wage.total}&nbsp;₽</p>
+        <p>Заработано За&nbsp;Упаковку По&nbsp;Штукам: {wage.boxes.box}&nbsp;₽</p>
+        <p>Заработано За&nbsp;Упаковку По&nbsp;Времени: {wage.boxes.time}&nbsp;₽</p>
+        <p>Заработано По&nbsp;Времени: {wage.time}&nbsp;₽</p>
       </div>
-      <div className='w-full flex flex-col space-y-2 px-4 py-2'>
+      <div className='w-full flex flex-col space-y-2 px-0 py-0 lg:px-4 lg:py-2'>
         {staff.work_sessions
           .filter(s => s.legit)
           .map(s => {
@@ -28,19 +28,21 @@ const StaffMemberActionLog: FC<StaffMember> = staff => {
               <div key={s.id}>
                 {s.box.specification?.product.category?.payment === 'hourly' ? (
                   <p>
-                    Коробка: {s.box.box} - Упаковано c {s.start.split(' ')[0]} по{' '}
-                    {s.end?.split(' ')[0] ?? '(Не закончено)'} - Оплата:&nbsp;Почасовая -
+                    Коробка: {s.box.box} - Упаковано&nbsp;c&nbsp;{s.start.split(' ')[0]}
+                    &nbsp;по&nbsp;
+                    {s.end?.split(' ')[0] ?? '(Не\u00A0закончено)'} - Оплата:&nbsp;Почасовая -
                     Кол-во:&nbsp;
                     {s.box.specification?.quantity} - Заработано:&nbsp;
                     {time}&nbsp;₽
                   </p>
                 ) : (
                   <p>
-                    Коробка: {s.box.box} - Упаковано c {s.start.split(' ')[0]} по{' '}
-                    {s.end?.split(' ')[0] ?? '(Не закончено)'} - Оплата:&nbsp;Поштучная -
+                    Коробка: {s.box.box} - Упаковано&nbsp;c&nbsp;{s.start.split(' ')[0]}
+                    &nbsp;по&nbsp;
+                    {s.end?.split(' ')[0] ?? `(Не\u00A0закончено)`} - Оплата:&nbsp;Поштучная -
                     Кол-во:&nbsp;
                     {s.box.specification?.quantity} - Заработано:&nbsp;
-                    {box}&nbsp;₽
+                    {s.end ? box : '(Не\u00A0Закончено)'}&nbsp;₽
                   </p>
                 )}
               </div>
@@ -48,9 +50,9 @@ const StaffMemberActionLog: FC<StaffMember> = staff => {
           })}
         {staff.time_sessions.map(s => (
           <p key={s.id}>
-            Начало c {s.start.split(' ')[0]} по {s.end?.split(' ')[0] ?? '(Не закончено)'} -
+            Начало c {s.start.split(' ')[0]} по {s.end?.split(' ')[0] ?? '(Не\u00A0закончено)'} -
             Оплата:&nbsp;Почасовая - Заработано:&nbsp;
-            {s.end ? calculateTimePayment(s, 200) + '₽' : '(Не закончено)'}
+            {s.end ? calculateTimePayment(s, 200) + '₽' : '(Не\u00A0закончено)'}
           </p>
         ))}
       </div>

@@ -24,7 +24,7 @@ const StaffMemberPopup: FC<{
       state={open}
       setState={setOpen}
       bgColor='bg-slate-100'
-      height='h-96'
+      height='h-[500px]'
       width='w-[440px]'
     >
       <AbsoluteCenteredContainer>
@@ -61,7 +61,7 @@ const StaffMemberPopup: FC<{
               onChange={e => setStaffMember({ ...staffMember, inactive: e.target.checked })}
             />
           </div>
-          <div className='flex items-center justify-center space-x-4'>
+          <div className='flex flex-col sm:flex-row space-y-8 sm:space-y-0 items-center justify-center space-x-0 sm:space-x-4'>
             <IndigoButton
               type='button'
               handler={async () => await onSubmit()}

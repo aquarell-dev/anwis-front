@@ -9,7 +9,7 @@ const MembersGrid: FC<{
   setOpen: SetState<boolean>
 }> = ({ members, setSelectedMember, setOpen }) => {
   return (
-    <div className='grid grid-cols-5 gap-x-4 gap-y-2 my-8'>
+    <div className='grid place-items-center grid-cols-1 sm:grid-cols-5 gap-x-4 gap-y-6 my-8'>
       {members?.map(member => (
         <div
           key={member.id}
