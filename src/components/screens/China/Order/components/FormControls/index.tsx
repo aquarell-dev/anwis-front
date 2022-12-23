@@ -26,7 +26,7 @@ const FormControls: FC<IFormControls> = ({
   const [orderForProjectValue, setOrderForProjectValue] = useState('')
   const [chinaDistributorValue, setChinaDistributorValue] = useState('')
 
-  const { createAcceptanceFromOrder, isLoading } = useCreateAcceptanceFromOrder(order)
+  const { createAcceptanceFromOrder, isLoading } = useCreateAcceptanceFromOrder()
   const navigate = useNavigate()
 
   return (
@@ -72,7 +72,7 @@ const FormControls: FC<IFormControls> = ({
               <IndigoButton
                 type='button'
                 customWidth='w-full'
-                handler={() => order && createAcceptanceFromOrder()}
+                handler={async () => order && (await createAcceptanceFromOrder(order))}
               >
                 {isLoading ? (
                   <SpinnerComponent
