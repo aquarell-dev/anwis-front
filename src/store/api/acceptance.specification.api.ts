@@ -30,7 +30,7 @@ export const acceptanceSpecificationSlice = apiSlice.injectEndpoints({
     }),
     createMultipleSpecifications: build.mutation<
       AcceptanceProductSpecification[],
-      { id: number; products: number[] }
+      { id: number; products: { quantity?: number; product: number }[] }
     >({
       query: body => ({
         url: `acceptance/specification/create-multiple/`,
