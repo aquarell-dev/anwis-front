@@ -1,31 +1,36 @@
 import { useEffect } from 'react'
 
+import useMutate from '../../../../../hooks/useMutate'
 import useNotifications from '../../../../../hooks/useNotifications'
 import useUpdatePartialOrder from '../../hooks/useUpdatePartialOrder'
 
 import { IOrder } from '../../../../../features/order/order.types'
 import { useCreateAcceptanceFromOrderMutation } from '../../../../../store/api/acceptance.api'
 
-const useCreateAcceptanceFromOrder = (order: IOrder | undefined) => {
+const useCreateAcceptanceFromOrder = () => {
   const [createFromOrder, { data: createFromOrderResult, isLoading: acceptanceFromOrderLoading }] =
     useCreateAcceptanceFromOrderMutation()
   const { updateOrder, isLoading: orderLoading } = useUpdatePartialOrder()
-  const { notifyError, notifySuccess } = useNotifications()
 
-  useEffect(() => {
-    if (createFromOrderResult && order) {
-      updateOrder({ id: order.id, acceptance: createFromOrderResult.acceptance_id })
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [createFromOrderResult])
+  const mutate = useMutate()
 
-  const createAcceptanceFromOrder = () => {
+  const createAcceptanceFromOrder = async (order: IOrder) => {
     if (!order) return
 
-    createFromOrder({ order_id: order.id })
-      .unwrap()
-      .then(() => notifySuccess('Приемка создана'))
-      .catch(() => notifyError('Приемка не создана'))
+    const result = await mutate(
+      async () => await createFromOrder({ order_id: order.id }).unwrap(),
+      {
+        successMessage: 'Приемка создана',
+        errorMessage: 'Приемка не создана'
+      }
+    )
+
+    if (!result) return
+
+    await mutate(
+      async () => await updateOrder({ id: order.id, acceptance: result.acceptance_id }),
+      { errorMessage: 'Заказ не был обновлен' }
+    )
   }
 
   return {
