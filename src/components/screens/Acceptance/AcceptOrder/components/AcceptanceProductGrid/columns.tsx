@@ -48,6 +48,8 @@ const generateBoxesField = (specifications: AcceptanceProductSpecification[]): G
 
         if (!box) return ''
 
+        if (box.quantity === 0) return ''
+
         return `${box.box} / ${box.quantity} шт ${box.finished ? '(У)' : ''}`
       }
     })
