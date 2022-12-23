@@ -23,6 +23,11 @@ export type Acceptance = {
   status: AcceptanceStatus
 }
 
+export type ListAcceptance = Pick<
+  Acceptance,
+  'id' | 'title' | 'specifications' | 'created_at' | 'from_order' | 'status'
+>
+
 type ModifiedAcceptance = Modify<
   Omit<Acceptance, 'created_at'>,
   {
