@@ -1,9 +1,14 @@
-import { Acceptance, CreateAcceptance, PartialUpdateAcceptance } from '../../types/acceptance.types'
+import {
+  Acceptance,
+  CreateAcceptance,
+  ListAcceptance,
+  PartialUpdateAcceptance
+} from '../../types/acceptance.types'
 import { apiSlice } from './api.slice'
 
 export const acceptanceSlice = apiSlice.injectEndpoints({
   endpoints: build => ({
-    listAcceptances: build.query<Acceptance[], any>({
+    listAcceptances: build.query<ListAcceptance[], any>({
       query: p => ({
         url: 'acceptances/'
       }),

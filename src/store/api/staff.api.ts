@@ -9,7 +9,7 @@ import { apiSlice } from './api.slice'
 
 const staffApi = apiSlice.injectEndpoints({
   endpoints: build => ({
-    listMembers: build.query<StaffMember[], undefined>({
+    listMembers: build.query<StaffMember[], number>({
       query: () => ({
         url: 'acceptance/members/'
       }),
