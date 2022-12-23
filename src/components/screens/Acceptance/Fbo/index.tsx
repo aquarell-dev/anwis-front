@@ -37,8 +37,9 @@ const Fbo: FC = () => {
             />
           ))}
       </div>
-      <div className='h-1 border-t-2 border-slate-800 my-12' />
+      <div className='h-1 border-t-2 border-slate-800 my-10' />
       <ShippingDrop currentDragAcceptance={currentDragAcceptance} />
+      <div className='h-1 border-t-2 border-slate-800 my-4' />
     </ContentContainer>
   )
 }
