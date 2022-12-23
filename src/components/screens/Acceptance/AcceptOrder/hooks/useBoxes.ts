@@ -1,17 +1,24 @@
 import { useState } from 'react'
 
+import useMutate from '../../../../../hooks/useMutate'
 import useNotifications from '../../../../../hooks/useNotifications'
 
 import {
   useAddBoxMutation,
-  useDeleteBoxMutation
+  useDeleteBoxMutation,
+  usePartialUpdateBoxMutation
 } from '../../../../../store/api/acceptance.box.api'
-import { AcceptanceProductSpecification } from '../../../../../types/acceptance.types'
+import {
+  AcceptanceProductSpecification,
+  Box,
+  PartialUpdateBox
+} from '../../../../../types/acceptance.types'
 import { SetState } from '../../../../../utils/types'
 
 const useBoxes = () => {
-  const [add, { isLoading: addBoxLoading }] = useAddBoxMutation()
+  const [add, { isLoading: addBoxLoading, data: lastAddedBox }] = useAddBoxMutation()
   const [delete_, { isLoading: deleteBoxLoading }] = useDeleteBoxMutation()
+  const [update, { isLoading: updateLoading }] = usePartialUpdateBoxMutation()
 
   const [alertText, setAlertText] = useState('')
   const [alertOpen, setAlertOpen] = useState(false)
@@ -24,9 +31,11 @@ const useBoxes = () => {
     return false
   }
 
+  const mutate = useMutate()
+
   const addBox = async (id: number) => {
     try {
-      await add({ id })
+      return await add({ id }).unwrap()
     } catch {
       notifyError('Коробка не была добавелена')
     }
@@ -34,10 +43,17 @@ const useBoxes = () => {
 
   const deleteBox = async (id: number) => {
     try {
-      await delete_({ id })
+      await delete_({ id }).unwrap()
     } catch {
       notifyError('Коробка не была удалена')
     }
+  }
+
+  const patchBox = async (box: PartialUpdateBox) => {
+    await mutate(async () => await update(box), {
+      successMessage: 'Коробка Обновлена',
+      errorMessage: 'Коробка не обновлена'
+    })
   }
 
   const formatBoxes = (
@@ -99,9 +115,7 @@ const useBoxes = () => {
 
     if (total !== specification.actual_quantity)
       return alertError(
-        'Фактическое количество не равно количеству в коробках' +
-          total +
-          specification.actual_quantity,
+        `Фактическое количество не равно количеству в коробках. Указано: ${total}. Факт. Кол-во: ${specification.actual_quantity}`,
         errorProduct
       )
 
@@ -109,8 +123,10 @@ const useBoxes = () => {
   }
 
   return {
+    lastAddedBox,
     addBox,
     deleteBox,
+    patchBox,
     loading: addBoxLoading || deleteBoxLoading,
     setAlertOpen,
     alertOpen,

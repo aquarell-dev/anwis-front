@@ -34,7 +34,9 @@ const useMember = () => {
     useLazyGetMemberQuery()
   const [create, { isLoading: createLoading }] = useCreateMemberMutation()
   const [update, { isLoading: updateLoading }] = useUpdateMemberMutation()
-  const [partialUpdate, { isLoading: partialUpdateLoading }] = usePartialUpdateMemberMutation()
+  const [partialUpdate, { isLoading: partialUpdateLoading }] = usePartialUpdateMemberMutation({
+    fixedCacheKey: 'shared-update-post'
+  })
   const [updateWorkSession, { isLoading: workSessionLoading }] = useUpdateWorkSessionMutation()
 
   const { finishBox, isLoading: boxLoading } = useBox()
@@ -130,13 +132,6 @@ const useMember = () => {
     if (staff.box?.box === box.box) {
       await mutate(
         async () => {
-          if (staff.work_session)
-            await updateWorkSession({
-              ...staff.work_session,
-              box: staff.work_session.box.id,
-              end: getCurrentTime()
-            })
-          await finishBox({ id: box.id, finished: true })
           await partialUpdate({
             id: staff.id,
             unique_number: staff.unique_number,
@@ -149,6 +144,15 @@ const useMember = () => {
           successMessage: 'Супер! Коробка Упакована'
         }
       )
+
+      if (staff.work_session)
+        await updateWorkSession({
+          ...staff.work_session,
+          box: staff.work_session.box.id,
+          end: getCurrentTime()
+        })
+
+      await finishBox({ id: box.id, finished: true })
       return
     }
 

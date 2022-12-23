@@ -69,6 +69,13 @@ const useUpdateAcceptanceProducts = () => {
             ? modify(specification)
             : {
                 ...specification,
+                actual_quantity: specification.boxes.reduce(
+                  (acc, curr) => ({
+                    ...curr,
+                    quantity: acc.quantity + curr.quantity
+                  }),
+                  { quantity: 0 }
+                ).quantity,
                 product: specification.product.id
               }
         )
@@ -77,7 +84,7 @@ const useUpdateAcceptanceProducts = () => {
   }
 
   const deleteSpecifications = async (ids: number[]) => {
-    mutateAcceptance(async () => {
+    await mutateAcceptance(async () => {
       await delete_({
         specifications: ids
       })

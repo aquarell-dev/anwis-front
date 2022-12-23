@@ -10,7 +10,9 @@ import { StaffMember, TimeSession, WorkSession } from '../../../../../types/acce
 type TimeSessionMutation = (staff: StaffMember) => Promise<void>
 
 const useSession = () => {
-  const [partialUpdate, { isLoading: partialUpdateLoading }] = usePartialUpdateMemberMutation()
+  const [partialUpdate, { isLoading: partialUpdateLoading }] = usePartialUpdateMemberMutation({
+    fixedCacheKey: 'shared-update-post'
+  })
 
   const { cacheLastMemberState } = useActions()
 

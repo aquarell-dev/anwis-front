@@ -15,14 +15,9 @@ const useProduct = () => {
   const mutate = useMutate()
 
   const getProductByBarcode = async (barcode: string) => {
-    await mutate(
-      async () => {
-        await _getProductByBarcode(barcode)
-      },
-      {
-        errorMessage: 'Товар не найден'
-      }
-    )
+    await mutate(async () => await _getProductByBarcode(barcode).unwrap(), {
+      errorMessage: 'Товар не найден'
+    })
   }
 
   return {
