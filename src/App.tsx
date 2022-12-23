@@ -28,7 +28,7 @@ import Settings from './components/screens/Settings'
 function App() {
   return (
     <>
-      <Router>
+      <Router basename='/index.html'>
         <Routes>
           <Route
             path='/'
