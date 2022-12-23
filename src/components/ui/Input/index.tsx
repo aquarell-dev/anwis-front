@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React, { FC, forwardRef } from 'react'
 import { SpinnerComponent } from 'react-element-spinner'
 
 import { cn } from '../../../utils'
@@ -26,19 +26,21 @@ export const Input: FC<IInput> = ({
   />
 )
 
-export const FancyInput: FC<IInput> = ({
-  customWidth,
-  placeholder,
-  handler,
-  value,
-  additionalStyles,
-  showLabel,
-  defaultValue,
-  searchIcon,
-  type = 'text',
-  loading,
-  ...rest
-}) => {
+export const FancyInput = forwardRef<HTMLInputElement, IInput>((props, ref) => {
+  const {
+    customWidth,
+    placeholder,
+    handler,
+    value,
+    additionalStyles,
+    showLabel,
+    defaultValue,
+    searchIcon,
+    type = 'text',
+    loading,
+    ...rest
+  } = props
+
   return (
     <div className='flex flex-col space-y-1'>
       {showLabel && <p className='text-sm'>{placeholder}</p>}
@@ -67,6 +69,7 @@ export const FancyInput: FC<IInput> = ({
           </svg>
         )}
         <input
+          ref={ref}
           className={cn('outline-none w-full', rest?.disabled ? 'bg-gray-100' : 'bg-white')}
           defaultValue={defaultValue}
           type={type}
@@ -76,6 +79,7 @@ export const FancyInput: FC<IInput> = ({
           onChange={handler}
           value={value ?? ''}
           {...rest}
+          placeholder={placeholder}
         />
         {loading && (
           <SpinnerComponent
@@ -86,7 +90,7 @@ export const FancyInput: FC<IInput> = ({
       </div>
     </div>
   )
-}
+})
 
 export const Checkbox: FC<{
   label: string
