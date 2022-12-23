@@ -50,7 +50,7 @@ const PackagingMember: FC<{
 
   return (
     <SliderItem>
-      <div className='flex flex-col justify-center items-center space-y-2 py-4'>
+      <div className='flex flex-col text-center lg:text-left justify-center items-center space-y-2 py-4'>
         <h1 className='text-xl lg:text-5xl'>
           {member.username}({member.unique_number}) -{' '}
           {member.time_session

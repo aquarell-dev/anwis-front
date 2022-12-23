@@ -65,7 +65,11 @@ const getBoxProperties = (
 
 const BoxProperties: FC<BoxPreview> = ({ box, propertiesFont }) => {
   return (
-    <div className={'min-h-[250px] min-w-[120px] w-2/3 flex flex-col space-y-2'}>
+    <div
+      className={
+        'min-h-[20px] lg:min-h-[250px] min-w-[120px] w-full lg:w-2/3 flex flex-col space-y-2'
+      }
+    >
       {box ? (
         <>
           <div className={'min-h-[120px] overflow-y-auto scrollbar-thin'}>
@@ -80,9 +84,9 @@ const BoxProperties: FC<BoxPreview> = ({ box, propertiesFont }) => {
                 />
               ))}
           </div>
-          <div className='flex flex-col-reverse lg:flex-row items-start space-x-2'>
+          <div className='flex flex-col lg:flex-row items-start lg:space-x-2'>
             <img
-              className={'w-[300px]'}
+              className={'w-[250px] lg:w-[300px]'}
               src={box.specification?.product.photo}
               alt={box.specification?.product.photo ?? '-'}
             />
@@ -101,7 +105,9 @@ const BoxProperties: FC<BoxPreview> = ({ box, propertiesFont }) => {
           </div>
         </>
       ) : (
-        <div className='min-h-[320px] min-w-[120px]' />
+        <div className='min-h-[20px] lg:min-h-[320px] min-w-[120px] text-center text-2xl font-medium'>
+          Нет Активной Коробки
+        </div>
       )}
     </div>
   )

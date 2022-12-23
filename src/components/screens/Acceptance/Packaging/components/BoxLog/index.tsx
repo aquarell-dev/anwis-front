@@ -6,10 +6,8 @@ import { useListWorkSessionsByBoxQuery } from '../../../../../../store/api/sessi
 const BoxLog: FC = () => {
   const { data, isLoading } = useListWorkSessionsByBoxQuery('1-1-1')
 
-  console.log(data)
-
   return (
-    <div className='flex flex-col space-y-2'>
+    <div className='flex flex-col space-y-2 min-h-[250px] max-h-[600px] overflow-y-auto scrollbar-thin'>
       <SpinnerComponent
         loading={isLoading}
         position='centered'

@@ -44,17 +44,17 @@ const AcceptanceNavigation: FC<{
         setLabelsOpen={setLabelsOpen}
       />
       <div className='flex flex-col space-y-2 py-2 px-4'>
-        <div className='flex items-center space-x-4'>
+        <div className='flex flex-col lg:flex-row space-y-4 items-center lg:space-y-0 lg:space-x-4'>
           <h1 className='text-2xl font-medium'>
             {acceptance.title || `Приемка ${getFourDigitId(acceptance.id)}`}
           </h1>
-          <p>
+          <p className='d-none lg:block'>
             Дата Создания: <span className='font-medium'>{acceptance.created_at}</span>
           </p>
           <IndigoButton
             type='button'
             text={`Печать этикеток(${selection.length || 'Все'})`}
-            customWidth='w-80'
+            customWidth='w-80 d-none lg:block'
             handler={() => {
               setLabelsOpen(true)
             }}
@@ -62,11 +62,11 @@ const AcceptanceNavigation: FC<{
           <GreenButton
             type='button'
             text='Печать ПДФ'
-            customWidth='w-80'
+            customWidth='w-80 d-none lg:block'
             handler={() => {}}
           />
         </div>
-        <div className='flex space-x-4 items-center'>
+        <div className='lg:flex space-x-4 items-center d-none'>
           {acceptance.specifications.length > 0 && (
             <p>
               <span className='font-medium'>Категории</span>:{' '}

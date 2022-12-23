@@ -2,6 +2,7 @@ import React, { FC, useRef } from 'react'
 import { SpinnerComponent } from 'react-element-spinner'
 import Slider, { Settings } from 'react-slick'
 
+import useMembers from '../../../hooks/useMembers'
 import 'slick-carousel/slick/slick-theme.css'
 import 'slick-carousel/slick/slick.css'
 
@@ -11,7 +12,10 @@ import PackagingMember from '../PackagingMember'
 import { LeftArrow, RightArrow } from './components/Arrows'
 import SliderItem from './components/SliderItem'
 
-const PackagingSlider: FC<{ members: StaffMember[] }> = ({ members }) => {
+const PackagingSlider: FC<{ members: StaffMember[]; loading: boolean }> = ({
+  members,
+  loading
+}) => {
   const slider = useRef(null)
 
   const settings: Settings = {
@@ -20,8 +24,9 @@ const PackagingSlider: FC<{ members: StaffMember[] }> = ({ members }) => {
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
-    autoplay: false,
+    autoplay: true,
     arrows: true,
+    autoplaySpeed: 5000,
     // @ts-ignore
     nextArrow: <RightArrow onClick={() => slider?.current?.slickPrev()} />,
     // @ts-ignore
@@ -33,11 +38,13 @@ const PackagingSlider: FC<{ members: StaffMember[] }> = ({ members }) => {
 
   return (
     <div className='py-4 lg:px-12 border-t border-slate-800 w-full min-h-[250px]'>
-      <SpinnerComponent
-        loading={isLoading}
-        position='centered'
-        backgroundColor='grey'
-      />
+      {(isLoading || loading) && (
+        <SpinnerComponent
+          loading
+          position='centered'
+          backgroundColor='grey'
+        />
+      )}
       <Slider
         className='h-[650px] lg:h-[500px] rounded-md shadow-md border flex justify-center items-center text-black'
         {...settings}

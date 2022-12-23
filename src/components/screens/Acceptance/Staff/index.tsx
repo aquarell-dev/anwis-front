@@ -14,7 +14,7 @@ const Staff: FC = () => {
   const { setMemberOpen, memberOpen, setSelectedMember, selectedMember } = useMutateStaff()
   const { createMember, partialUpdateMember, memberLoading } = useMember()
 
-  const { data: members, isLoading } = useListMembersQuery(undefined)
+  const { data: members, isLoading } = useListMembersQuery(1)
 
   if (isLoading) return <Loader isLoading />
 

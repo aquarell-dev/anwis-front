@@ -24,7 +24,7 @@ const StaffMemberPreview: FC<{
       fetching={memberFetching}
     >
       {staffMember ? (
-        <div className='m-8 w-[290px] sm:w-[400px] md:w-[800px] lg:w-[1024px] xl:w-[1200px] 2xl:w-full h-[500px] lg:h-full flex flex-col lg:flex-row items-start space-x-0 lg:space-x-4 overflow-y-auto scrollbar-thin'>
+        <div className='m-8 h-[560px] lg:h-full flex flex-col lg:flex-row items-start space-x-0 lg:space-x-4 overflow-y-auto scrollbar-thin'>
           <div className='flex flex-col w-full space-y-6 lg:w-fit'>
             <Navigation
               {...boxActions}

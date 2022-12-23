@@ -8,7 +8,7 @@ const Staff: FC<{ acceptance: Acceptance }> = ({ acceptance }) => {
   const { data, isLoading } = useListWorkSessionsByAcceptanceQuery(acceptance.id)
 
   return (
-    <div className='w-1/2 rounded-md shadow-xl p-4 border h-full'>
+    <div className='w-1/2 rounded-md shadow-xl p-4 border h-full overflow-y-auto scrollbar-thin'>
       <SpinnerComponent
         loading={isLoading}
         position='centered'

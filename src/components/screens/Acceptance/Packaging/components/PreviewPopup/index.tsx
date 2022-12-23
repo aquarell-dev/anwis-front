@@ -17,8 +17,8 @@ const PreviewPopup: FC<PreviewPopupProps> = ({
   setOpen,
   children,
   fetching,
-  width = 'w-[320px] sm:w-[450px] md:w-[800px] lg:w-[1024px] xl:w-[1200px] 2xl:w-[1800px]',
-  height = 'h-[560px] md:h-[800px]'
+  width = 'w-fit',
+  height = 'h-fit'
 }) => {
   return (
     <Popup

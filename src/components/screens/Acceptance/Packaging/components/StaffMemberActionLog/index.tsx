@@ -11,7 +11,7 @@ const StaffMemberActionLog: FC<StaffMember> = staff => {
   )
 
   return (
-    <div className='w-[290px] sm:w-[400px] md:w-[800px] lg:w-1/3 mt-10 min-h-[150px] max-h-[700px] overflow-y-auto scrollbar-thin'>
+    <div className='w-[290px] sm:w-[400px] lg:w-1/3 2xl:w-[400px] mt-10 min-h-[150px] lg:max-h-[700px] lg:overflow-y-auto lg:scrollbar-thin'>
       <div className='flex flex-col space-y-3 w-full border-b border-slate-600 py-0 px-0 sm:py-2 sm:px-4 text-xl'>
         <p>Заработано&nbsp;Всего: {wage.total}&nbsp;₽</p>
         <p>Заработано За&nbsp;Упаковку По&nbsp;Штукам: {wage.boxes.box}&nbsp;₽</p>

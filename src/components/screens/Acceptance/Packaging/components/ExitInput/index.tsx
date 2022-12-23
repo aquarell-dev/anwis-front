@@ -1,5 +1,6 @@
 import React, { FC, useState } from 'react'
 
+import useAutoFocus from '../../../../../../hooks/useAutoFocus'
 import useNotifications from '../../../../../../hooks/useNotifications'
 
 import { SetState } from '../../../../../../utils/types'
@@ -10,13 +11,16 @@ const ExitInput: FC<{ setOpen: SetState<boolean> }> = ({ setOpen }) => {
 
   const { notifyError } = useNotifications()
 
+  const { ref } = useAutoFocus()
+
   return (
-    <div className='absolute right-0 top-0 m-12'>
+    <div className='absolute right-0 top-0 m-12 z-[200]'>
       <FancyInput
+        ref={ref}
         value={value}
         handler={e => setValue(e.target.value)}
-        placeholder='Закрыть'
-        showLabel
+        placeholder='Закрыть/Отменить Действие'
+        // showLabel
         customWidth='w-full lg:w-80'
         onKeyDown={e => {
           if (e.key !== 'Enter') return

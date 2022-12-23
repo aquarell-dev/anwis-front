@@ -1,13 +1,15 @@
 import { FC } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 import useUpdateAcceptanceProducts from '../hooks/useUpdateAcceptanceProducts'
 import useAcceptance from './hooks/useAcceptance'
 import useProducts from './hooks/useProducts'
 
 import AttachDocument from '../../../common/AttachDocument'
+import { IndigoButton } from '../../../ui/Button'
 import { ContentContainer } from '../../../ui/Container'
 import Loader from '../../../ui/Loader'
+import AcceptanceCustomGrid from './components/AcceptanceCustomGrid'
 import AcceptanceDropdowns from './components/AcceptanceDropdowns'
 import AcceptanceNavigation from './components/AcceptanceNavigation'
 import AcceptanceProductGrid from './components/AcceptanceProductGrid'
@@ -27,6 +29,8 @@ const AcceptOrder: FC = () => {
 
   const { updateFetching, ...mutations } = useUpdateAcceptanceProducts()
 
+  const navigate = useNavigate()
+
   const { comment, setComment, setDocuments, updateAcceptance, updateLoading, ...acceptanceInfo } =
     useAcceptance(acceptance, specifications)
 
@@ -36,25 +40,58 @@ const AcceptOrder: FC = () => {
 
   return (
     <ContentContainer>
+      <div className='absolute left-0 top-0 m-2'>
+        <IndigoButton
+          type='button'
+          handler={() => navigate('../tsd/acceptances')}
+          customWidth='w-12 block md:d-none'
+        >
+          <svg
+            xmlns='http://www.w3.org/2000/svg'
+            fill='none'
+            viewBox='0 0 24 24'
+            strokeWidth={1.5}
+            stroke='currentColor'
+            className='w-6 h-6'
+          >
+            <path
+              strokeLinecap='round'
+              strokeLinejoin='round'
+              d='M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18'
+            />
+          </svg>
+        </IndigoButton>
+      </div>
       <AcceptanceNavigation
         acceptance={acceptance}
         selection={selection}
         specifications={specifications}
       />
       <AcceptanceDropdowns {...acceptanceInfo} />
-      <ContorlPanel updateAcceptance={updateAcceptance} />
+      <div className='d-none lg:block'>
+        <ContorlPanel updateAcceptance={updateAcceptance} />
+      </div>
       <Management acceptance={acceptance} />
       <SpecificationManagement
         specifications={specifications}
         acceptanceId={acceptance.id}
       />
-      <AcceptanceProductGrid
-        selection={selection}
-        loading={isFetching || updateFetching}
-        {...mutations}
-        {...rest}
-      />
-      <div className='flex w-full h-[500px] space-x-4 my-6 border-t-2 border-slate-600'>
+      <div className='d-none md:block w-full'>
+        <AcceptanceProductGrid
+          selection={selection}
+          loading={isFetching || updateFetching}
+          {...mutations}
+          {...rest}
+        />
+      </div>
+      <div className='block md:d-none w-full'>
+        <AcceptanceCustomGrid
+          loading={isFetching || updateFetching}
+          {...rest}
+          {...mutations}
+        />
+      </div>
+      <div className='d-none lg:flex w-full h-[500px] space-x-4 my-6 border-t-2 border-slate-600'>
         <div className='flex flex-col h-full space-y-4 w-1/3 py-6'>
           <Comment
             comment={comment}

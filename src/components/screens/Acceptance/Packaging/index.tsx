@@ -1,7 +1,6 @@
-import { FC } from 'react'
+import { FC, useEffect } from 'react'
 
-import useMembers from '../hooks/useMembers'
-
+import { useListMembersQuery } from '../../../../store/api/staff.api'
 import { ContentContainer } from '../../../ui/Container'
 import Loader from '../../../ui/Loader'
 import PackagingSlider from './components/PackagingSlider'
@@ -9,18 +8,31 @@ import Search from './components/Search'
 import Staff from './components/Staff/Staff'
 
 const Packaging: FC = () => {
-  const { members, isLoading, isFetching } = useMembers()
+  const { data: members, isLoading, isFetching } = useListMembersQuery(1)
 
-  if (isLoading || !members) return <Loader isLoading />
+  useEffect(() => {
+    if (members) console.log(members.filter(m => m.box))
+  }, [members])
+
+  if (isLoading) return <Loader isLoading />
 
   return (
     <ContentContainer>
-      <Search />
-      <Staff
-        members={members}
-        loading={isFetching}
-      />
-      <PackagingSlider members={members} />
+      {members ? (
+        <>
+          <Search />
+          <Staff
+            members={members}
+            loading={isFetching || isLoading}
+          />
+          <PackagingSlider
+            members={members}
+            loading={isFetching || isLoading}
+          />
+        </>
+      ) : (
+        <p>No Data</p>
+      )}
     </ContentContainer>
   )
 }

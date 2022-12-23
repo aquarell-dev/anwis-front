@@ -19,7 +19,7 @@ const AcceptanceTasks: FC<{ acceptance?: Acceptance }> = ({ acceptance }) => {
   const getTasksProps = useCallback((tasks?: Task[]) => tasksProps(tasks), [acceptance])
 
   return (
-    <div className='flex flex-col space-y-4 py-8 my-4 border-t border-slate-800'>
+    <div className='d-none lg:flex flex-col space-y-4 py-8 my-4 border-t border-slate-800'>
       <Notification
         notification={notification}
         setNotification={setNotification}

@@ -9,7 +9,7 @@ import ProductItem from '../ProductItem'
 
 const BoxItem: FC<
   AcceptanceProductSpecification & {
-    addBox: (id: number) => Promise<void>
+    addBox: (id: number) => Promise<AcceptanceProductSpecification | undefined>
     validateBeforeSave: (specification: AcceptanceProductSpecification) => boolean | void
     formatBoxes: (
       specification: AcceptanceProductSpecification,
