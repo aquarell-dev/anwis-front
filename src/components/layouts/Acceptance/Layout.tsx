@@ -21,6 +21,10 @@ export const Layout: FC = () => {
     {
       title: 'Сотрудники',
       link: '/acceptance/staff'
+    },
+    {
+      title: 'Фбо',
+      link: '/acceptance/fbo'
     }
   ]
 

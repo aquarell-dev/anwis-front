@@ -4,10 +4,13 @@ import { ToastContainer } from 'react-toastify'
 import { Layout as AcceptanceLayout } from './components/layouts/Acceptance/Layout'
 import { Layout as ChinaLayout } from './components/layouts/China/Layout'
 import Layout from './components/layouts/Layout'
+import NotFound from './components/screens/404'
 import Acceptance from './components/screens/Acceptance'
 import AcceptOrder from './components/screens/Acceptance/AcceptOrder'
 import Acceptances from './components/screens/Acceptance/Acceptances'
+import AcceptanceTSD from './components/screens/Acceptance/Acceptances/tsd'
 import CreateAcceptance from './components/screens/Acceptance/CreateAcceptance'
+import Fbo from './components/screens/Acceptance/Fbo'
 import Packaging from './components/screens/Acceptance/Packaging'
 import Products from './components/screens/Acceptance/Products'
 import Staff from './components/screens/Acceptance/Staff'
@@ -111,7 +114,19 @@ function App() {
                 path='/acceptance/packaging'
                 element={<Packaging />}
               />
+              <Route
+                path='/acceptance/tsd/acceptances'
+                element={<AcceptanceTSD />}
+              />
+              <Route
+                path='/acceptance/fbo'
+                element={<Fbo />}
+              />
             </Route>
+            <Route
+              path='*'
+              element={<NotFound />}
+            />
           </Route>
         </Routes>
       </Router>
