@@ -180,12 +180,8 @@ export type AcceptanceProductSpecification = {
   boxes: Box[]
   reasons: Reason[]
   actual_quantity?: number
+  fbo_quantity?: number
 }
-
-export type CreateProductSpecification = Modify<
-  AcceptanceProductSpecification,
-  { product: number; id: undefined }
->
 
 export type PartialUpdateProductSpecification = Partial<
   Modify<Omit<AcceptanceProductSpecification, 'id'>, { product: number }>

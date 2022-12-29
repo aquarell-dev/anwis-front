@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 
+// import { useNavigate } from 'react-router-dom'
 import useNotifications from '../../../../../hooks/useNotifications'
 
 import { useCreateAcceptanceMutation } from '../../../../../store/api/acceptance.api'
@@ -19,7 +19,7 @@ const useCreateAcceptance = () => {
 
   const { notifyError, notifySuccess } = useNotifications()
 
-  const navigate = useNavigate()
+  // const navigate = useNavigate()
 
   const createAcceptance = async (
     acceptance: CreateAcceptance,
@@ -28,11 +28,11 @@ const useCreateAcceptance = () => {
     try {
       await create(acceptance).unwrap()
       notifySuccess('Приемка создана')
-      if (navigationAfter)
-        (navigationAfter.navigateToAcceptance || navigationAfter.customUrl) &&
-        navigationAfter.navigateToAcceptance
-          ? navigate(`../acceptances/${data?.id.toString()}` ?? '')
-          : navigate(navigationAfter.customUrl ?? '')
+      // if (navigationAfter)
+      //   (navigationAfter.navigateToAcceptance || navigationAfter.customUrl) &&
+      //   navigationAfter.navigateToAcceptance
+      //     ? navigate(`../acceptances/${data?.id.toString()}` ?? '')
+      //     : navigate(navigationAfter.customUrl ?? '')
     } catch (e) {
       notifyError('Приемка не создана')
     }

@@ -1,16 +1,30 @@
-import React, { FC, useState } from 'react'
+import React, { FC } from 'react'
+
+import useFbo from '../../hooks/useFbo'
+import useFboAcceptances from '../../hooks/useFboAcceptances'
 
 import { ListAcceptance } from '../../../../../../types/acceptance.types'
-import { IndigoButton, RedButton } from '../../../../../ui/Button'
+import { GreenButton, IndigoButton, RedButton } from '../../../../../ui/Button'
 import MiniAcceptance from '../MiniAcceptance'
+import SelectProductsPopup from '../SelectProductsPopup'
 
 const ShippingDrop: FC<{ currentDragAcceptance: ListAcceptance | null }> = ({
   currentDragAcceptance
 }) => {
-  const [submittedAcceptances, setSubmittedAcceptances] = useState<ListAcceptance[]>([])
+  const { setSubmittedAcceptances, submittedAcceptances, drop, open, setOpen } = useFboAcceptances()
+
+  const { createFbo } = useFbo()
 
   return (
     <>
+      <SelectProductsPopup
+        acceptance={submittedAcceptances.find(a => a.id === currentDragAcceptance?.id) ?? null}
+        setSubmittedAcceptances={setSubmittedAcceptances}
+        state={open}
+        setState={setOpen}
+        width='min-w-[1400px]'
+        height='min-h-[900px]'
+      />
       <div
         className='w-full p-4 border rounded-md shadow-xl h-[500px] bg-gray-100'
         onDragLeave={e => e.currentTarget.setAttribute('style', 'background-color: #f3f4f6;')}
@@ -19,11 +33,7 @@ const ShippingDrop: FC<{ currentDragAcceptance: ListAcceptance | null }> = ({
           e.currentTarget.setAttribute('style', 'background-color: #d1d5db;')
         }}
         onDrop={e => {
-          if (
-            currentDragAcceptance &&
-            !submittedAcceptances.map(a => a.id).includes(currentDragAcceptance.id)
-          )
-            setSubmittedAcceptances(prev => [...prev, currentDragAcceptance])
+          drop(currentDragAcceptance)
           e.currentTarget.setAttribute('style', 'background-color: #f3f4f6;')
         }}
       >
@@ -55,6 +65,16 @@ const ShippingDrop: FC<{ currentDragAcceptance: ListAcceptance | null }> = ({
                     />
                   </svg>
                 </div>
+                <div className='mt-4 flex space-x-4 items-center'>
+                  <GreenButton
+                    type='button'
+                    handler={() => {}}
+                    text='Изменить'
+                  />
+                  <p>
+                    Выбрано товаров: {acceptance.specifications.filter(s => s.fbo_quantity).length}
+                  </p>
+                </div>
               </MiniAcceptance>
             ))}
           </div>
@@ -67,7 +87,7 @@ const ShippingDrop: FC<{ currentDragAcceptance: ListAcceptance | null }> = ({
       <div className='flex items-center space-x-4 mt-6'>
         <IndigoButton
           type='button'
-          handler={() => console.log(123)}
+          handler={async () => await createFbo(submittedAcceptances)}
           customWidth='w-80'
           text='Создать Отгрузку'
         />

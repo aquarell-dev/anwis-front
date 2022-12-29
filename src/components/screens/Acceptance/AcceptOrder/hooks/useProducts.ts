@@ -25,24 +25,24 @@ const useProducts = (id: string | undefined) => {
     if (acceptance) setSpecifications(acceptance.specifications)
   }, [acceptance])
 
+  const getRows = (specifications: AcceptanceProductSpecification[]) =>
+    specifications.map(specification => ({
+      id: specification.product.id,
+      title: specification.product.title,
+      article: specification.product.article,
+      linked_china_product_article: specification.product.linked_china_product_article,
+      brand: specification.product.brand,
+      size: specification.product.size,
+      quantity: specification.quantity,
+      color: specification.product.color,
+      photo: specification.product.photo,
+      cost: specification.cost,
+      actual_quantity: specification?.actual_quantity,
+      difference: specification.cost === specification?.actual_quantity
+    }))
+
   useEffect(() => {
-    if (specifications)
-      setRows(
-        specifications.map(specification => ({
-          id: specification.product.id,
-          title: specification.product.title,
-          article: specification.product.article,
-          linked_china_product_article: specification.product.linked_china_product_article,
-          brand: specification.product.brand,
-          size: specification.product.size,
-          quantity: specification.quantity,
-          color: specification.product.color,
-          photo: specification.product.photo,
-          cost: specification.cost,
-          actual_quantity: specification?.actual_quantity,
-          difference: specification.cost === specification?.actual_quantity
-        }))
-      )
+    if (specifications) setRows(getRows(specifications))
   }, [specifications])
 
   return {
@@ -53,7 +53,8 @@ const useProducts = (id: string | undefined) => {
     acceptance,
     rows,
     specifications,
-    setSpecifications
+    setSpecifications,
+    getRows
   }
 }
 

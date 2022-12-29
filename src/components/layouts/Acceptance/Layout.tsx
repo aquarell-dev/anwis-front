@@ -1,6 +1,6 @@
 import { FC } from 'react'
-import { Outlet } from 'react-router-dom'
 
+// import { Outlet } from 'react-router-dom'
 import SubNavbar from '../../ui/SubNavbar'
 import { ISubNavElement } from '../../ui/SubNavbar/types'
 
@@ -25,13 +25,17 @@ export const Layout: FC = () => {
     {
       title: 'Фбо',
       link: '/acceptance/fbo'
+    },
+    {
+      title: 'Отгрузки',
+      link: '/acceptance/shippings'
     }
   ]
 
   return (
     <div className='mx-8'>
       <SubNavbar elements={elements} />
-      <Outlet />
+      {/*<Outlet />*/}
     </div>
   )
 }

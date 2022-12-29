@@ -4,6 +4,7 @@ import useAcceptances from '../../../Acceptances/hooks/useAcceptances'
 
 import { ListAcceptance } from '../../../../../../types/acceptance.types'
 import { cn, getFourDigitId } from '../../../../../../utils'
+import { GreenButton } from '../../../../../ui/Button'
 
 const MiniAcceptance: FC<{
   acceptance: ListAcceptance

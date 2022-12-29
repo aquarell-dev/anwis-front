@@ -31,7 +31,7 @@ const Fbo: FC = () => {
           .map(acceptance => (
             <MiniAcceptance
               acceptance={acceptance}
-              dragStart={e => setCurrentDragAcceptance(acceptance)}
+              dragStart={e => setCurrentDragAcceptance(prev => acceptance)} // so state updates immediately
               draggable
               key={acceptance.id}
             />

@@ -1,5 +1,5 @@
 import { FC, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 import { useActions } from '../../../hooks/useActions'
 import useAuth from '../../../hooks/useAuth'
@@ -22,7 +22,7 @@ const Navbar: FC = () => {
 
   const { logOut } = useActions()
 
-  const navigate = useNavigate()
+  // const navigate = useNavigate()
 
   return (
     <>
@@ -119,7 +119,7 @@ const Navbar: FC = () => {
                 text={'Выйти'}
                 handler={() => {
                   logOut()
-                  navigate('/')
+                  // navigate('/')
                 }}
               />
             )}

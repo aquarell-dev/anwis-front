@@ -10,7 +10,7 @@ import { AcceptanceProductSpecification } from '../../../../../../types/acceptan
 import { SetState } from '../../../../../../utils/types'
 import { GreenButton } from '../../../../../ui/Button'
 import SlideAlert from '../../../../../ui/SlideAlert'
-import CustomGridItem from '../CustomGridItem'
+import BoxGridItem from '../BoxGridItem'
 
 const AcceptanceCustomGrid: FC<{
   specifications: AcceptanceProductSpecification[]
@@ -66,7 +66,7 @@ const AcceptanceCustomGrid: FC<{
           .slice()
           .sort((a, b) => (a.id > b.id ? 1 : -1))
           .map(specification => (
-            <CustomGridItem
+            <BoxGridItem
               lastAddedBox={lastAddedBox}
               specification={specification}
               setSpecifications={setSpecifications}

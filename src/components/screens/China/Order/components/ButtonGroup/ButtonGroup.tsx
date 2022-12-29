@@ -1,35 +1,36 @@
-import { BaseSyntheticEvent, FC, useRef } from 'react';
+import { BaseSyntheticEvent, FC, useRef } from 'react'
+import { SpinnerComponent } from 'react-element-spinner'
+import { SubmitErrorHandler, SubmitHandler } from 'react-hook-form'
 
-import { useNavigate } from 'react-router-dom';
+import useUpdatePartialOrder from '../../../hooks/useUpdatePartialOrder'
+import useExcelCreate from '../../hooks/useExcelCreate'
 
-
-import { GreenButton, IndigoButton, RedButton } from '../../../../../ui/Button';
-
-import { IOrder, TStatuses } from '../../../../../../features/order/order.types';
-import useExcelCreate from '../../hooks/useExcelCreate';
-import { SpinnerComponent } from 'react-element-spinner';
-import { SetState } from '../../../../../../utils/types';
-import useUpdatePartialOrder from '../../../hooks/useUpdatePartialOrder';
-import { SubmitErrorHandler, SubmitHandler } from 'react-hook-form';
-import { IOrderForm } from '../../../types';
-import DeleteOrderButton from '../DeleteOrderButton';
+import { IOrder, TStatuses } from '../../../../../../features/order/order.types'
+import { SetState } from '../../../../../../utils/types'
+// import { useNavigate } from 'react-router-dom';
+import { GreenButton, IndigoButton, RedButton } from '../../../../../ui/Button'
+import { IOrderForm } from '../../../types'
+import DeleteOrderButton from '../DeleteOrderButton'
 
 const ButtonGroup: FC<{
-  order?: IOrder,
-  selectedStatus: TStatuses,
-  setSelectedStatus: SetState<TStatuses>,
-  handleSubmit: (onValid: SubmitHandler<IOrderForm>, onInvalid?: SubmitErrorHandler<IOrderForm>) => (e?: BaseSyntheticEvent) => Promise<void>,
+  order?: IOrder
+  selectedStatus: TStatuses
+  setSelectedStatus: SetState<TStatuses>
+  handleSubmit: (
+    onValid: SubmitHandler<IOrderForm>,
+    onInvalid?: SubmitErrorHandler<IOrderForm>
+  ) => (e?: BaseSyntheticEvent) => Promise<void>
   onSubmit: (data: IOrderForm, redirect?: string) => void
 }> = ({ order, selectedStatus, setSelectedStatus, handleSubmit, onSubmit }) => {
-  const navigate = useNavigate();
-  const downloadRef = useRef<HTMLAnchorElement | null>(null);
-  const { createExcel, isLoading, error } = useExcelCreate(selectedStatus, setSelectedStatus);
+  // const navigate = useNavigate();
+  const downloadRef = useRef<HTMLAnchorElement | null>(null)
+  const { createExcel, isLoading, error } = useExcelCreate(selectedStatus, setSelectedStatus)
 
-  const { updateOrder } = useUpdatePartialOrder();
+  const { updateOrder } = useUpdatePartialOrder()
 
   return (
-    <div className="flex justify-between items-center mt-6 mb-4 border-t pt-2 border-slate-600">
-      <div className="flex items-center space-x-4">
+    <div className='flex justify-between items-center mt-6 mb-4 border-t pt-2 border-slate-600'>
+      <div className='flex items-center space-x-4'>
         <IndigoButton
           type={'button'}
           text={order ? 'Обновить' : 'Создать'}
@@ -45,7 +46,9 @@ const ButtonGroup: FC<{
           type={'button'}
           customWidth={'w-60'}
           text={'Закрыть'}
-          handler={() => navigate('/china')}
+          handler={() => {
+            // navigate('/china')
+          }}
         />
         <DeleteOrderButton order={order} />
         {selectedStatus === 'Заказ в Москве' && !order?.archive && (
@@ -74,10 +77,12 @@ const ButtonGroup: FC<{
               customWidth='w-80'
               handler={() => createExcel(order?.id)}
             >
-              {isLoading && <SpinnerComponent
-                loading={true}
-                position={'inline'}
-              />}
+              {isLoading && (
+                <SpinnerComponent
+                  loading={true}
+                  position={'inline'}
+                />
+              )}
             </GreenButton>
             <GreenButton
               type={'button'}
@@ -91,10 +96,12 @@ const ButtonGroup: FC<{
             text={'Создать эксель'}
             handler={() => order?.id && createExcel(order.id)}
           >
-            {isLoading && <SpinnerComponent
-              loading={true}
-              position={'inline'}
-            />}
+            {isLoading && (
+              <SpinnerComponent
+                loading={true}
+                position={'inline'}
+              />
+            )}
           </GreenButton>
         )}
       </div>
@@ -104,10 +111,12 @@ const ButtonGroup: FC<{
         target='_blank'
         download
         href={order?.excel}
-        rel="noreferrer"
-      >Скачать</a>
+        rel='noreferrer'
+      >
+        Скачать
+      </a>
     </div>
-  );
-};
+  )
+}
 
-export default ButtonGroup;
+export default ButtonGroup

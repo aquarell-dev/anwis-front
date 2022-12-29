@@ -6,8 +6,9 @@ import { AcceptanceInfo } from '../../hooks/useAcceptance'
 import moment from 'moment'
 
 import { IIndividual, IProject } from '../../../../../../features/order/order.types'
-import { AcceptanceStatus } from '../../../../../../types/acceptance.types'
+import { AcceptanceStatus, AcceptanceStatuses } from '../../../../../../types/acceptance.types'
 import { SetState } from '../../../../../../utils/types'
+import Status from '../../../../../common/Status'
 import { CustomDateTimePicker } from '../../../../../ui/DateTime'
 
 const AcceptanceDropdowns: FC<{
@@ -36,9 +37,8 @@ const AcceptanceDropdowns: FC<{
   return (
     <div className='w-full flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-4 items-center my-2 pt-4 pb-2 border-t border-slate-800'>
       <div className='z-[17]'>
-        <Select
-          options={statusOptions}
-          value={statusOptions?.find(option => option.value === acceptanceInfo.currentStatus?.id)}
+        <Status<AcceptanceStatuses>
+          statusOptions={statusOptions}
           onChange={newValue =>
             newValue &&
             setAcceptanceInfo({
@@ -46,17 +46,7 @@ const AcceptanceDropdowns: FC<{
               currentStatus: { id: newValue.value, color: newValue.color, status: newValue.label }
             })
           }
-          placeholder={'Статус'}
-          formatOptionLabel={({ color, label }) => (
-            <div className='flex items-center space-x-2'>
-              <div
-                className='h-6 w-6 rounded-full'
-                style={{ flex: '0 0 auto', backgroundColor: color }}
-              />
-              <p>{label}</p>
-            </div>
-          )}
-          className='w-64'
+          value={statusOptions?.find(option => option.value === acceptanceInfo.currentStatus?.id)}
         />
       </div>
       <div className='z-[16]'>

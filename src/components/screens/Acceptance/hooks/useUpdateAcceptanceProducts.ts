@@ -1,3 +1,4 @@
+import useMutate from '../../../../hooks/useMutate'
 import useNotifications from '../../../../hooks/useNotifications'
 
 import {
@@ -7,7 +8,8 @@ import {
 } from '../../../../store/api/acceptance.specification.api'
 import {
   AcceptanceProductSpecification,
-  PartialUpdateAcceptance
+  PartialUpdateAcceptance,
+  PartialUpdateProductSpecification
 } from '../../../../types/acceptance.types'
 
 type ModifySpecification = (
@@ -22,6 +24,10 @@ export type UpdateSpecification = (
 export type UpdateSpecifications = (
   specifications: AcceptanceProductSpecification[],
   modify?: ModifySpecification
+) => Promise<void>
+
+export type UpdatePartialSpecifications = (
+  specifications: PartialUpdateProductSpecification[]
 ) => Promise<void>
 
 const useUpdateAcceptanceProducts = () => {
@@ -41,6 +47,8 @@ const useUpdateAcceptanceProducts = () => {
       notifyError('Приемка не была обновлена')
     }
   }
+
+  const mutate = useMutate()
 
   const updateSpecification: UpdateSpecification = async (
     specification: AcceptanceProductSpecification,
@@ -83,6 +91,13 @@ const useUpdateAcceptanceProducts = () => {
     })
   }
 
+  const updatePartialSpecifications: UpdatePartialSpecifications = async specifications => {
+    await mutate(async () => await updateMultipleSpecifications({ specifications }).unwrap(), {
+      successMessage: 'Товары были обновлены',
+      errorMessage: 'Товары не были обновлены'
+    })
+  }
+
   const deleteSpecifications = async (ids: number[]) => {
     await mutateAcceptance(async () => {
       await delete_({
@@ -95,6 +110,7 @@ const useUpdateAcceptanceProducts = () => {
     updateSpecification: updateSpecification,
     updateSpecifications,
     deleteSpecifications,
+    updatePartialSpecifications,
     updateFetching: specificationLoading || specificationMultipleLoading || deleteLoading
   }
 }

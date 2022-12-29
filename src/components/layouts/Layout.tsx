@@ -1,6 +1,6 @@
 import { FC } from 'react'
-import { Outlet } from 'react-router-dom'
 
+// import { Outlet } from 'react-router-dom'
 import useAuth from '../../hooks/useAuth'
 
 import GridLoadingContextProvider from '../../context/GridLoadingContext'
@@ -14,12 +14,12 @@ const Layout: FC = () => {
   return (
     <div className='min-h-screen'>
       <Navbar />
-      <GridLoadingContextProvider>
-        <ImagePreviewContextProvider>
-          <BigImage />
-          <Outlet />
-        </ImagePreviewContextProvider>
-      </GridLoadingContextProvider>
+      {/*<GridLoadingContextProvider>*/}
+      {/*  <ImagePreviewContextProvider>*/}
+      {/*    <BigImage />*/}
+      {/*    <Outlet />*/}
+      {/*  </ImagePreviewContextProvider>*/}
+      {/*</GridLoadingContextProvider>*/}
     </div>
   )
 }
