@@ -1,6 +1,6 @@
 import { FC, Fragment } from 'react'
+import { useNavigate } from 'react-router-dom'
 
-// import { useNavigate } from 'react-router-dom'
 import useCreateAcceptance from '../CreateAcceptance/hooks/useCreateAcceptance'
 import useAcceptances from './hooks/useAcceptances'
 
@@ -13,7 +13,7 @@ const Acceptances: FC = () => {
   const { isLoading, rows, isFetching } = useAcceptances()
   const { createAcceptance, isLoading: createLoading } = useCreateAcceptance()
 
-  // const navigate = useNavigate()
+  const navigate = useNavigate()
 
   if (isLoading) return <Loader isLoading />
 
@@ -47,7 +47,7 @@ const Acceptances: FC = () => {
           <Fragment key={acceptance.id}>
             <div
               className='w-full min-h-[250px] border-2 border-emerald-600'
-              // onClick={() => navigate(`../acceptances/${acceptance.id}`)}
+              onClick={() => navigate(`../acceptances/${acceptance.id}`)}
             >
               <div className='min-h-[3rem] flex w-full items-center justify-center font-medium border-b-2 border-slate-800'>
                 <p className='font-medium text-3xl text-center'>{acceptance.title}</p>

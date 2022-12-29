@@ -1,6 +1,6 @@
 import React, { FC } from 'react'
+import { useNavigate } from 'react-router-dom'
 
-// import { useNavigate } from 'react-router-dom'
 import useCreateAcceptance from '../../Acceptance/CreateAcceptance/hooks/useCreateAcceptance'
 import useCreateAcceptanceFromOrder from '../Order/hooks/useCreateAcceptanceFromOrder'
 import useStatusShow from '../Order/hooks/useStatusShow'
@@ -19,7 +19,7 @@ const Orders: FC = () => {
 
   const { createAcceptanceFromOrder, isLoading: createLoading } = useCreateAcceptanceFromOrder()
 
-  // const navigate = useNavigate()
+  const navigate = useNavigate()
 
   if (isLoading) return <Loader isLoading={isLoading} />
 
@@ -36,7 +36,7 @@ const Orders: FC = () => {
                 <Order
                   border={order.draft ? '#6b7280' : order.status.color}
                   hover={order.draft ? '#fff9f9' : order.status.hover_color}
-                  // onClick={() => navigate(`/china/orders/${order.id}`)}
+                  onClick={() => navigate(`/china/orders/${order.id}`)}
                 >
                   <div className='flex w-full h-full justify-center'>
                     <OrderSideInfo {...order} />

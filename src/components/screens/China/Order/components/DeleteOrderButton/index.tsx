@@ -1,6 +1,6 @@
 import { FC, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
-// import { useNavigate } from 'react-router-dom'
 import useNotifications from '../../../../../../hooks/useNotifications'
 
 import { IOrder } from '../../../../../../features/order/order.types'
@@ -10,7 +10,7 @@ import { RedButton } from '../../../../../ui/Button'
 import ConfirmationPopup from '../../../../../ui/ConfirmationPopup'
 
 const DeleteOrderButton: FC<{ order?: IOrder }> = ({ order }) => {
-  // const navigate = useNavigate()
+  const navigate = useNavigate()
   const { notifyError, notifySuccess } = useNotifications()
   const [deleteOrder, _] = useDeleteOrderMutation()
 
@@ -34,7 +34,7 @@ const DeleteOrderButton: FC<{ order?: IOrder }> = ({ order }) => {
                 .unwrap()
                 .then(() => {
                   notifySuccess('Заказ был успешно удален')
-                  // navigate('../orders')
+                  navigate('../orders')
                 })
                 .catch(() => notifyError('Заказ не был удален'))
             }

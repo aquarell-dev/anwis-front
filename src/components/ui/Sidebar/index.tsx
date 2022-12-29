@@ -1,15 +1,12 @@
 import { FC } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 
 const SidebarActiveLink = () => (
   <div className='absolute right-0 top-[50%] -translate-y-1/2 h-[70%] rounded-lg bg-indigo-600 w-1' />
 )
 
 const Sidebar: FC = () => {
-  const location = {
-    pathname: ''
-  }
-  // const location = useLocation();
+  const location = useLocation()
 
   return (
     <div className='relative'>

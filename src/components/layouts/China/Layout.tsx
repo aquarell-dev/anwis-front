@@ -1,9 +1,8 @@
 import { FC } from 'react'
+import { Outlet } from 'react-router-dom'
 
 import SubNavbar from '../../ui/SubNavbar'
 import { ISubNavElement } from '../../ui/SubNavbar/types'
-
-// import { Outlet } from 'react-router-dom';
 
 const elements: ISubNavElement[] = [
   {
@@ -36,7 +35,7 @@ export const Layout: FC = () => {
   return (
     <div>
       <SubNavbar elements={elements} />
-      {/*<Outlet />*/}
+      <Outlet />
     </div>
   )
 }

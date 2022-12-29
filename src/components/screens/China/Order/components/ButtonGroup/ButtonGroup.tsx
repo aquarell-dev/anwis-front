@@ -1,13 +1,13 @@
 import { BaseSyntheticEvent, FC, useRef } from 'react'
 import { SpinnerComponent } from 'react-element-spinner'
 import { SubmitErrorHandler, SubmitHandler } from 'react-hook-form'
+import { useNavigate } from 'react-router-dom'
 
 import useUpdatePartialOrder from '../../../hooks/useUpdatePartialOrder'
 import useExcelCreate from '../../hooks/useExcelCreate'
 
 import { IOrder, TStatuses } from '../../../../../../features/order/order.types'
 import { SetState } from '../../../../../../utils/types'
-// import { useNavigate } from 'react-router-dom';
 import { GreenButton, IndigoButton, RedButton } from '../../../../../ui/Button'
 import { IOrderForm } from '../../../types'
 import DeleteOrderButton from '../DeleteOrderButton'
@@ -22,7 +22,7 @@ const ButtonGroup: FC<{
   ) => (e?: BaseSyntheticEvent) => Promise<void>
   onSubmit: (data: IOrderForm, redirect?: string) => void
 }> = ({ order, selectedStatus, setSelectedStatus, handleSubmit, onSubmit }) => {
-  // const navigate = useNavigate();
+  const navigate = useNavigate()
   const downloadRef = useRef<HTMLAnchorElement | null>(null)
   const { createExcel, isLoading, error } = useExcelCreate(selectedStatus, setSelectedStatus)
 
@@ -46,9 +46,7 @@ const ButtonGroup: FC<{
           type={'button'}
           customWidth={'w-60'}
           text={'Закрыть'}
-          handler={() => {
-            // navigate('/china')
-          }}
+          handler={() => navigate('/china')}
         />
         <DeleteOrderButton order={order} />
         {selectedStatus === 'Заказ в Москве' && !order?.archive && (

@@ -1,6 +1,6 @@
 import { FC } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
 
-// import { useNavigate, useParams } from 'react-router-dom'
 import useUpdateAcceptanceProducts from '../hooks/useUpdateAcceptanceProducts'
 import useAcceptance from './hooks/useAcceptance'
 import useProducts from './hooks/useProducts'
@@ -21,15 +21,15 @@ import Reasons from './components/Reasons'
 import SpecificationManagement from './components/SpecificationManagment'
 
 const AcceptOrder: FC = () => {
-  // const { id } = useParams()
-  const id = '123'
+  const { id } = useParams()
+
   const { selection, acceptance, isLoading, isFetching, ...rest } = useProducts(id)
 
   const { specifications, setSpecifications } = rest
 
   const { updateFetching, ...mutations } = useUpdateAcceptanceProducts()
 
-  // const navigate = useNavigate()
+  const navigate = useNavigate()
 
   const { comment, setComment, setDocuments, updateAcceptance, updateLoading, ...acceptanceInfo } =
     useAcceptance(acceptance, specifications)
@@ -43,9 +43,7 @@ const AcceptOrder: FC = () => {
       <div className='absolute left-0 top-0 m-2'>
         <IndigoButton
           type='button'
-          handler={() => {
-            // navigate('../tsd/acceptances')
-          }}
+          handler={() => navigate('../tsd/acceptances')}
           customWidth='w-12 block md:d-none'
         >
           <svg

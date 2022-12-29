@@ -1,11 +1,11 @@
 import { FC } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 
-import { cn } from '../../../utils/index'
+import { cn } from '../../../utils'
 import { ISubNavElement } from './types'
 
 const SubNavbar: FC<{ elements: ISubNavElement[] }> = ({ elements }) => {
-  // const router = useLocation()
+  const router = useLocation()
 
   return (
     <div className='d-none sm:block w-11/12 mx-auto min-h-12 rounded-b-lg shadow-md bg-gray-100'>
@@ -18,8 +18,9 @@ const SubNavbar: FC<{ elements: ISubNavElement[] }> = ({ elements }) => {
             <Link to={link}>
               <p
                 className={cn(
-                  // router.pathname.includes(link)
-                  true ? 'underline underline-offset-2 underline-indigo-600' : ''
+                  router.pathname.includes(link)
+                    ? 'underline underline-offset-2 underline-indigo-600'
+                    : ''
                 )}
               >
                 {title}

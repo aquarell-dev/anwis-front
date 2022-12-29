@@ -1,4 +1,4 @@
-import { Route, BrowserRouter as Router, Switch } from 'react-router-dom'
+import { Route, BrowserRouter as Router, Routes } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
 
 import { Layout as AcceptanceLayout } from './components/layouts/Acceptance/Layout'
@@ -30,121 +30,114 @@ function App() {
   return (
     <>
       <Router basename={process.env.PUBLIC_URL}>
-        <Switch>
+        <Routes>
           <Route
-            exact
             path='/'
-            component={Index}
-          />
-        </Switch>
-        {/*<Routes>*/}
-        {/*  <Route*/}
-        {/*    path='/'*/}
-        {/*    element={<Layout />}*/}
-        {/*  >*/}
-        {/*    <Route*/}
-        {/*      index*/}
-        {/*      element={<Index />}*/}
-        {/*    />*/}
+            element={<Layout />}
+          >
+            <Route
+              index
+              element={<Index />}
+            />
 
-        {/*    <Route*/}
-        {/*      path={'/settings'}*/}
-        {/*      element={<Settings />}*/}
-        {/*    />*/}
+            <Route
+              path={'/settings'}
+              element={<Settings />}
+            />
 
-        {/*    <Route*/}
-        {/*      path={'/china'}*/}
-        {/*      element={<ChinaLayout />}*/}
-        {/*    >*/}
-        {/*      <Route*/}
-        {/*        index*/}
-        {/*        element={<China />}*/}
-        {/*      />*/}
+            <Route
+              path={'/china'}
+              element={<ChinaLayout />}
+            >
+              <Route
+                index
+                element={<China />}
+              />
 
-        {/*      <Route*/}
-        {/*        path={'/china/orders/:id'}*/}
-        {/*        element={<ExistingOrder />}*/}
-        {/*      />*/}
-        {/*      <Route*/}
-        {/*        path={'/china/new-order'}*/}
-        {/*        element={<NewOrder />}*/}
-        {/*      />*/}
-        {/*      <Route*/}
-        {/*        path={'/china/orders'}*/}
-        {/*        element={<Orders />}*/}
-        {/*      />*/}
-        {/*      <Route*/}
-        {/*        path={'/china/archive'}*/}
-        {/*        element={<Archive />}*/}
-        {/*      />*/}
+              <Route
+                path={'/china/orders/:id'}
+                element={<ExistingOrder />}
+              />
+              <Route
+                path={'/china/new-order'}
+                element={<NewOrder />}
+              />
+              <Route
+                path={'/china/orders'}
+                element={<Orders />}
+              />
+              <Route
+                path={'/china/archive'}
+                element={<Archive />}
+              />
 
-        {/*      <Route*/}
-        {/*        path={'/china/leftover'}*/}
-        {/*        element={<LeftOver />}*/}
-        {/*      />*/}
+              <Route
+                path={'/china/leftover'}
+                element={<LeftOver />}
+              />
 
-        {/*      <Route*/}
-        {/*        path={'/china/products'}*/}
-        {/*        element={<ProductsPage />}*/}
-        {/*      />*/}
+              <Route
+                path={'/china/products'}
+                element={<ProductsPage />}
+              />
 
-        {/*      <Route*/}
-        {/*        path={'/china/additional'}*/}
-        {/*        element={<Additional />}*/}
-        {/*      />*/}
-        {/*    </Route>*/}
+              <Route
+                path={'/china/additional'}
+                element={<Additional />}
+              />
+            </Route>
 
-        {/*    <Route*/}
-        {/*      path='/acceptance'*/}
-        {/*      element={<AcceptanceLayout />}*/}
-        {/*    >*/}
-        {/*      <Route*/}
-        {/*        index*/}
-        {/*        element={<Acceptance />}*/}
-        {/*      />*/}
-        {/*      <Route*/}
-        {/*        path='/acceptance/acceptances'*/}
-        {/*        element={<Acceptances />}*/}
-        {/*      />*/}
-        {/*      <Route*/}
-        {/*        path='/acceptance/acceptances/:id'*/}
-        {/*        element={<AcceptOrder />}*/}
-        {/*      />*/}
-        {/*      <Route*/}
-        {/*        path='/acceptance/staff'*/}
-        {/*        element={<Staff />}*/}
-        {/*      />*/}
-        {/*      <Route*/}
-        {/*        path='/acceptance/products'*/}
-        {/*        element={<Products />}*/}
-        {/*      />*/}
-        {/*      <Route*/}
-        {/*        path='/acceptance/packaging'*/}
-        {/*        element={<Packaging />}*/}
-        {/*      />*/}
-        {/*      <Route*/}
-        {/*        path='/acceptance/tsd/acceptances'*/}
-        {/*        element={<AcceptanceTSD />}*/}
-        {/*      />*/}
-        {/*      <Route*/}
-        {/*        path='/acceptance/fbo'*/}
-        {/*        element={<Fbo />}*/}
-        {/*      />*/}
-        {/*      <Route*/}
-        {/*        path='/acceptance/shippings'*/}
-        {/*        element={<Shippings />}*/}
-        {/*      />*/}
-        {/*      <Route*/}
-        {/*        path='/acceptance/shippings/:id'*/}
-        {/*        element={<Shipping />}*/}
-        {/*      />*/}
-        {/*    </Route>*/}
-        {/*    <Route*/}
-        {/*      path='*'*/}
-        {/*      element={<NotFound />}*/}
-        {/*    />*/}
-        {/*  </Route>*/}
-        {/*</Routes>*/}
+            <Route
+              path='/acceptance'
+              element={<AcceptanceLayout />}
+            >
+              <Route
+                index
+                element={<Acceptance />}
+              />
+              <Route
+                path='/acceptance/acceptances'
+                element={<Acceptances />}
+              />
+              <Route
+                path='/acceptance/acceptances/:id'
+                element={<AcceptOrder />}
+              />
+              <Route
+                path='/acceptance/staff'
+                element={<Staff />}
+              />
+              <Route
+                path='/acceptance/products'
+                element={<Products />}
+              />
+              <Route
+                path='/acceptance/packaging'
+                element={<Packaging />}
+              />
+              <Route
+                path='/acceptance/tsd/acceptances'
+                element={<AcceptanceTSD />}
+              />
+              <Route
+                path='/acceptance/fbo'
+                element={<Fbo />}
+              />
+              <Route
+                path='/acceptance/shippings'
+                element={<Shippings />}
+              />
+              <Route
+                path='/acceptance/shippings/:id'
+                element={<Shipping />}
+              />
+            </Route>
+            <Route
+              path='*'
+              element={<NotFound />}
+            />
+          </Route>
+        </Routes>
       </Router>
       <ToastContainer
         bodyClassName='popupException'

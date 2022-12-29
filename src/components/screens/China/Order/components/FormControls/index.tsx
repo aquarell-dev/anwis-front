@@ -1,6 +1,6 @@
 import { FC, useState } from 'react'
 import { SpinnerComponent } from 'react-element-spinner'
-// import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import 'react-toastify/dist/ReactToastify.css'
 
 import useCreateAcceptanceFromOrder from '../../hooks/useCreateAcceptanceFromOrder'
@@ -27,7 +27,7 @@ const FormControls: FC<IFormControls> = ({
   const [chinaDistributorValue, setChinaDistributorValue] = useState('')
 
   const { createAcceptanceFromOrder, isLoading } = useCreateAcceptanceFromOrder()
-  // const navigate = useNavigate()
+  const navigate = useNavigate()
 
   return (
     <>
@@ -89,9 +89,7 @@ const FormControls: FC<IFormControls> = ({
                   type='button'
                   text='Перейти к приемке'
                   customWidth='w-full'
-                  handler={() => {
-                    // navigate(`../../acceptance/acceptances/${order?.acceptance}/`)
-                  }}
+                  handler={() => navigate(`../../acceptance/acceptances/${order?.acceptance}/`)}
                 />
               )
             )}

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 import useNotifications from '../../../../../hooks/useNotifications'
-// import { useNavigate } from 'react-router-dom';
 import { useTypedSelector } from '../../../../../hooks/useTypedSelector'
 
 import { orderService } from '../../../../../features/order/order.services'
@@ -33,7 +33,7 @@ const useSubmitOrder = (args: SubmitOrder) => {
 
   const { currentSelectedIndividual } = useTypedSelector(state => state.individual)
 
-  // const navigate = useNavigate();
+  const navigate = useNavigate()
 
   const creation = !order
 
@@ -42,9 +42,7 @@ const useSubmitOrder = (args: SubmitOrder) => {
   }, [createData])
 
   useEffect(() => {
-    if (redirectId) {
-      // navigate(`../../china/orders/${redirectId}`)
-    }
+    if (redirectId) navigate(`../../china/orders/${redirectId}`)
   }, [redirectId])
 
   const onSubmit = (data: IOrderForm, redirect?: string) => {
@@ -59,7 +57,7 @@ const useSubmitOrder = (args: SubmitOrder) => {
         .unwrap()
         .then(() => {
           notifySuccess('Заказ успешно создан')
-          // redirect && navigate(redirect)
+          redirect && navigate(redirect)
         })
         .catch(() => notifyError('Заказ не был создан'))
     } else if (!creation) {
@@ -67,7 +65,7 @@ const useSubmitOrder = (args: SubmitOrder) => {
         .unwrap()
         .then(() => {
           notifySuccess('Заказ успешно обновлен')
-          // redirect && navigate(redirect)
+          redirect && navigate(redirect)
         })
         .catch(() => notifyError('Заказ не был обновлен'))
     }

@@ -11,7 +11,7 @@ const Index: FC = () => {
   return (
     <AbsoluteCenteredContainer>
       {isAuth ? (
-        <h1 className='text-4xl text-center'>Добро пожаловать, 123.</h1>
+        <h1 className='text-4xl text-center'>Добро пожаловать, {user}.</h1>
       ) : (
         <>
           <h1 className='text-3xl text-center font-medium mb-4'>Авторизация</h1>

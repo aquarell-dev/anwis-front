@@ -1,6 +1,6 @@
 import { FC } from 'react'
+import { useNavigate } from 'react-router-dom'
 
-// import { useNavigate } from 'react-router-dom'
 import { DataGrid } from '@mui/x-data-grid'
 
 import { Row } from '../../../types'
@@ -10,14 +10,14 @@ const Grid: FC<{
   rows: Row[] | undefined
   loading: boolean
 }> = ({ rows, loading }) => {
-  // const navigate = useNavigate()
-  //
-  // const actualColumns = getColumns(url => navigate(url))
+  const navigate = useNavigate()
+
+  const actualColumns = getColumns(url => navigate(url))
 
   return (
     <div className='my-5'>
       <DataGrid
-        columns={[]}
+        columns={actualColumns}
         autoHeight
         rows={rows ?? []}
         disableSelectionOnClick
