@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React, { FC, ReactNode } from 'react'
 import { SpinnerComponent } from 'react-element-spinner'
 
 import { SetState } from '../../../../../../utils/types'
@@ -10,6 +10,7 @@ export type PreviewPopupProps = {
   fetching?: boolean
   width?: string
   height?: string
+  children?: ReactNode
 }
 
 const PreviewPopup: FC<PreviewPopupProps> = ({

@@ -1,6 +1,4 @@
 import { FC } from 'react'
-
-import '../../../../../../index.css'
 import { AcceptanceProductSpecification } from '../../../../../../types/acceptance.types'
 import { SetState } from '../../../../../../utils/types'
 import { IndigoButton } from '../../../../../ui/Button'

@@ -1,6 +1,9 @@
-import React, { FC, HTMLProps } from 'react'
+import React, { FC, HTMLProps, ReactNode } from 'react'
 
-const SliderItem: FC<Pick<HTMLProps<HTMLElement>, 'className'>> = ({ children, className }) => {
+const SliderItem: FC<Pick<HTMLProps<HTMLElement>, 'className'> & { children: ReactNode }> = ({
+  children,
+  className
+}) => {
   return (
     <div
       className={

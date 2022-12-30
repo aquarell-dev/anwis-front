@@ -1,6 +1,5 @@
 import { FC } from 'react'
 
-import '../../../../../../index.css'
 import ProductHeaders from '../ProductHeaders'
 
 const BoxesHeader: FC = () => {

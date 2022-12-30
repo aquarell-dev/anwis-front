@@ -1,6 +1,6 @@
-import { FC } from 'react'
+import { FC, ReactNode } from 'react'
 
-const ProductHeaders: FC = ({ children }) => {
+const ProductHeaders: FC<{ children: ReactNode }> = ({ children }) => {
   return (
     <div
       className='flex w-full items-center space-x-2 py-2 px-4 border-b border-slate-800 children__no_shrink'

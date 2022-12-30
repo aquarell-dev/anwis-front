@@ -19,7 +19,8 @@ const useFocusNext = () => {
     }
   }
 
-  return useCallback(element => {
+  return useCallback((element: any) => {
+    // todo fix typing here
     if (element && !controls.current.includes(element)) {
       controls.current.push(element)
       element.addEventListener('keydown', handler)

@@ -1,10 +1,10 @@
-import { FC } from 'react'
+import { FC, ReactNode } from 'react'
 
 import { cn } from '../../../../../../../../utils'
 
 type ArrowProps = { onClick: () => void }
 
-const Arrow: FC<ArrowProps & { arrowDirection: 'left' | 'right' }> = ({
+const Arrow: FC<ArrowProps & { arrowDirection: 'left' | 'right'; children: ReactNode }> = ({
   children,
   onClick,
   arrowDirection

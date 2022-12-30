@@ -1,9 +1,8 @@
-import { FC } from 'react'
+import { FC, ReactNode } from 'react'
 
-import '../../../../../../index.css'
 import { AcceptanceProductSpecification } from '../../../../../../types/acceptance.types'
 
-const ProductItem: FC<AcceptanceProductSpecification> = props => {
+const ProductItem: FC<AcceptanceProductSpecification & { children: ReactNode }> = props => {
   const { ...specification } = props
 
   return (
