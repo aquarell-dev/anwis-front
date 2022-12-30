@@ -1,4 +1,5 @@
 import { PrintStatus } from '../../hooks/useLabelRows'
+import dynamic from 'next/dynamic'
 
 import { GridColDef } from '@mui/x-data-grid'
 import printJS from 'print-js'
@@ -55,8 +56,6 @@ export const getColumns = <T extends LabelProduct>(
             'bg-blue-600 hover:bg-blue-700'
           )}
           onClick={async () => {
-            console.log(product)
-
             if (!product?.pdf) return
 
             printJS({

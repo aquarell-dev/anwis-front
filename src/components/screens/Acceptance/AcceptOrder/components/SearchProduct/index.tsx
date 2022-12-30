@@ -1,3 +1,4 @@
+import dynamic from 'next/dynamic'
 import { FC } from 'react'
 
 import useMemberSearch from '../../hooks/useMemberSearch'
@@ -6,9 +7,11 @@ import {
   Acceptance,
   AcceptanceProductSpecification
 } from '../../../../../../types/acceptance.types'
-import LabelsGrid from '../../../components/LabelsGrid'
+
 import ProductPreview from '../../../components/ProductPreview'
 import SearchFields from '../SearchFields'
+
+const LabelsGrid = dynamic(() => import('../../../components/LabelsGrid'), { ssr: false })
 
 type SearchProductProps = {
   specifications: AcceptanceProductSpecification[]
