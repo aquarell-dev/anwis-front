@@ -1,0 +1,22 @@
+.wrapper {
+    background: #ccc;
+}
+
+.main_img {
+    width: 45px;
+    position: relative;
+    cursor: zoom-in;
+}
+
+.hover_img {
+    width: 45px;
+    position: absolute;
+    display: none;
+    margin-left: 115px;
+    margin-top: -60px;
+}
+
+.wrapper:hover .hover_img {
+    display: block;
+    transform: scale(3.5);
+}
