@@ -9,7 +9,7 @@ const SubNavbar: FC<{ elements: ISubNavElement[] }> = ({ elements }) => {
   const router = useRouter()
 
   return (
-    <div className='d-none sm:block w-11/12 mx-auto min-h-12 rounded-b-lg shadow-md bg-gray-100'>
+    <div className='block w-11/12 mx-auto min-h-12 rounded-b-lg shadow-md bg-gray-100'>
       <div className='w-full h-full flex flex-col lg:flex-row items-center px-4 py-2 space-x-4'>
         {elements.map(({ link, title }, idx) => (
           <div

@@ -29,7 +29,7 @@ const Navbar: FC = () => {
 
   return (
     <>
-      <div className='d-none sm:flex h-16 bg-indigo-600 shadow-md py-2 px-4 items-center justify-between text-white'>
+      <div className='flex h-16 bg-indigo-600 shadow-md py-2 px-4 items-center justify-between text-white'>
         <div className='flex items-end space-x-4 w-4/6'>
           <h1 className='font-medium text-xl lg:text-2xl'>
             <Link href='/'>Anwis Dashboard</Link>
