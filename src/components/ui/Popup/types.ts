@@ -7,7 +7,7 @@ import { ICategory, IProductSpecs } from '../../../features/order/order.types'
 import { SetState } from '../../../utils/types'
 import { IProductSearchProps } from '../../screens/China/Order/components/Products/types'
 
-export interface IPopup<T> {
+export interface IPopup<T = boolean> {
   state: boolean
   setState: SetState<boolean>
   width?: string
