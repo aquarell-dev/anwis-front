@@ -28,7 +28,9 @@ export const fields: AcceptanceProductColumn[] = [
   { field: 'id', width: 100, headerName: 'ID' }
 ]
 
-const generateBoxesField = (specifications: AcceptanceProductSpecification[]): GridColDef[] => {
+export const generateBoxesField = (
+  specifications: AcceptanceProductSpecification[]
+): GridColDef[] => {
   const boxes = Math.max(...specifications.map(s => s.boxes.length))
 
   const fields: GridColDef[] = []

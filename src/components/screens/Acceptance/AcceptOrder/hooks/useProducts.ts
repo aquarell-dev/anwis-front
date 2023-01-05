@@ -8,12 +8,12 @@ import { useGetAcceptanceByIdQuery } from '../../../../../store/api/acceptance.a
 import { AcceptanceProductSpecification } from '../../../../../types/acceptance.types'
 import { AcceptanceProductRow } from '../../types'
 
-const useProducts = (id: string | undefined) => {
+const useProducts = (id?: string) => {
   const {
     data: acceptance,
     isLoading,
     isFetching
-  } = useGetAcceptanceByIdQuery(parseInt(id ? id : '0'))
+  } = useGetAcceptanceByIdQuery(parseInt(id ? id : '1'))
 
   const [specifications, setSpecifications] = useState<AcceptanceProductSpecification[]>([])
   const [rows, setRows] = useState<AcceptanceProductRow[]>([])
@@ -38,7 +38,8 @@ const useProducts = (id: string | undefined) => {
       photo: specification.product.photo,
       cost: specification.cost,
       actual_quantity: specification?.actual_quantity,
-      difference: specification.cost === specification?.actual_quantity
+      difference: specification.cost === specification?.actual_quantity,
+      fbo_quantity: specification.fbo_quantity ?? specification.actual_quantity
     }))
 
   useEffect(() => {
