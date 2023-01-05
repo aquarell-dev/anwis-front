@@ -1,8 +1,7 @@
 import { NextPage } from 'next'
 import Head from 'next/head'
-import React from 'react'
-import { Layout } from '../../src/components/layouts/Acceptance/Layout'
-import Shippings from '../../src/components/screens/Acceptance/Shippings'
+import { Layout } from '../../../src/components/layouts/Acceptance/Layout'
+import Shippings from '../../../src/components/screens/Acceptance/Shippings'
 
 const ShippingsPage: NextPage = () => {
   return (
