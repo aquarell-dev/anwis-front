@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import React, { FC } from 'react'
+import { FC } from 'react'
 
 import { FBOShipping } from '../../../../../../types/fbo.types'
 import { getFourDigitId } from '../../../../../../utils'
@@ -21,7 +21,7 @@ const ShippingCard: FC<FBOShipping> = shipping => {
   return (
     <div
       className='w-80 p-4 rounded-md shadow-xl border hover:bg-gray-100 duration-300 transition ease-in-out cursor-pointer'
-      onClick={() => router.push(`./${shipping.id}`)}
+      onClick={() => router.push(`./shippings/${shipping.id}`)}
     >
       <h3 className='text-xl font-medium'>
         Отгрузка ФБО {shipping.acceptances.map(a => getFourDigitId(a.id)).join(', ')}

@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import { FC } from 'react'
 
 import { useListFboShippingsQuery } from '../../../../store/api/fbo.api'
 import { ContentContainer } from '../../../ui/Container'
