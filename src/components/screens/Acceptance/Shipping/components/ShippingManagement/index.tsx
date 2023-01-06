@@ -1,9 +1,10 @@
-import React, { FC, useState } from 'react'
+import { FC, useState } from 'react'
 
 import useFbo from '../../../Fbo/hooks/useFbo'
 
 import moment, { Moment } from 'moment'
 
+import useAutoFocus from '../../../../../../hooks/useAutoFocus'
 import { FBOShipping } from '../../../../../../types/fbo.types'
 import Status from '../../../../../common/Status'
 import { IndigoButton } from '../../../../../ui/Button'
@@ -23,6 +24,8 @@ const ShippingManagement: FC<FBOShipping> = shipping => {
     shipping_date: moment(shipping.shipping_date ?? new Date(), 'DD/MM/YYYY')
   })
 
+  const { ref } = useAutoFocus()
+
   const { patchFbo, isLoading } = useFbo()
 
   return (
@@ -37,6 +40,7 @@ const ShippingManagement: FC<FBOShipping> = shipping => {
         handler={e => setShippingInfo({ ...shippingInfo, box_quantity: e.target.value })}
         customWidth='w-64'
         showLabel
+        ref={ref}
         placeholder='Кол-во Коробок'
       />
       <FancyInput
