@@ -5,7 +5,7 @@ const useAutoFocus = <T extends HTMLElement = HTMLInputElement>() => {
 
   useEffect(() => {
     ref.current?.focus()
-  }, [])
+  }, [ref.current])
 
   return { ref }
 }
